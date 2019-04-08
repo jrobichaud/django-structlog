@@ -8,10 +8,8 @@ amqp==2.4.2               # via kombu
 billiard==3.6.0.0         # via celery
 celery==4.3.0
 colorama==0.4.1
-django==2.2
 kombu==4.5.0              # via celery
-pytz==2018.9              # via celery, django
+pytz==2018.9              # via celery
 six==1.12.0               # via structlog
-sqlparse==0.3.0           # via django
 structlog==19.1.0
 vine==1.3.0               # via amqp, celery

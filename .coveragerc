@@ -1,2 +1,8 @@
 [run]
 include = ./django_structlog
+
+[report]
+omit =
+   *site-packages*
+   *test_**
+   *.tox*
