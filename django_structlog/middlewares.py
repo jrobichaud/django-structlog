@@ -18,12 +18,12 @@ class RequestLoggingMiddleware(object):
             'process_template_response',
             response_status_code=response.status_code,
             request=str(request),
-            user_agent=request.META.get('HTTP_USER_AGENT')
+            user_agent=request.META.get('HTTP_USER_AGENT'),
         )
         return response
 
     def process_exception(self, request, exception):
         logger.exception(
             'process_exception',
-            exception
+            exception,
         )
