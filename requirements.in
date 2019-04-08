@@ -1,0 +1,4 @@
+django>=2.2,<3
+celery>=4.3
+structlog>=19,<20
+colorama>=0.4.1
