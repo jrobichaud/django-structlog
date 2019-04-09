@@ -12,5 +12,5 @@ sudo: false
 script: tox
 before_script:
   - flake8 django_structlog --ignore=E501,E128,E402
-after_script:
+after_success:
   - codecov
