@@ -1,13 +1,12 @@
 language: python
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.7"
-env:
-    - DJANGO_SETTINGS_MODULE=django_structlog_demo_project.settings
 install:
   - pip install tox-travis tox flake8 coverage codecov
+services:
+  - redis-server
 dist: xenial
 sudo: false
 script: tox
