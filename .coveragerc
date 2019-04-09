@@ -1,10 +1,4 @@
-[run]
+[report]
 include =
     ./django_structlog/*
     ./django_structlog_demo_project/*
-
-[report]
-omit =
-   *site-packages*
-   *tests**
-   *.tox*
