@@ -30,4 +30,4 @@ class CeleryAppConfig(AppConfig):
 
 @app.task(bind=True)
 def debug_task(self):
-    print(f"Request: {self.request!r}")  # pragma: no cover
+    print("Request: {request}".format(request=self.request))  # pragma: no cover
