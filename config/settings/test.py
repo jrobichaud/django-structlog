@@ -122,3 +122,7 @@ DATABASES = {
         'NAME': os.path.join(str(ROOT_DIR), 'db.sqlite3'),
     }
 }
+
+INSTALLED_APPS += [
+    'django_structlog_demo_project.test_app',
+]
