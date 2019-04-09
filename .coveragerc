@@ -1,7 +1,7 @@
 [run]
 include =
-    ./django_structlog
-    django_structlog_demo_project/*
+    ./django_structlog/*
+    ./django_structlog_demo_project/*
 
 plugins =
     django_coverage_plugin
