@@ -249,3 +249,7 @@ SOCIALACCOUNT_ADAPTER = "django_structlog_demo_project.users.adapters.SocialAcco
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+INSTALLED_APPS += [
+    'django_structlog',
+]
