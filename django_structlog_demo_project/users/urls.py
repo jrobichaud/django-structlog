@@ -1,4 +1,4 @@
-from django.urls import path
+from django.conf.urls import url
 
 from django_structlog_demo_project.users.views import (
     user_list_view,
@@ -9,8 +9,8 @@ from django_structlog_demo_project.users.views import (
 
 app_name = "users"
 urlpatterns = [
-    path("", view=user_list_view, name="list"),
-    path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<str:username>/", view=user_detail_view, name="detail"),
+    url(r"^$", view=user_list_view, name="list"),
+    url(r"~redirect/", view=user_redirect_view, name="redirect"),
+    url(r"~update/", view=user_update_view, name="update"),
+    url(r"^(?P<username>\w+)/", view=user_detail_view, name="detail"),
 ]
