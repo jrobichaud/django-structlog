@@ -1,8 +1,13 @@
 [run]
-include = ./django_structlog
+include =
+    ./django_structlog
+    django_structlog_demo_project/*
 
 [report]
 omit =
    *site-packages*
-   *test_**
+   *tests**
    *.tox*
+
+plugins =
+    django_coverage_plugin
