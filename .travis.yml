@@ -5,7 +5,7 @@ python:
   - "3.6"
   - "3.7"
 env:
-    - DJANGO_SETTINGS_MODULE=test_project.settings
+    - DJANGO_SETTINGS_MODULE=django_structlog_demo_project.settings
 install:
   - pip install tox-travis tox flake8 coverage codecov
 dist: xenial
