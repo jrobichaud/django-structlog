@@ -2,3 +2,5 @@
 include =
     ./django_structlog/*
     ./django_structlog_demo_project/*
+
+fail_under = 100
