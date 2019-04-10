@@ -1,11 +1,12 @@
 import logging
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, RequestFactory
 import structlog
 
 from django_structlog import middlewares
+from django_structlog_demo_project.users.models import User
 
 
 class TestRequestLoggingMiddleware(TestCase):
@@ -14,26 +15,112 @@ class TestRequestLoggingMiddleware(TestCase):
         self.logger = structlog.getLogger(__name__)
 
     def test_process_request_anonymous(self):
-        middleware = middlewares.RequestLoggingMiddleware(None)
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = '00000000-0000-0000-0000-000000000000'
+        self.log_results = None
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
         request = self.factory.get('/foo')
         request.user = AnonymousUser()
 
-        expected_uuid = '00000000-0000-0000-0000-000000000000'
+        middleware = middlewares.RequestLoggingMiddleware(get_response)
         with patch('uuid.UUID.__str__', return_value=expected_uuid):
-            middleware.process_request(request)
+            middleware(request)
 
-        self.assertEqual(expected_uuid, request.id)
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
 
-        with self.assertLogs(__name__, logging.INFO) as log_results:
-            self.logger.info("hello")
-
-        self.assertEqual(1, len(log_results.records))
-        self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        self.assertEqual('INFO', record.levelname)
         self.assertIn('request_id', record.msg)
         self.assertEqual(expected_uuid, record.msg['request_id'])
         self.assertIn('user_id', record.msg)
         self.assertIsNone(record.msg['user_id'])
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn('request_id', record.msg)
+        self.assertNotIn('user_id', record.msg)
+
+    def test_process_request_user(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = '00000000-0000-0000-0000-000000000000'
+        self.log_results = None
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = self.factory.get('/foo')
+
+        mock_user = User.objects.create()
+        request.user = mock_user
+
+        middleware = middlewares.RequestLoggingMiddleware(get_response)
+        with patch('uuid.UUID.__str__', return_value=expected_uuid):
+            middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual('INFO', record.levelname)
+        self.assertIn('request_id', record.msg)
+        self.assertEqual(expected_uuid, record.msg['request_id'])
+        self.assertIn('user_id', record.msg)
+        self.assertEqual(mock_user.id, record.msg['user_id'])
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn('request_id', record.msg)
+        self.assertNotIn('user_id', record.msg)
+
+    def test_process_request_error(self):
+        expected_uuid = '00000000-0000-0000-0000-000000000000'
+        self.log_results = None
+
+        def get_response(_response):
+            raise Exception
+
+        request = self.factory.get('/foo')
+        request.user = AnonymousUser()
+
+        middleware = middlewares.RequestLoggingMiddleware(get_response)
+        with patch('uuid.UUID.__str__', return_value=expected_uuid), \
+            self.assertLogs(logging.getLogger('django_structlog'), logging.INFO) as log_results, \
+                self.assertRaises(Exception):
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual('INFO', record.levelname)
+        self.assertIn('request_id', record.msg)
+        self.assertEqual(expected_uuid, record.msg['request_id'])
+        self.assertIn('user_id', record.msg)
+        self.assertIsNone(record.msg['user_id'])
+
+        record = log_results.records[1]
+        self.assertEqual('ERROR', record.levelname)
+        self.assertIn('request_id', record.msg)
+        self.assertEqual(expected_uuid, record.msg['request_id'])
+        self.assertIn('user_id', record.msg)
+        self.assertIsNone(record.msg['user_id'])
+
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn('request_id', record.msg)
+        self.assertNotIn('user_id', record.msg)
 
     def tearDown(self):
         self.logger.new()

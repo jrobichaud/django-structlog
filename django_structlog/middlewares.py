@@ -9,35 +9,28 @@ logger = structlog.wrap_logger(logger=logging.getLogger(__name__))
 class RequestLoggingMiddleware(object):
     def __init__(self, get_response):
         self.get_response = get_response
-        # One-time configuration and initialization.
 
     def __call__(self, request):
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
-
-        response = self.get_response(request)
-
-        # Code to be executed for each request/response after
-        # the view is called.
+        request_id = str(uuid.uuid4())
+        with structlog.threadlocal.tmp_bind(logger):
+            logger.bind(request_id=request_id)
+            logger.bind(user_id=request.user.id)
+            logger.info(
+                'Request started',
+                request=request,
+                user_agent=request.META.get('HTTP_USER_AGENT'),
+            )
+            try:
+                response = self.get_response(request)
+            except Exception as e:
+                logger.error(
+                    'Request raised exception',
+                    exception=str(e)
+                )
+            else:
+                logger.info(
+                    'Request finished',
+                    response_status_code=response.status_code,
+                )
 
         return response
-
-    def process_request(self, request):
-        request.id = str(uuid.uuid4())
-        logger.bind(request_id=request.id)
-        logger.bind(user_id=request.user.id)
-
-    def process_template_response(self, request, response):
-        logger.info(
-            'process_template_response',
-            response_status_code=response.status_code,
-            request=str(request),
-            user_agent=request.META.get('HTTP_USER_AGENT'),
-        )
-        return response
-
-    def process_exception(self, request, exception):
-        logger.exception(
-            'process_exception',
-            exception,
-        )
