@@ -10,7 +10,7 @@ services:
 dist: xenial
 sudo: false
 script: tox
-before_script:
-  - flake8 django_structlog --ignore=E501,E128,E402
+#before_script:
+  #- flake8 django_structlog --ignore=E501,E128,E402
 after_success:
   - codecov

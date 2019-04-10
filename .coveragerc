@@ -2,6 +2,10 @@
 include =
     ./django_structlog/*
     ./django_structlog_demo_project/*
+exclude_lines =
+    pragma: no cover
+    raise NotImplementedError
 
 fail_under = 100
 skip_covered = True
+show_missing = True

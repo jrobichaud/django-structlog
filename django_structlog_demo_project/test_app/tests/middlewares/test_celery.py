@@ -14,14 +14,19 @@ class TestCeleryMiddleware(TestCase):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
 
+    def test_call(self):
+        mock_get_response = Mock()
+        mock_request = Mock()
+        middleware = middlewares.CeleryMiddleware(mock_get_response)
+        middleware(mock_request)
+        mock_get_response.assert_called_once_with(mock_request)
+
     def test_task_enqueue(self):
-        mock_response = Mock()
-        mock_response.status_code.return_value = 200
         expected_uuid = '00000000-0000-0000-0000-000000000000'
         self.logger.bind(request_id=expected_uuid)
 
         @shared_task
-        def test_task(value):
+        def test_task(value):  # pragma: no cover
             pass
 
         request = self.factory.get('/foo')
