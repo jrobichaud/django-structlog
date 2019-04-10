@@ -4,3 +4,4 @@ include =
     ./django_structlog_demo_project/*
 
 fail_under = 100
+skip_covered = True
