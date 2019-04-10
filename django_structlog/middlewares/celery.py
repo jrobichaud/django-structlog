@@ -22,24 +22,14 @@ class CeleryMiddleware(object):
         )
 
         @before_task_publish.connect
-        def receiver_before_task_publish(
-                sender=None,
-                headers=None,
-                body=None,
-                **kwargs,
-        ):
+        def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
             # info = headers if 'task' in headers else body
             pass
 
         self.receiver_before_task_publish = receiver_before_task_publish
 
         @after_task_publish.connect
-        def receiver_after_task_publish(
-                sender=None,
-                headers=None,
-                body=None,
-                **kwargs,
-        ):
+        def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
             info = headers if 'task' in headers else body
             logger.info('Task enqueued', task_id=info['id'])
 
