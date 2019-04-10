@@ -9,7 +9,7 @@ from django_structlog import middlewares
 from django_structlog_demo_project.users.models import User
 
 
-class TestRequestLoggingMiddleware(TestCase):
+class TestRequestMiddleware(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
@@ -29,7 +29,7 @@ class TestRequestLoggingMiddleware(TestCase):
         request = self.factory.get('/foo')
         request.user = AnonymousUser()
 
-        middleware = middlewares.RequestLoggingMiddleware(get_response)
+        middleware = middlewares.RequestMiddleware(get_response)
         with patch('uuid.UUID.__str__', return_value=expected_uuid):
             middleware(request)
 
@@ -65,7 +65,7 @@ class TestRequestLoggingMiddleware(TestCase):
         mock_user = User.objects.create()
         request.user = mock_user
 
-        middleware = middlewares.RequestLoggingMiddleware(get_response)
+        middleware = middlewares.RequestMiddleware(get_response)
         with patch('uuid.UUID.__str__', return_value=expected_uuid):
             middleware(request)
 
@@ -94,7 +94,7 @@ class TestRequestLoggingMiddleware(TestCase):
         request = self.factory.get('/foo')
         request.user = AnonymousUser()
 
-        middleware = middlewares.RequestLoggingMiddleware(get_response)
+        middleware = middlewares.RequestMiddleware(get_response)
         with patch('uuid.UUID.__str__', return_value=expected_uuid), \
             self.assertLogs(logging.getLogger('django_structlog'), logging.INFO) as log_results, \
                 self.assertRaises(Exception):

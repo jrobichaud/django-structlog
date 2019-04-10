@@ -6,7 +6,7 @@ import structlog
 logger = structlog.wrap_logger(logger=logging.getLogger(__name__))
 
 
-class RequestLoggingMiddleware(object):
+class RequestMiddleware(object):
     def __init__(self, get_response):
         self.get_response = get_response
 

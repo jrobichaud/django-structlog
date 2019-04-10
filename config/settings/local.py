@@ -140,5 +140,5 @@ structlog.configure_once(
 )
 
 MIDDLEWARE += [
-    'django_structlog.middlewares.RequestLoggingMiddleware'
+    'django_structlog.middlewares.RequestMiddleware'
 ]
