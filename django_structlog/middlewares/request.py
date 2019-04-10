@@ -25,7 +25,7 @@ class RequestMiddleware(object):
             except Exception as e:
                 logger.error(
                     'Request raised exception',
-                    exception=str(e)
+                    exception=str(e),
                 )
             else:
                 logger.info(
