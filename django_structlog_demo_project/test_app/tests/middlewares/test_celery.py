@@ -51,14 +51,13 @@ class TestCeleryMiddleware(TestCase):
         headers = {
             'kwargsrepr': "{}"
         }
-        with middlewares.CeleryMiddleware() as middleware:
-            with structlog.threadlocal.tmp_bind(self.logger):
-                self.logger.bind(
-                    request_id=expected_uuid,
-                    user_id=expected_user_id
-                )
-                task_kwargs = {}
-                middleware.receiver_before_task_publish(body=((), task_kwargs), headers=headers)
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(
+                request_id=expected_uuid,
+                user_id=expected_user_id
+            )
+            task_kwargs = {}
+            middlewares.celery.receiver_before_task_publish(body=((), task_kwargs), headers=headers)
 
         self.assertDictEqual({
                 '__django_structlog__': {
@@ -73,9 +72,8 @@ class TestCeleryMiddleware(TestCase):
         expected_task_id = '00000000-0000-0000-0000-000000000000'
         headers = {'id': expected_task_id}
 
-        with middlewares.CeleryMiddleware(None) as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.INFO) as log_results:
-                middleware.receiver_after_task_publish(headers=headers)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.INFO) as log_results:
+            middlewares.celery.receiver_after_task_publish(headers=headers)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -94,18 +92,17 @@ class TestCeleryMiddleware(TestCase):
                 'user_id': expected_user_id,
             }
         }
-        with middlewares.CeleryMiddleware() as middleware:
-            with structlog.threadlocal.tmp_bind(self.logger):
-                self.logger.bind(foo='bar')
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(foo='bar')
 
-                structlog.threadlocal.as_immutable(self.logger)
-                immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-                context = immutable_logger._context
-                self.assertDictEqual({'foo': 'bar'}, context)
+            structlog.threadlocal.as_immutable(self.logger)
+            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
+            context = immutable_logger._context
+            self.assertDictEqual({'foo': 'bar'}, context)
 
-                middleware.receiver_task_pre_run(task_id, None, None, kwargs=task_kwargs)
-                immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-                context = immutable_logger._context
+            middlewares.celery.receiver_task_pre_run(task_id, None, None, kwargs=task_kwargs)
+            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
+            context = immutable_logger._context
 
         self.assertDictEqual({
             'task_id': task_id,
@@ -116,9 +113,8 @@ class TestCeleryMiddleware(TestCase):
     def test_receiver_task_retry(self):
         expected_reason = 'foo'
 
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.WARNING) as log_results:
-                middleware.receiver_task_retry(reason=expected_reason)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.WARNING) as log_results:
+            middlewares.celery.receiver_task_retry(reason=expected_reason)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -130,9 +126,8 @@ class TestCeleryMiddleware(TestCase):
     def test_receiver_task_success(self):
         expected_result = 'foo'
 
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.INFO) as log_results:
-                middleware.receiver_task_success(result=expected_result)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.INFO) as log_results:
+            middlewares.celery.receiver_task_success(result=expected_result)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -144,9 +139,8 @@ class TestCeleryMiddleware(TestCase):
     def test_receiver_task_failure(self):
         expected_exception = 'foo'
 
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
-                middleware.receiver_task_failure(exception=Exception('foo'))
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
+            middlewares.celery.receiver_task_failure(exception=Exception('foo'))
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -156,9 +150,8 @@ class TestCeleryMiddleware(TestCase):
         self.assertEqual(expected_exception, record.msg['error'])
 
     def test_receiver_task_revoked(self):
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.WARNING) as log_results:
-                middleware.receiver_task_revoked(terminated=True, signum=1, expired=False)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.WARNING) as log_results:
+            middlewares.celery.receiver_task_revoked(terminated=True, signum=1, expired=False)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -174,9 +167,8 @@ class TestCeleryMiddleware(TestCase):
     def test_receiver_task_unknown(self):
         expected_message = 'foo'
 
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
-                middleware.receiver_task_unknown(message=expected_message)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
+            middlewares.celery.receiver_task_unknown(message=expected_message)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -188,9 +180,8 @@ class TestCeleryMiddleware(TestCase):
     def test_receiver_task_rejected(self):
         expected_message = 'foo'
 
-        with middlewares.CeleryMiddleware() as middleware:
-            with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
-                middleware.receiver_task_rejected(message=expected_message)
+        with self.assertLogs(logging.getLogger('django_structlog.middlewares.celery'), logging.ERROR) as log_results:
+            middlewares.celery.receiver_task_rejected(message=expected_message)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]

@@ -8,7 +8,7 @@ from django.apps import apps, AppConfig
 from django.conf import settings
 
 
-from django_structlog.middlewares import CeleryMiddleware
+from django_structlog.middlewares.celery import connect_signals
 
 
 if not settings.configured:
@@ -25,13 +25,10 @@ app = Celery("django_structlog_demo_project")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-middleware = None
-
 
 @setup_logging.connect
 def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pragma: no cover
-    global middleware
-    middleware = CeleryMiddleware(None)
+    connect_signals()
     logging.basicConfig(
         **settings.LOGGING,
     )
