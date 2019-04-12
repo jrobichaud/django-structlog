@@ -89,7 +89,7 @@ class TestRequestMiddleware(TestCase):
         self.log_results = None
 
         def get_response(_response):
-            raise Exception
+            raise Exception("This is an exception")
 
         request = self.factory.get('/foo')
         request.user = AnonymousUser()
@@ -97,8 +97,10 @@ class TestRequestMiddleware(TestCase):
         middleware = middlewares.RequestMiddleware(get_response)
         with patch('uuid.UUID.__str__', return_value=expected_uuid), \
             self.assertLogs(logging.getLogger('django_structlog'), logging.INFO) as log_results, \
-                self.assertRaises(Exception):
+                self.assertRaises(Exception) as e:
             middleware(request)
+
+        self.assertEqual("This is an exception", str(e.exception))
 
         self.assertEqual(2, len(log_results.records))
         record = log_results.records[0]

@@ -119,7 +119,7 @@ LOGGING = {
 }
 
 # Same as in the example
-structlog.configure_once(
+structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
         structlog.processors.TimeStamper(fmt="iso"),

@@ -1,7 +1,14 @@
+import logging
 import os
-from celery import Celery
+
+import structlog
+from celery import Celery, shared_task
+from celery.signals import setup_logging
 from django.apps import apps, AppConfig
 from django.conf import settings
+
+
+from django_structlog.middlewares import CeleryMiddleware
 
 
 if not settings.configured:
@@ -18,6 +25,38 @@ app = Celery("django_structlog_demo_project")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+middleware = None
+
+
+@setup_logging.connect
+def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pragma: no cover
+    global middleware
+    middleware = CeleryMiddleware(None)
+    logging.basicConfig(
+        **settings.LOGGING,
+    )
+
+    # Same as in the example
+    structlog.configure(
+        processors=[
+            structlog.stdlib.filter_by_level,
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.stdlib.add_logger_name,
+            structlog.stdlib.add_log_level,
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            structlog.processors.UnicodeDecoder(),
+            structlog.processors.ExceptionPrettyPrinter(),
+            #structlog.processors.KeyValueRenderer(),
+            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+        ],
+        context_class=structlog.threadlocal.wrap_dict(dict),
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        wrapper_class=structlog.stdlib.BoundLogger,
+        cache_logger_on_first_use=True,
+    )
+
 
 class CeleryAppConfig(AppConfig):
     name = "django_structlog_demo_project.taskapp"
@@ -31,3 +70,15 @@ class CeleryAppConfig(AppConfig):
 @app.task(bind=True)
 def debug_task(self):
     print("Request: {request}".format(request=self.request))  # pragma: no cover
+
+
+@shared_task
+def successful_task(foo=None):
+    import structlog
+    logger = structlog.getLogger(__name__)
+    logger.info('This is a successful task')
+
+
+@shared_task
+def failing_task(foo=None, **kwargs):
+    raise Exception('This is a failed task')

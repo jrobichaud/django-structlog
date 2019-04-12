@@ -27,6 +27,7 @@ class RequestMiddleware(object):
                     'Request raised exception',
                     exception=str(e),
                 )
+                raise
             else:
                 logger.info(
                     'Request finished',

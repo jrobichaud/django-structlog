@@ -5,8 +5,12 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
+from django_structlog_demo_project.home import views
+
 urlpatterns = [
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    url(r"^success_task$", views.enqueue_successful_task, name="enqueue_successful_task"),
+    url(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
     url(
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),

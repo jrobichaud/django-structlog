@@ -1,1 +1,9 @@
 {% extends "base.html" %}
+
+
+{% block content %}
+<div>
+    <a href="{% url 'enqueue_successful_task' %}">Enqueue successful task</a>
+    <a href="{% url 'enqueue_failing_task' %}">Enqueue failing task</a>
+</div>
+{% endblock %}

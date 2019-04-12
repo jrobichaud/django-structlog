@@ -1,9 +1,7 @@
 import logging
-import json
 
 import structlog
 
-from django.conf import settings
 
 logger = structlog.wrap_logger(logger=logging.getLogger(__name__))
 
@@ -14,7 +12,7 @@ class CeleryMiddleware(object):
         'user_id',
     ]
 
-    def __init__(self, get_response):
+    def __init__(self, get_response=None):
         self.get_response = get_response
         from celery.signals import (
             before_task_publish,
@@ -30,28 +28,25 @@ class CeleryMiddleware(object):
 
         @before_task_publish.connect
         def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
-            if settings.CELERY_TASK_SERIALIZER == 'json':
-                decoded_kwargs = json.loads(headers['kwargsrepr'])
-                data_to_pass = {}
-                immutable_logger = structlog.threadlocal.as_immutable(logger)
-                context = immutable_logger._context
-                for key in self.context_to_pass:
-                    if key in context:
-                        data_to_pass[key] = context[key]
-                decoded_kwargs['__django_structlog__'] = data_to_pass
-
-                headers['kwargsrepr'] = json.dumps(decoded_kwargs)
+            data_to_pass = {}
+            immutable_logger = structlog.threadlocal.as_immutable(logger)
+            # noinspection PyProtectedMember
+            context = immutable_logger._context
+            for key in self.context_to_pass:
+                if key in context:
+                    data_to_pass[key] = context[key]
+            body[1]['__django_structlog__'] = data_to_pass
 
         @after_task_publish.connect
         def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
             logger.info('Task enqueued', task_id=headers['id'])
 
         @task_prerun.connect
-        def receiver_task_pre_run(task_id, task, request, *args, **kwargs):
+        def receiver_task_pre_run(task_id, task, *args, **kwargs):
             logger.new()
             logger.bind(task_id=task_id)
-            logger.bind(**kwargs.pop('__django_structlog__', {}))
-            logger.info('Task started')
+            metadata = kwargs['kwargs'].pop('__django_structlog__', {})
+            logger.bind(**metadata)
 
         @task_retry.connect
         def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
@@ -77,6 +72,7 @@ class CeleryMiddleware(object):
         def receiver_task_rejected(message=None, exc=None, **kwargs):
             logger.error('Task rejected', message=message)
 
+        #self.receiver_setup_logging = receiver_setup_logging
         self.receiver_before_task_publish = receiver_before_task_publish
         self.receiver_after_task_publish = receiver_after_task_publish
         self.receiver_task_pre_run = receiver_task_pre_run
@@ -89,3 +85,17 @@ class CeleryMiddleware(object):
 
     def __call__(self, request):
         return self.get_response(request)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.receiver_before_task_publish = None
+        self.receiver_after_task_publish = None
+        self.receiver_task_pre_run = None
+        self.receiver_task_retry = None
+        self.receiver_task_success = None
+        self.receiver_task_failure = None
+        self.receiver_task_revoked = None
+        self.receiver_task_unknown = None
+        self.receiver_task_rejected = None
