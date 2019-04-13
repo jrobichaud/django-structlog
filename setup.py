@@ -11,7 +11,7 @@ setup(
     version=django_structlog.__version__,
     author='Jules Robichaud-Gagnon',
     author_email='j.robichaudg+pypi@gmail.com',
-    description='Structure logging for Django',
+    description='Structured Logging for Django',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/jrobichaud/django-structlog',
