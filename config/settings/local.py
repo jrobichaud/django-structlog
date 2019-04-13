@@ -83,35 +83,42 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
-        "plain": {
+        "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.dev.ConsoleRenderer(colors=False),
+            "processor": structlog.processors.JSONRenderer(),
         },
         "colored": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(colors=True),
         },
-    },
-    "filters": {
+        "key_value": {
+            "()": structlog.stdlib.ProcessorFormatter,
+            "processor": structlog.processors.KeyValueRenderer(key_order=['timestamp', 'level', 'event', 'logger']),
+        },
     },
     "handlers": {
-        "structured_stream": {
+        "colored_stream": {
             "class": "logging.StreamHandler",
             "formatter": "colored",
         },
-        "structured_file": {
+        "json_file": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": "test.log",
-            "formatter": "plain",
+            "filename": "logs/json.log",
+            "formatter": "json_formatter",
+        },
+        "flat_line_file": {
+            "class": "logging.handlers.WatchedFileHandler",
+            "filename": "logs/flat_line.log",
+            "formatter": "key_value",
         },
     },
     "loggers": {
         "": {
-            "handlers": ["structured_stream"],
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
         },
         "django_structlog": {
-            "handlers": ["structured_stream"],
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
             "propagate": False
         },
