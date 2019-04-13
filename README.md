@@ -10,11 +10,11 @@ Logging will then produce additional cohesive metadata on each logs that makes i
 ```python
 >>> import logging
 >>> logger = logging.get_logger(__name__)
->>> logger.info("Foo")
+>>> logger.info("An error occured")
 ```
 
 ```
-Foo
+An error occured
 ```
 
 Well... ok
@@ -23,25 +23,25 @@ Well... ok
 ```python
 >>> import structlog 
 >>> logger = structlog.get_logger(__name__)
->>> logger.info("Foo", bar="Buz")
+>>> logger.info("An error occured", bar="Buz")
 ```
 ```
-timestamp='2019-04-13T19:39:31.089925Z' level='info' event='Foo' logger='my_awesome_project.my_awesome_module' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0'
+timestamp='2019-04-13T19:39:31.089925Z' level='info' event='An error occured' logger='my_awesome_project.my_awesome_module' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0'
 ```
 
 Then you can search with commands like:
 ```bash
-$ cat logs/flat_line.log | grep user_id=1
+$ cat logs/flat_line.log | grep request_id='3a8f801c-072b-4805-8f38-e1337f363ed4'
 ```
 
 #### With django-structlog and json
 ```python
 >>> import structlog 
 >>> logger = structlog.get_logger(__name__)
->>> logger.info("Foo", bar="Buz")
+>>> logger.info("An error occured", bar="Buz")
 ```
 ```json
-{"request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "event": "Foo", "timestamp": "2019-04-13T19:39:31.089925Z", "logger": "my_awesome_project.my_awesome_module", "level": "info", "bar": "buz"}
+{"request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "event": "An error occured", "timestamp": "2019-04-13T19:39:31.089925Z", "logger": "my_awesome_project.my_awesome_module", "level": "info", "bar": "buz"}
 ```
 Then you can search with commands like:
 ```bash
