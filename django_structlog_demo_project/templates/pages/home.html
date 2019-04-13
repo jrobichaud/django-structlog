@@ -2,8 +2,18 @@
 
 
 {% block content %}
-<div>
-    <a href="{% url 'enqueue_successful_task' %}">Enqueue successful task</a>
-    <a href="{% url 'enqueue_failing_task' %}">Enqueue failing task</a>
-</div>
+    <div>
+        <form action="{% url 'enqueue_successful_task' %}" method="post" id="form1" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form1" value="Submit">Enqueue successful task</button>
+    </div>
+    <div>
+        <form action="{% url 'enqueue_failing_task' %}" method="post" id="form2 target="dummyframe"">
+        {% csrf_token %}
+        </form>
+        <button type="submit" form="form2" value="Submit">Enqueue failing task</button>
+    </div>
+    <span><iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" style="visibility: hidden;"></iframe></span>
+
 {% endblock %}

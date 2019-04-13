@@ -81,7 +81,7 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": True,
+    "disable_existing_loggers": False,
     "formatters": {
         "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
@@ -113,14 +113,13 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {
-            "handlers": ["colored_stream", "flat_line_file", "json_file"],
-            "level": "INFO",
-        },
         "django_structlog": {
             "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
-            "propagate": False
+        },
+        "django_structlog_demo_project": {
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
+            "level": "INFO",
         },
     }
 }

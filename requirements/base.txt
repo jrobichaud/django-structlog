@@ -22,4 +22,4 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 
 structlog>=19,<20
 colorama>=0.4.1
-
+django-ipware==2.1.0
