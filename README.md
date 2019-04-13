@@ -6,7 +6,7 @@ django-structlog is a structured logging integration for Django project using [s
 
 Logging will then produce additional cohesive metadata on each logs that makes it easier to track incident.
 
-####Standard logging:
+#### Standard logging:
 ```python
 >>> import logging
 >>> logger = logging.get_logger(__name__)
