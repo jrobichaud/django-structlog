@@ -2,10 +2,12 @@ import logging
 from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser
+from django.dispatch import receiver
 from django.test import TestCase, RequestFactory
 import structlog
 
 from django_structlog import middlewares
+from django_structlog.signals import bind_extra_request_metadata
 from django_structlog_demo_project.users.models import User
 
 
@@ -83,6 +85,39 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn('request_id', record.msg)
         self.assertNotIn('user_id', record.msg)
+
+    def test_signal(self):
+
+        @receiver(bind_extra_request_metadata)
+        def receiver_bind_extra_request_metadata(sender, signal, request=None, logger=None):
+            logger.bind(user_email=getattr(request.user, 'email', ''))
+
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        self.log_results = None
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = self.factory.get('/foo')
+
+        mock_user = User.objects.create(email='foo@example.com')
+        request.user = mock_user
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual('INFO', record.levelname)
+        self.assertIn('request_id', record.msg)
+        self.assertEqual(mock_user.email, record.msg['user_email'])
+        self.assertIn('user_id', record.msg)
+        self.assertEqual(mock_user.id, record.msg['user_id'])
 
     def test_process_request_error(self):
         expected_uuid = '00000000-0000-0000-0000-000000000000'

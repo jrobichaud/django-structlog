@@ -1,7 +1,7 @@
 # django-structlog
 [![Build Status](https://travis-ci.org/jrobichaud/django-structlog.svg?branch=master)](https://travis-ci.org/jrobichaud/django-structlog)
 [![codecov](https://codecov.io/gh/jrobichaud/django-structlog/branch/master/graph/badge.svg)](https://codecov.io/gh/jrobichaud/django-structlog)
-
+[![PyPI version](https://badge.fury.io/py/django-structlog.svg)](https://badge.fury.io/py/django-structlog)
 django-structlog is a structured logging integration for Django project using [structlog](https://www.structlog.org/)
 
 Logging will then produce additional cohesive metadata on each logs that makes it easier to track incident.
@@ -45,7 +45,7 @@ $ cat logs/flat_line.log | grep request_id='3a8f801c-072b-4805-8f38-e1337f363ed4
 ```
 Then you can search with commands like:
 ```bash
-$ cat logs/json.log | jq '.[] | select(.user_id==1)' -s
+$ cat logs/json.log | jq '.[] | select(.request_id="3a8f801c-072b-4805-8f38-e1337f363ed4")' -s
 ```
 
 ## Getting Started
@@ -143,6 +143,23 @@ Start logging with `structlog` instead of `logging`.
 ```python
 import structlog
 logger = structlog.get_logger(__name__)
+```
+
+## Extending Request Log Metadata
+
+By default only a `request_id` and the `user_id` are bound from the request but pertinent log metadata may vary from a project to another.
+
+If you need to add more metadata from the request you can implement a convenient signal receiver to bind them.
+
+```python
+from django.dispatch import receiver
+
+from django_structlog.signals import bind_extra_request_metadata
+
+
+@receiver(bind_extra_request_metadata)
+def bind_user_email(request, logger, **kwargs):
+    logger.bind(user_email=getattr(request.user, 'email', ''))
 ```
 
 ## Example outputs
