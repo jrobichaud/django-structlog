@@ -224,9 +224,28 @@ See also the list of [contributors](https://github.com/jrobichaud/django-structl
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/jrobichaud/django-structlog/blob/master/LICENSE) file for details
 
 ## Acknowledgments
 
 - Big thanks to [@ferd](https://github.com/ferd) for his [bad opinions](https://ferd.ca/erlang-otp-21-s-new-logger.html) that inspired the author enough to spend time on this library. 
 - [This issue](https://github.com/hynek/structlog/issues/175) helped the author to figure out how to integrate `structlog` in Django.
+
+## Roadmap
+
+**1.1** (TBD)
+* Add `celery` tasks support ([An answer to this is needed](https://stackoverflow.com/questions/55660979/in-celery-what-is-the-appropriate-way-to-pass-contextual-metadata-from-sender-p))
+
+## Version History
+
+**1.0.4** to **1.0.7** (April 14, 2019)
+* Automated releases with tags on `travis`
+
+**1.0.3** (April 14, 2019)
+* Add `bind_extra_request_metadata` documentation
+
+**1.0.2** (April 13, 2019)
+* Tweaked documentation.
+
+**1.0.0** (April 13, 2019)
+* Fist public release.
