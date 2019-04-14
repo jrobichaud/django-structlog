@@ -1,8 +1,6 @@
-from django.utils.version import get_version
-
 default_app_config = 'django_structlog.apps.DjangoStructLogConfig'
 name = "django_structlog"
 
-VERSION = (1, 0, 5, 'final', 0)
+VERSION = (1, 0, 6)
 
-__version__ = get_version(VERSION)
+__version__ = ".".join(str(v) for v in VERSION)

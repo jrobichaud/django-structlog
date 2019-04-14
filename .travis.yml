@@ -7,7 +7,7 @@ python:
   - '3.6'
   - '3.7'
 install:
-  - pip install tox-travis tox flake8 coverage codecov django
+  - pip install tox-travis tox flake8 coverage codecov
 after_success:
   - codecov
 services:
