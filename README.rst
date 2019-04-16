@@ -17,6 +17,12 @@ django-structlog
    :target: https://badge.fury.io/py/django-structlog
    :alt: PyPI version
 
+
+.. image:: https://readthedocs.org/projects/django-structlog/badge/?version=latest
+   :target: https://django-structlog.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+
 django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
 
 Logging will then produce additional cohesive metadata on each logs that makes it easier to track incident.
