@@ -2,7 +2,7 @@ from setuptools import setup
 
 import django_structlog
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 
@@ -13,7 +13,7 @@ setup(
     author_email='j.robichaudg+pypi@gmail.com',
     description='Structured Logging for Django',
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type="text/x-rst",
     url='https://github.com/jrobichaud/django-structlog',
     packages=[
         'django_structlog',
