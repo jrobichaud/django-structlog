@@ -36,7 +36,7 @@ Standard logging:
    >>> logger = logging.get_logger(__name__)
    >>> logger.info("An error occured")
 
-.. code-block::
+.. code-block:: bash
 
    An error occured
 
