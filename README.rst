@@ -45,7 +45,7 @@ With django-structlog and flag_line:
    >>> logger = structlog.get_logger(__name__)
    >>> logger.info("An error occured", bar="Buz")
 
-.. code-block::
+.. code-block:: bash
 
    timestamp='2019-04-13T19:39:31.089925Z' level='info' event='An error occured' logger='my_awesome_project.my_awesome_module' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0'
 
@@ -84,17 +84,17 @@ Installing
 
 Install the library
 
-.. code-block::
+.. code-block:: bash
 
    pip install django-structlog
 
 Add middleware
 
-.. code-block::
+.. code-block:: python
 
    MIDDLEWARE = [
-       'django_structlog.middlewares.RequestMiddleware',
        # ...
+       'django_structlog.middlewares.RequestMiddleware',
    ]
 
 Add appropriate structlog configuration to your ``settings.py``
