@@ -1,3 +1,7 @@
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -40,6 +44,17 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+
+def get_version(precision):
+    import django_structlog
+    return '.'.join(str(v) for v in django_structlog.VERSION[:precision])
+
+
+# Full version
+release = get_version(3)
+
+# Minor version
+version = get_version(2)
 
 # -- Options for HTML output -------------------------------------------------
 
