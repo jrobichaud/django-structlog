@@ -9,7 +9,7 @@
         <button type="submit" form="form1" value="Submit">Enqueue successful task</button>
     </div>
     <div>
-        <form action="{% url 'enqueue_failing_task' %}" method="post" id="form2 target="dummyframe"">
+        <form action="{% url 'enqueue_failing_task' %}" method="post" id="form2" target="dummyframe">
         {% csrf_token %}
         </form>
         <button type="submit" form="form2" value="Submit">Enqueue failing task</button>
