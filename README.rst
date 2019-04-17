@@ -1,27 +1,35 @@
 
 django-structlog
 ================
+|build-status| |pypi| |docs| |coverage| |python| |license|
 
-
-.. image:: https://travis-ci.org/jrobichaud/django-structlog.svg?branch=master
+.. |build-status| image:: https://secure.travis-ci.org/jrobichaud/django-structlog.svg?branch=master
    :target: https://travis-ci.org/jrobichaud/django-structlog
    :alt: Build Status
 
 
-.. image:: https://codecov.io/gh/jrobichaud/django-structlog/branch/master/graph/badge.svg
+.. |pypi| image:: https://img.shields.io/pypi/v/django-structlog.svg
+   :target: https://django-structlog.readthedocs.io/en/latest/changelog.html
+   :alt: PyPI version
+
+
+.. |docs| image:: https://readthedocs.org/projects/django-structlog/badge/?version=latest
+   :target: https://django-structlog.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+
+.. |coverage| image:: https://img.shields.io/codecov/c/github/jrobichaud/django-structlog.svg
    :target: https://codecov.io/gh/jrobichaud/django-structlog
    :alt: codecov
 
 
-.. image:: https://badge.fury.io/py/django-structlog.svg
-   :target: https://badge.fury.io/py/django-structlog
-   :alt: PyPI version
+.. |python| image:: https://img.shields.io/pypi/pyversions/django-structlog.svg
+    :target: https://pypi.org/project/django-structlog/
+    :alt: Supported Python versions
 
-
-.. image:: https://readthedocs.org/projects/django-structlog/badge/?version=latest
-   :target: https://django-structlog.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
-
+.. |license| image:: https://img.shields.io/pypi/l/django-structlog.svg
+    :target: https://pypi.org/project/django-structlog/
+    :alt: License
 
 django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
 
@@ -272,7 +280,7 @@ See also the list of `contributors <https://github.com/jrobichaud/django-structl
 License
 -------
 
-This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE>`_ file for details
+This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst>`_ file for details
 
 Acknowledgments
 ---------------

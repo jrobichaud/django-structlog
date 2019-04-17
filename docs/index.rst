@@ -10,8 +10,7 @@ Contents, indices and tables
 
   celery
   licence
-  roadmap
-  versions
+  changelog
 
 * :ref:`genindex`
 * :ref:`modindex`
