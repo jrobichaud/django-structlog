@@ -10,7 +10,7 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
     immutable_logger = structlog.threadlocal.as_immutable(logger)
     # noinspection PyProtectedMember
     context = immutable_logger._context
-    body[1]['__django_structlog__'] = dict(context)
+    headers['__django_structlog__'] = dict(context)
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
@@ -20,7 +20,7 @@ def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
     logger.new()
     logger.bind(task_id=task_id)
-    metadata = kwargs['kwargs'].pop('__django_structlog__', {})
+    metadata = getattr(task.request, '__django_structlog__', {})
     logger.bind(**metadata)
 
 
