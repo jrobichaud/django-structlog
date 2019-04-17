@@ -250,7 +250,7 @@ In another shell
 
 .. code-block:: bash
 
-   pip install -r requirement/base.txt
+   pip install -r requirements/base.txt
    pytest
 
 Demo app
