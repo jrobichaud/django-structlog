@@ -5,7 +5,7 @@ volumes:
   local_postgres_data_backups: {}
 
 services:
-  django: &django
+  django:
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -38,28 +38,38 @@ services:
       - "6379:6379"
 
   celeryworker:
-    <<: *django
-    image: django_structlog_demo_project_local_celeryworker
+    image: django_structlog_demo_project_local_django
     depends_on:
       - redis
       - postgres
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
       
-    ports: []
     command: /start-celeryworker
 
   celerybeat:
-    <<: *django
-    image: django_structlog_demo_project_local_celerybeat
+    image: django_structlog_demo_project_local_django
     depends_on:
       - redis
       - postgres
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
       
-    ports: []
     command: /start-celerybeat
 
   flower:
-    <<: *django
-    image: django_structlog_demo_project_local_flower
+    image: django_structlog_demo_project_local_django
     ports:
       - "5555:5555"
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
     command: /start-flower
