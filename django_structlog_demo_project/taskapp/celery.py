@@ -7,9 +7,7 @@ from celery.signals import setup_logging
 from django.apps import apps, AppConfig
 from django.conf import settings
 
-
-from django_structlog.middlewares.celery import connect_signals
-
+from django_structlog.celery.steps import DjangoStructLogInitStep
 
 if not settings.configured:
     # set the default Django settings module for the 'celery' program.
@@ -25,10 +23,12 @@ app = Celery("django_structlog_demo_project")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+# A step to initialize django-structlog
+app.steps['worker'].add(DjangoStructLogInitStep)
+
 
 @setup_logging.connect
 def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pragma: no cover
-    connect_signals()
     logging.basicConfig(
         **settings.LOGGING,
     )
