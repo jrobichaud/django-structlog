@@ -43,7 +43,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task enqueued', record.msg['event'])
+        self.assertEqual('task_enqueued', record.msg['event'])
         self.assertEqual('INFO', record.levelname)
         self.assertIn('task_id', record.msg)
         self.assertEqual(expected_uuid, record.msg['request_id'])
@@ -78,7 +78,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task enqueued', record.msg['event'])
+        self.assertEqual('task_enqueued', record.msg['event'])
         self.assertEqual('INFO', record.levelname)
         self.assertIn('task_id', record.msg)
         self.assertEqual(expected_task_id, record.msg['task_id'])
@@ -144,7 +144,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task retry', record.msg['event'])
+        self.assertEqual('task_retrying', record.msg['event'])
         self.assertEqual('WARNING', record.levelname)
         self.assertIn('reason', record.msg)
         self.assertEqual(expected_reason, record.msg['reason'])
@@ -157,7 +157,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task success', record.msg['event'])
+        self.assertEqual('task_succeed', record.msg['event'])
         self.assertEqual('INFO', record.levelname)
         self.assertIn('result', record.msg)
         self.assertEqual(expected_result, record.msg['result'])
@@ -170,7 +170,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task failure', record.msg['event'])
+        self.assertEqual('task_failed', record.msg['event'])
         self.assertEqual('ERROR', record.levelname)
         self.assertIn('error', record.msg)
         self.assertEqual(expected_exception, record.msg['error'])
@@ -181,7 +181,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task revoked', record.msg['event'])
+        self.assertEqual('task_revoked', record.msg['event'])
         self.assertEqual('WARNING', record.levelname)
         self.assertIn('terminated', record.msg)
         self.assertTrue(record.msg['terminated'])
@@ -198,7 +198,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task unknown', record.msg['event'])
+        self.assertEqual('task_not_found', record.msg['event'])
         self.assertEqual('ERROR', record.levelname)
         self.assertIn('message', record.msg)
         self.assertEqual(expected_message, record.msg['message'])
@@ -211,7 +211,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual('Task rejected', record.msg['event'])
+        self.assertEqual('task_rejected', record.msg['event'])
         self.assertEqual('ERROR', record.levelname)
         self.assertIn('message', record.msg)
         self.assertEqual(expected_message, record.msg['message'])

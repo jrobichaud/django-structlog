@@ -23,7 +23,7 @@ class RequestMiddleware(object):
             signals.bind_extra_request_metadata.send(sender=self.__class__, request=request, logger=logger)
 
             logger.info(
-                'Request started',
+                'request_started',
                 request=request,
                 user_agent=request.META.get('HTTP_USER_AGENT'),
             )
@@ -31,13 +31,13 @@ class RequestMiddleware(object):
                 response = self.get_response(request)
             except Exception as e:
                 logger.error(
-                    'Request raised exception',
+                    'request_failed',
                     exception=str(e),
                 )
                 raise
             else:
                 logger.info(
-                    'Request finished',
+                    'request_finished',
                     code=response.status_code,
                 )
 

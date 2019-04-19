@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.1.2 (April 19, 2019)
+----------------------
+
+*Bugfixes:*
+    - Rewrite the log texts as events
+
 1.1.1 (April 18, 2019)
 ----------------------
 

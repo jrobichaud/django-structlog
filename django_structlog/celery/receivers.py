@@ -16,7 +16,7 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
-    logger.info('Task enqueued', task_id=headers['id'])
+    logger.info('task_enqueued', task_id=headers['id'])
 
 
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
@@ -28,24 +28,24 @@ def receiver_task_pre_run(task_id, task, *args, **kwargs):
 
 
 def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
-    logger.warning('Task retry', reason=reason)
+    logger.warning('task_retrying', reason=reason)
 
 
 def receiver_task_success(result=None, **kwargs):
-    logger.info('Task success', result=str(result))
+    logger.info('task_succeed', result=str(result))
 
 
 def receiver_task_failure(task_id=None, exception=None, traceback=None, einfo=None, *args, **kwargs):
-    logger.error('Task failure', error=str(exception))
+    logger.error('task_failed', error=str(exception))
 
 
 def receiver_task_revoked(request=None, terminated=None, signum=None, expired=None, **kwargs):
-    logger.warning('Task revoked', terminated=terminated, signum=signum, expired=expired)
+    logger.warning('task_revoked', terminated=terminated, signum=signum, expired=expired)
 
 
 def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
-    logger.error('Task unknown', message=message)
+    logger.error('task_not_found', message=message)
 
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):
-    logger.error('Task rejected', message=message)
+    logger.error('task_rejected', message=message)
