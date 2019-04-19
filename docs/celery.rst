@@ -1,10 +1,13 @@
 Celery Integration
 ==================
 
+Getting Started
+^^^^^^^^^^^^^^^
+
 In order to be able to support celery you need to configure both your webapp and your workers
 
 Add CeleryMiddleWare in your web app
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 In your settings.py
 
@@ -18,7 +21,7 @@ In your settings.py
 
 
 Initialize Celery Worker with DjangoStructLogInitStep
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------------------------
 
 In your celery AppConfig's module.
 
@@ -38,7 +41,7 @@ In your celery AppConfig's module.
 
 
 Configure celery's logger
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 In the same file as before
 
@@ -112,3 +115,18 @@ In the same file as before
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
         )
+
+
+Signals
+^^^^^^^
+
+You can optionally connect to ``bind_extra_task_metadata`` signal in order to bind more metadata to the logger. This is called
+in celery's ``receiver_task_pre_run``.
+
+.. code-block:: python
+
+    from django_structlog.celery import signals
+
+    @receiver(signals.bind_extra_task_metadata)
+    def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
+        logger.bind(correlation_id=task.request.correlation_id)

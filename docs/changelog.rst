@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.1.1 (April 18, 2019)
+--------------------
+
+*New:*
+    - Add ``celery`` signal ``signals.bind_extra_task_metadata``
+
+
 1.1 (April 16, 2019)
 --------------------
 

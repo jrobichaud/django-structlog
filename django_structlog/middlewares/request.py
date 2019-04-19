@@ -1,4 +1,3 @@
-import logging
 import uuid
 
 import structlog
@@ -6,7 +5,7 @@ import structlog
 from .. import signals
 
 
-logger = structlog.wrap_logger(logger=logging.getLogger(__name__))
+logger = structlog.getLogger(__name__)
 
 
 class RequestMiddleware(object):

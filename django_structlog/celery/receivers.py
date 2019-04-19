@@ -2,8 +2,10 @@ import logging
 
 import structlog
 
+from . import signals
 
-logger = structlog.wrap_logger(logger=logging.getLogger(__name__))
+
+logger = structlog.getLogger(__name__)
 
 
 def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
@@ -20,6 +22,7 @@ def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
     logger.new()
     logger.bind(task_id=task_id)
+    signals.bind_extra_task_metadata.send(sender=receiver_task_pre_run, task=task, logger=logger)
     metadata = getattr(task.request, '__django_structlog__', {})
     logger.bind(**metadata)
 

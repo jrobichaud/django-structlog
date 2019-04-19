@@ -4,9 +4,10 @@ from unittest.mock import Mock
 import structlog
 from celery import shared_task
 from django.contrib.auth.models import AnonymousUser
+from django.dispatch import receiver
 from django.test import TestCase, RequestFactory
 
-from django_structlog.celery import receivers
+from django_structlog.celery import receivers, signals
 
 
 class TestReceivers(TestCase):
@@ -109,6 +110,31 @@ class TestReceivers(TestCase):
             'request_id': expected_request_uuid,
             'user_id': expected_user_id,
         }, context)
+
+    def test_signal(self):
+        @receiver(signals.bind_extra_task_metadata)
+        def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
+            logger.bind(correlation_id=task.request.correlation_id)
+
+        expected_correlation_uuid = '00000000-0000-0000-0000-000000000000'
+        task_id = '11111111-1111-1111-1111-111111111111'
+        task = Mock()
+        task.request = Mock()
+        task.request.correlation_id = expected_correlation_uuid
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(foo='bar')
+
+            structlog.threadlocal.as_immutable(self.logger)
+            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
+            context = immutable_logger._context
+            self.assertDictEqual({'foo': 'bar'}, context)
+
+            receivers.receiver_task_pre_run(task_id, task)
+            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
+            context = immutable_logger._context
+
+        self.assertEqual(context['correlation_id'], expected_correlation_uuid)
+        self.assertEqual(context['task_id'], task_id)
 
     def test_receiver_task_retry(self):
         expected_reason = 'foo'

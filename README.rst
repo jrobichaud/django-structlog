@@ -1,6 +1,6 @@
-
 django-structlog
 ================
+
 |build-status| |pypi| |docs| |coverage| |python| |license|
 
 .. |build-status| image:: https://secure.travis-ci.org/jrobichaud/django-structlog.svg?branch=master
@@ -35,6 +35,9 @@ django-structlog is a structured logging integration for Django project using `s
 
 Logging will then produce additional cohesive metadata on each logs that makes it easier to track incident.
 
+Logging comparison
+^^^^^^^^^^^^^^^^^^
+
 Standard logging:
 ~~~~~~~~~~~~~~~~~
 
@@ -55,7 +58,7 @@ With django-structlog and flag_line:
 
 .. code-block:: python
 
-   >>> import structlog 
+   >>> import structlog
    >>> logger = structlog.get_logger(__name__)
    >>> logger.info("An error occured", bar="Buz")
 
@@ -74,7 +77,7 @@ With django-structlog and json
 
 .. code-block:: python
 
-   >>> import structlog 
+   >>> import structlog
    >>> logger = structlog.get_logger(__name__)
    >>> logger.info("An error occured", bar="Buz")
 
@@ -89,12 +92,12 @@ Then you can search with commands like:
    $ cat logs/json.log | jq '.[] | select(.request_id="3a8f801c-072b-4805-8f38-e1337f363ed4")' -s
 
 Getting Started
----------------
+===============
 
 These steps will show how to integrate the middleware to your awesome application.
 
-Installing
-^^^^^^^^^^
+Installation
+^^^^^^^^^^^^
 
 Install the library
 
@@ -189,7 +192,7 @@ Start logging with ``structlog`` instead of ``logging``.
    logger = structlog.get_logger(__name__)
 
 Extending Request Log Metadata
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By default only a ``request_id`` and the ``user_id`` are bound from the request but pertinent log metadata may vary from a project to another.
 
@@ -207,10 +210,10 @@ If you need to add more metadata from the request you can implement a convenient
        logger.bind(user_email=getattr(request.user, 'email', ''))
 
 Example outputs
----------------
+^^^^^^^^^^^^^^^
 
 Flat lines file (\ ``logs/flat_lines.log``\ )
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: bash
 
@@ -224,7 +227,7 @@ Flat lines file (\ ``logs/flat_lines.log``\ )
    timestamp='2019-04-13T19:39:31.162372Z' level='info' event='Task success' logger='django_structlog.middlewares.celery' task_id='6b11fd80-3cdf-4de5-acc2-3fd4633aa654' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0' result='None'
 
 Json file (\ ``logs/json.log``\ )
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
 
@@ -238,9 +241,9 @@ Json file (\ ``logs/json.log``\ )
    {"task_id": "6b11fd80-3cdf-4de5-acc2-3fd4633aa654", "request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "result": "None", "event": "Task success", "timestamp": "2019-04-13T19:39:31.162372Z", "logger": "django_structlog.middlewares.celery", "level": "info"}
 
 Running the tests
------------------
+^^^^^^^^^^^^^^^^^
 
-Note: For the moment redis is needed to run the tests. The easiest way start docker's demo. 
+Note: For the moment redis is needed to run the tests. The easiest way start docker's demo.
 
 .. code-block:: bash
 
@@ -254,7 +257,7 @@ In another shell
    pytest
 
 Demo app
---------
+========
 
 .. code-block:: bash
 
@@ -262,15 +265,15 @@ Demo app
 
 Open ``http://0.0.0.0:8000/`` in your browser.
 
-Navigate while looking into the log files and shell's output. 
+Navigate while looking into the log files and shell's output.
 
 Versioning
-----------
+==========
 
-We use `SemVer <http://semver.org/>`_ for versioning. For the versions available, see the `tags on this repository <https://github.com/jrobichaud/django-structlog/tags>`_. 
+We use `SemVer <http://semver.org/>`_ for versioning. For the versions available, see the `tags on this repository <https://github.com/jrobichaud/django-structlog/tags>`_.
 
 Authors
--------
+=======
 
 
 * **Jules Robichaud-Gagnon** - *Initial work* - `jrobichaud <https://github.com/jrobichaud>`_
@@ -278,13 +281,13 @@ Authors
 See also the list of `contributors <https://github.com/jrobichaud/django-structlog/contributors>`_ who participated in this project.
 
 License
--------
+=======
 
 This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst>`_ file for details
 
 Acknowledgments
----------------
+===============
 
 
-* Big thanks to `@ferd <https://github.com/ferd>`_ for his `bad opinions <https://ferd.ca/erlang-otp-21-s-new-logger.html>`_ that inspired the author enough to spend time on this library. 
+* Big thanks to `@ferd <https://github.com/ferd>`_ for his `bad opinions <https://ferd.ca/erlang-otp-21-s-new-logger.html>`_ that inspired the author enough to spend time on this library.
 * `This issue <https://github.com/hynek/structlog/issues/175>`_ helped the author to figure out how to integrate ``structlog`` in Django.
