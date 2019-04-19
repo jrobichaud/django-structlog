@@ -1,8 +1,8 @@
 Celery Integration
 ==================
 
-Getting Started
-^^^^^^^^^^^^^^^
+Getting Started with Celery
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to be able to support celery you need to configure both your webapp and your workers
 

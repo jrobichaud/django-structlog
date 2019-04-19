@@ -1,3 +1,5 @@
+.. inclusion-marker-introduction-begin
+
 django-structlog
 ================
 
@@ -90,6 +92,10 @@ Then you can search with commands like:
 .. code-block:: bash
 
    $ cat logs/json.log | jq '.[] | select(.request_id="3a8f801c-072b-4805-8f38-e1337f363ed4")' -s
+
+.. inclusion-marker-introduction-end
+
+.. inclusion-marker-getting-started-begin
 
 Getting Started
 ===============
@@ -209,11 +215,16 @@ If you need to add more metadata from the request you can implement a convenient
    def bind_user_email(request, logger, **kwargs):
        logger.bind(user_email=getattr(request.user, 'email', ''))
 
+
+.. inclusion-marker-getting-started-end
+
+.. inclusion-marker-example-outputs-begin
+
 Example outputs
-^^^^^^^^^^^^^^^
+===============
 
 Flat lines file (\ ``logs/flat_lines.log``\ )
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
@@ -227,7 +238,7 @@ Flat lines file (\ ``logs/flat_lines.log``\ )
    timestamp='2019-04-13T19:39:31.162372Z' level='info' event='Task success' logger='django_structlog.middlewares.celery' task_id='6b11fd80-3cdf-4de5-acc2-3fd4633aa654' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0' result='None'
 
 Json file (\ ``logs/json.log``\ )
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: json
 
@@ -240,8 +251,12 @@ Json file (\ ``logs/json.log``\ )
    {"request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "code": 201, "event": "Request finished", "timestamp": "2019-04-13T19:39:31.160043Z", "logger": "django_structlog.middlewares.request", "level": "info"}
    {"task_id": "6b11fd80-3cdf-4de5-acc2-3fd4633aa654", "request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "result": "None", "event": "Task success", "timestamp": "2019-04-13T19:39:31.162372Z", "logger": "django_structlog.middlewares.celery", "level": "info"}
 
+.. inclusion-marker-example-outputs-end
+
+.. inclusion-marker-running-tests-begin
+
 Running the tests
-^^^^^^^^^^^^^^^^^
+=================
 
 Note: For the moment redis is needed to run the tests. The easiest way start docker's demo.
 
@@ -256,6 +271,11 @@ In another shell
    pip install -r requirements/base.txt
    pytest
 
+.. inclusion-marker-running-tests-end
+
+
+.. inclusion-marker-demo-begin
+
 Demo app
 ========
 
@@ -267,10 +287,10 @@ Open ``http://0.0.0.0:8000/`` in your browser.
 
 Navigate while looking into the log files and shell's output.
 
-Versioning
-==========
+.. inclusion-marker-demo-end
 
-We use `SemVer <http://semver.org/>`_ for versioning. For the versions available, see the `tags on this repository <https://github.com/jrobichaud/django-structlog/tags>`_.
+
+.. inclusion-marker-authors-begin
 
 Authors
 =======
@@ -280,14 +300,20 @@ Authors
 
 See also the list of `contributors <https://github.com/jrobichaud/django-structlog/contributors>`_ who participated in this project.
 
-License
-=======
+.. inclusion-marker-authors-end
 
-This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst>`_ file for details
+
+.. inclusion-marker-acknowledgements-begin
 
 Acknowledgments
 ===============
 
-
 * Big thanks to `@ferd <https://github.com/ferd>`_ for his `bad opinions <https://ferd.ca/erlang-otp-21-s-new-logger.html>`_ that inspired the author enough to spend time on this library.
 * `This issue <https://github.com/hynek/structlog/issues/175>`_ helped the author to figure out how to integrate ``structlog`` in Django.
+
+.. inclusion-marker-acknowledgements-end
+
+License
+=======
+
+This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst>`_ file for details
