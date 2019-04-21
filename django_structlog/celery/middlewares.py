@@ -2,6 +2,16 @@ from ..celery.receivers import receiver_before_task_publish, receiver_after_task
 
 
 class CeleryMiddleware(object):
+    """
+    ``CeleryMiddleware`` initializes ``celery`` signals to pass ``django``'s request information to ``celery`` worker's logger.
+
+    >>> MIDDLEWARE = [
+    ...     # ...
+    ...     'django_structlog.middlewares.RequestMiddleware',
+    ...     'django_structlog.middlewares.CeleryMiddleware',
+    ... ]
+
+    """
     def __init__(self, get_response=None):
         self.get_response = get_response
         from celery.signals import (

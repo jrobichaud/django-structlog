@@ -9,6 +9,14 @@ logger = structlog.getLogger(__name__)
 
 
 class RequestMiddleware(object):
+    """ ``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+
+    >>> MIDDLEWARE = [
+    ...     # ...
+    ...     'django_structlog.middlewares.RequestMiddleware',
+    ... ]
+
+    """
     def __init__(self, get_response):
         self.get_response = get_response
 

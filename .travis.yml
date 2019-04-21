@@ -23,6 +23,7 @@ jobs:
       script:
         - cd docs
         - make html
+        - make doctest
       services: []
       after_success: skip
     - stage: deploy

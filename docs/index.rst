@@ -11,6 +11,7 @@ Contents, indices and tables
 
   getting_started
   celery
+  api_documentation
   example_outputs
   running_tests
   demo

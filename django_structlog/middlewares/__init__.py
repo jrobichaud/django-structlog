@@ -1,7 +1,8 @@
-from .request import ( # noqa F401
+from .request import (  # noqa F401
     RequestMiddleware,
 )
 
-from .celery import ( # noqa F401
+# noinspection PyUnresolvedReferences
+from ..celery.middlewares import (  # noqa F401
     CeleryMiddleware,
 )
