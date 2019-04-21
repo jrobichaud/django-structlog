@@ -35,6 +35,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: PyPy",
+        "Topic :: System :: Logging",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ]
