@@ -3,7 +3,9 @@
 django-structlog
 ================
 
-|build-status| |pypi| |docs| |coverage| |python| |license|
+| |pypi| |build-status| |docs| |coverage| |open_issues| |pull_requests|
+| |django| |python| |license|
+| |watchers| |stars| |forks|
 
 .. |build-status| image:: https://secure.travis-ci.org/jrobichaud/django-structlog.svg?branch=master
    :target: https://travis-ci.org/jrobichaud/django-structlog
@@ -11,7 +13,7 @@ django-structlog
 
 
 .. |pypi| image:: https://img.shields.io/pypi/v/django-structlog.svg
-   :target: https://django-structlog.readthedocs.io/en/latest/changelog.html
+   :target: https://pypi.org/project/django-structlog/
    :alt: PyPI version
 
 
@@ -30,8 +32,32 @@ django-structlog
     :alt: Supported Python versions
 
 .. |license| image:: https://img.shields.io/pypi/l/django-structlog.svg
-    :target: https://pypi.org/project/django-structlog/
+    :target: https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst
     :alt: License
+
+.. |open_issues| image:: https://img.shields.io/github/issues/jrobichaud/django-structlog.svg
+    :target: https://github.com/jrobichaud/django-structlog/issues
+    :alt: GitHub issues
+
+.. |django| image:: https://img.shields.io/pypi/djversions/django-structlog.svg
+    :target: https://pypi.org/project/django-structlog/
+    :alt: PyPI - Django Version
+
+.. |pull_requests| image:: https://img.shields.io/github/issues-pr/jrobichaud/django-structlog.svg
+    :target: https://github.com/jrobichaud/django-structlog/pulls
+    :alt: GitHub pull requests
+
+.. |forks| image:: https://img.shields.io/github/forks/jrobichaud/django-structlog.svg?style=social
+    :target: https://github.com/jrobichaud/django-structlog/
+    :alt: GitHub forks
+
+.. |stars| image:: https://img.shields.io/github/stars/jrobichaud/django-structlog.svg?style=social
+    :target: https://github.com/jrobichaud/django-structlog/
+    :alt: GitHub stars
+
+.. |watchers| image:: https://img.shields.io/github/watchers/jrobichaud/django-structlog.svg?style=social
+    :target: https://github.com/jrobichaud/django-structlog/
+    :alt: GitHub watchers
 
 django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
 
