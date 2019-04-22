@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.1.4 (April 22, 2019)
+----------------------
+
+*Improvements:*
+    - Wheel distribution
+
+
 1.1.3 (April 22, 2019)
 ----------------------
 

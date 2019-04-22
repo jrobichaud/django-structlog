@@ -3,7 +3,7 @@
 django-structlog
 ================
 
-| |pypi| |build-status| |docs| |coverage| |open_issues| |pull_requests|
+| |pypi| |wheels| |build-status| |docs| |coverage| |open_issues| |pull_requests|
 | |django| |python| |license|
 | |watchers| |stars| |forks|
 
@@ -16,16 +16,13 @@ django-structlog
    :target: https://pypi.org/project/django-structlog/
    :alt: PyPI version
 
-
 .. |docs| image:: https://readthedocs.org/projects/django-structlog/badge/?version=latest
    :target: https://django-structlog.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-
 .. |coverage| image:: https://img.shields.io/codecov/c/github/jrobichaud/django-structlog.svg
    :target: https://codecov.io/gh/jrobichaud/django-structlog
    :alt: codecov
-
 
 .. |python| image:: https://img.shields.io/pypi/pyversions/django-structlog.svg
     :target: https://pypi.org/project/django-structlog/
@@ -58,6 +55,11 @@ django-structlog
 .. |watchers| image:: https://img.shields.io/github/watchers/jrobichaud/django-structlog.svg?style=social
     :target: https://github.com/jrobichaud/django-structlog/
     :alt: GitHub watchers
+
+.. |wheels| image:: https://img.shields.io/pypi/wheel/django-structlog.svg
+    :target: https://pypi.org/project/django-structlog/
+    :alt: PyPI - Wheel
+
 
 django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
 
