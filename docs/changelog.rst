@@ -1,10 +1,17 @@
 Change Log
 ==========
 
+1.1.3 (April 22, 2019)
+----------------------
+
+*Improvements:*
+    - api documentation
+    - code documentation
+
 1.1.2 (April 19, 2019)
 ----------------------
 
-*Bugfixes:*
+*Changes:*
     - Rewrite the log texts as events
 
 1.1.1 (April 18, 2019)
