@@ -94,7 +94,7 @@ With django-structlog and flag_line:
 
 .. code-block:: bash
 
-   timestamp='2019-04-13T19:39:31.089925Z' level='info' event='an_error_occurred' logger='my_awesome_project.my_awesome_module' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0'
+   timestamp='2019-04-13T19:39:31.089925Z' level='info' event='an_error_occurred' logger='my_awesome_project.my_awesome_module' request_id='3a8f801c-072b-4805-8f38-e1337f363ed4' user_id=1 ip='0.0.0.0' bar='Buz'
 
 Then you can search with commands like:
 
@@ -113,7 +113,7 @@ With django-structlog and json
 
 .. code-block:: json
 
-   {"request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "event": "an_error_occurred", "timestamp": "2019-04-13T19:39:31.089925Z", "logger": "my_awesome_project.my_awesome_module", "level": "info", "bar": "buz"}
+   {"request_id": "3a8f801c-072b-4805-8f38-e1337f363ed4", "user_id": 1, "ip": "0.0.0.0", "event": "an_error_occurred", "timestamp": "2019-04-13T19:39:31.089925Z", "logger": "my_awesome_project.my_awesome_module", "level": "info", "bar": "Buz"}
 
 Then you can search with commands like:
 
