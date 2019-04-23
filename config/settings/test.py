@@ -95,7 +95,6 @@ LOGGING = {
     }
 }
 
-# Same as in the example
 structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
@@ -107,7 +106,6 @@ structlog.configure(
         structlog.processors.format_exc_info,
         structlog.processors.UnicodeDecoder(),
         structlog.processors.ExceptionPrettyPrinter(),
-        #structlog.processors.KeyValueRenderer(),
         structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
     ],
     context_class=structlog.threadlocal.wrap_dict(dict),

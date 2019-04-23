@@ -33,7 +33,6 @@ def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pr
         **settings.LOGGING,
     )
 
-    # Same as in the example
     structlog.configure(
         processors=[
             structlog.stdlib.filter_by_level,

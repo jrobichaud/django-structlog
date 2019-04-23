@@ -124,7 +124,6 @@ LOGGING = {
     }
 }
 
-# Same as in the example
 structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
