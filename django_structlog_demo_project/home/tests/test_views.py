@@ -17,3 +17,7 @@ class TestEnqueueFailingTask:
         assert response.status_code == 201
 
 
+class TestEnqueueNestingTask:
+    def test(self):
+        response = views.enqueue_nesting_task(None)
+        assert response.status_code == 201

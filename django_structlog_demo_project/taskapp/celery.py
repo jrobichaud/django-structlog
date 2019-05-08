@@ -78,3 +78,20 @@ def successful_task(foo=None):
 @shared_task
 def failing_task(foo=None, **kwargs):
     raise Exception('This is a failed task')
+
+
+@shared_task
+def nesting_task():
+    import structlog
+    logger = structlog.getLogger(__name__)
+    logger.bind(foo='Bar')
+    logger.info('This is a nesting task')
+
+    nested_task.delay()
+
+
+@shared_task
+def nested_task():
+    import structlog
+    logger = structlog.getLogger(__name__)
+    logger.info('This is a nested task')

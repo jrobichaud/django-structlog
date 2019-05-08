@@ -11,6 +11,7 @@ urlpatterns = [
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     url(r"^success_task$", views.enqueue_successful_task, name="enqueue_successful_task"),
     url(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
+    url(r"^nesting_task$", views.enqueue_nesting_task, name="enqueue_nesting_task"),
     url(
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),

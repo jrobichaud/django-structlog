@@ -14,6 +14,12 @@
         </form>
         <button type="submit" form="form2" value="Submit">Enqueue failing task</button>
     </div>
+    <div>
+        <form action="{% url 'enqueue_nesting_task' %}" method="post" id="form3" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form3" value="Submit">Enqueue nesting task</button>
+    </div>
     <span><iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" style="visibility: hidden;"></iframe></span>
 
 {% endblock %}

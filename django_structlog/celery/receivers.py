@@ -1,5 +1,3 @@
-import logging
-
 import structlog
 
 from . import signals
@@ -11,8 +9,10 @@ logger = structlog.getLogger(__name__)
 def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
     immutable_logger = structlog.threadlocal.as_immutable(logger)
     # noinspection PyProtectedMember
-    context = immutable_logger._context
-    headers['__django_structlog__'] = dict(context)
+    context = dict(immutable_logger._context)
+    if 'task_id' in context:
+        context['parent_task_id'] = context.pop('task_id')
+    headers['__django_structlog__'] = context
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
