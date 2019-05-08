@@ -45,7 +45,7 @@ class TestReceivers(TestCase):
         record = log_results.records[0]
         self.assertEqual('task_enqueued', record.msg['event'])
         self.assertEqual('INFO', record.levelname)
-        self.assertIn('task_id', record.msg)
+        self.assertIn('child_task_id', record.msg)
         self.assertEqual(expected_uuid, record.msg['request_id'])
 
     def test_receiver_before_task_publish(self):
@@ -84,10 +84,10 @@ class TestReceivers(TestCase):
         record = log_results.records[0]
         self.assertEqual('task_enqueued', record.msg['event'])
         self.assertEqual('INFO', record.levelname)
-        self.assertIn('task_id', record.msg)
-        self.assertEqual(expected_task_id, record.msg['task_id'])
-        self.assertIn('task_name', record.msg)
-        self.assertEqual(expected_task_name, record.msg['task_name'])
+        self.assertIn('child_task_id', record.msg)
+        self.assertEqual(expected_task_id, record.msg['child_task_id'])
+        self.assertIn('child_task_name', record.msg)
+        self.assertEqual(expected_task_name, record.msg['child_task_name'])
 
     def test_receiver_task_pre_run(self):
         expected_request_uuid = '00000000-0000-0000-0000-000000000000'
