@@ -74,7 +74,8 @@ class TestReceivers(TestCase):
 
     def test_receiver_after_task_publish(self):
         expected_task_id = '00000000-0000-0000-0000-000000000000'
-        headers = {'id': expected_task_id}
+        expected_task_name = 'Foo'
+        headers = {'id': expected_task_id, 'task': expected_task_name}
 
         with self.assertLogs(logging.getLogger('django_structlog.celery.receivers'), logging.INFO) as log_results:
             receivers.receiver_after_task_publish(headers=headers)
@@ -85,6 +86,8 @@ class TestReceivers(TestCase):
         self.assertEqual('INFO', record.levelname)
         self.assertIn('task_id', record.msg)
         self.assertEqual(expected_task_id, record.msg['task_id'])
+        self.assertIn('task_name', record.msg)
+        self.assertEqual(expected_task_name, record.msg['task_name'])
 
     def test_receiver_task_pre_run(self):
         expected_request_uuid = '00000000-0000-0000-0000-000000000000'

@@ -16,7 +16,7 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
-    logger.info('task_enqueued', task_id=headers['id'])
+    logger.info('task_enqueued', task_id=headers['id'], task_name=headers['task'])
 
 
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
