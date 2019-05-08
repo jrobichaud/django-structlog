@@ -25,6 +25,7 @@ setup(
         'structlog',
         'django-ipware',
     ],
+    include_package_data=True,
     license="MIT",
     classifiers=[
         "Framework :: Django",
