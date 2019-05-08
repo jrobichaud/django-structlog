@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+
+1.1.5 (May 8, 2019)
+----------------------
+
+*New:*
+    - Add support of tasks calling other tasks (introducing `parent_task_id`)
+
+*Bugfixes:*
+    - Fix missing packages
+
+
 1.1.4 (April 22, 2019)
 ----------------------
 
