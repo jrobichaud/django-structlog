@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.1.6 (May 8, 2019)
+----------------------
+
+*New:*
+    - Add `task_name` when a task is enqueued
+
 
 1.1.5 (May 8, 2019)
 ----------------------
