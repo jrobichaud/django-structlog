@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.2.0 (May 8, 2019)
+----------------------
+
+*Changes:*
+    - In the event `task_enqueued`, `task_id` and `task_name` are renamed `child_task_id` and `child_task_name` respectively to avoid override of `task_id` in nested tasks.
+
+
 1.1.6 (May 8, 2019)
 ----------------------
 
