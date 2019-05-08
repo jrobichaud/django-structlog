@@ -17,6 +17,8 @@ setup(
     url='https://github.com/jrobichaud/django-structlog',
     packages=[
         'django_structlog',
+        'django_structlog.celery',
+        'django_structlog.middlewares',
     ],
     install_requires=[
         'django>=1.11'
