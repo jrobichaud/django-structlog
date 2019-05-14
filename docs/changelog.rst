@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+
+1.2.2 (May 13, 2019)
+-------------------
+
+*Improvements:*
+    - Use appropriate packaging
+
+
 1.2.1 (May 8, 2019)
 -------------------
 
