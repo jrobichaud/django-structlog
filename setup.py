@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_namespace_packages
 
 import django_structlog
 
@@ -15,11 +15,12 @@ setup(
     long_description=long_description,
     long_description_content_type="text/x-rst",
     url='https://github.com/jrobichaud/django-structlog',
-    packages=[
-        'django_structlog',
-        'django_structlog.celery',
-        'django_structlog.middlewares',
-    ],
+    packages=find_namespace_packages(
+        include=[
+            'django_structlog',
+            'django_structlog.*',
+        ]
+    ),
     install_requires=[
         'django>=1.11'
         'structlog',
