@@ -4,7 +4,7 @@ django-structlog
 ================
 
 | |pypi| |wheels| |build-status| |docs| |coverage| |open_issues| |pull_requests|
-| |django| |python| |license|
+| |django| |python| |license| |black|
 | |watchers| |stars| |forks|
 
 .. |build-status| image:: https://secure.travis-ci.org/jrobichaud/django-structlog.svg?branch=master
@@ -59,6 +59,10 @@ django-structlog
 .. |wheels| image:: https://img.shields.io/pypi/wheel/django-structlog.svg
     :target: https://pypi.org/project/django-structlog/
     :alt: PyPI - Wheel
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/python/black
+    :alt: Black
 
 
 django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
