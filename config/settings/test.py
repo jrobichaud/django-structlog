@@ -74,25 +74,16 @@ LOGGING = {
             "processor": structlog.dev.ConsoleRenderer(colors=True),
         },
     },
-    "filters": {
-    },
+    "filters": {},
     "handlers": {
-        "structured_stream": {
-            "class": "logging.StreamHandler",
-            "formatter": "colored",
-        },
+        "structured_stream": {"class": "logging.StreamHandler", "formatter": "colored"},
         "structured_file": {
             "class": "logging.handlers.WatchedFileHandler",
             "filename": "test.log",
             "formatter": "plain",
         },
     },
-    "loggers": {
-        "": {
-            "handlers": ["structured_stream"],
-            "level": "INFO",
-        },
-    }
+    "loggers": {"": {"handlers": ["structured_stream"], "level": "INFO"}},
 }
 
 structlog.configure(
@@ -115,12 +106,10 @@ structlog.configure(
 )
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(str(ROOT_DIR), 'db.sqlite3'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(str(ROOT_DIR), "db.sqlite3"),
     }
 }
 
-INSTALLED_APPS += [
-    'django_structlog_demo_project.test_app',
-]
+INSTALLED_APPS += ["django_structlog_demo_project.test_app"]

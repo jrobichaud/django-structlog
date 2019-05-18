@@ -9,7 +9,9 @@ from django_structlog_demo_project.home import views
 
 urlpatterns = [
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    url(r"^success_task$", views.enqueue_successful_task, name="enqueue_successful_task"),
+    url(
+        r"^success_task$", views.enqueue_successful_task, name="enqueue_successful_task"
+    ),
     url(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
     url(r"^nesting_task$", views.enqueue_nesting_task, name="enqueue_nesting_task"),
     url(
@@ -18,7 +20,10 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     # User management
-    url(r"^users/", include("django_structlog_demo_project.users.urls", namespace="users")),
+    url(
+        r"^users/",
+        include("django_structlog_demo_project.users.urls", namespace="users"),
+    ),
     url(r"^accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
