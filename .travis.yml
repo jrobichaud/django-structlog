@@ -22,11 +22,11 @@ jobs:
         - make doctest
       services: []
       after_success: skip
-    - stage: lint
-      name: 'Linting'
+    - stage: black
+      name: 'black'
       python: '3.7'
       install: pip install black
-      script: black --check .
+      script: black --check --verbose .
       services: []
       after_success: skip
     - stage: deploy
