@@ -24,14 +24,14 @@ app = Celery("django_structlog_demo_project")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # A step to initialize django-structlog
-app.steps['worker'].add(DjangoStructLogInitStep)
+app.steps["worker"].add(DjangoStructLogInitStep)
 
 
 @setup_logging.connect
-def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pragma: no cover
-    logging.basicConfig(
-        **settings.LOGGING,
-    )
+def receiver_setup_logging(
+    loglevel, logfile, format, colorize, **kwargs
+):  # pragma: no cover
+    logging.basicConfig(**settings.LOGGING)
 
     structlog.configure(
         processors=[
@@ -44,7 +44,7 @@ def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pr
             structlog.processors.format_exc_info,
             structlog.processors.UnicodeDecoder(),
             structlog.processors.ExceptionPrettyPrinter(),
-            #structlog.processors.KeyValueRenderer(),
+            # structlog.processors.KeyValueRenderer(),
             structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],
         context_class=structlog.threadlocal.wrap_dict(dict),
@@ -71,21 +71,23 @@ def debug_task(self):
 @shared_task
 def successful_task(foo=None):
     import structlog
+
     logger = structlog.getLogger(__name__)
-    logger.info('This is a successful task')
+    logger.info("This is a successful task")
 
 
 @shared_task
 def failing_task(foo=None, **kwargs):
-    raise Exception('This is a failed task')
+    raise Exception("This is a failed task")
 
 
 @shared_task
 def nesting_task():
     import structlog
+
     logger = structlog.getLogger(__name__)
-    logger.bind(foo='Bar')
-    logger.info('This is a nesting task')
+    logger.bind(foo="Bar")
+    logger.info("This is a nesting task")
 
     nested_task.delay()
 
@@ -93,5 +95,6 @@ def nesting_task():
 @shared_task
 def nested_task():
     import structlog
+
     logger = structlog.getLogger(__name__)
-    logger.info('This is a nested task')
+    logger.info("This is a nested task")

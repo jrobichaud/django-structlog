@@ -1,7 +1,9 @@
 import django.dispatch
 
 
-bind_extra_request_metadata = django.dispatch.Signal(providing_args=["request", "logger"])
+bind_extra_request_metadata = django.dispatch.Signal(
+    providing_args=["request", "logger"]
+)
 """ Signal to add extra ``structlog`` bindings from ``django``'s request.
 
 >>> from django.dispatch import receiver

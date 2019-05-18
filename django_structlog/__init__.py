@@ -2,7 +2,7 @@
 """
 
 
-default_app_config = 'django_structlog.apps.DjangoStructLogConfig'
+default_app_config = "django_structlog.apps.DjangoStructLogConfig"
 name = "django_structlog"
 
 VERSION = (1, 2, 2)

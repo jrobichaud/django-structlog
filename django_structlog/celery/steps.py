@@ -27,6 +27,7 @@ class DjangoStructLogInitStep(bootsteps.Step):
             task_unknown,
             task_rejected,
         )
+
         before_task_publish.connect(receivers.receiver_before_task_publish)
         after_task_publish.connect(receivers.receiver_after_task_publish)
         task_prerun.connect(receivers.receiver_task_pre_run)

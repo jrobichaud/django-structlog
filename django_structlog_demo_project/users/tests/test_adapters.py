@@ -1,6 +1,9 @@
 import pytest
 
-from django_structlog_demo_project.users.adapters import SocialAccountAdapter, AccountAdapter
+from django_structlog_demo_project.users.adapters import (
+    SocialAccountAdapter,
+    AccountAdapter,
+)
 
 pytestmark = pytest.mark.django_db
 

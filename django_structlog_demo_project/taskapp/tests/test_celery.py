@@ -7,17 +7,17 @@ pytestmark = pytest.mark.django_db
 
 class TestSuccessfulTask:
     def test(self, caplog):
-        celery.successful_task(foo='bar')
+        celery.successful_task(foo="bar")
         assert len(caplog.records) == 1
         record = caplog.records[0]
-        assert record.msg['event'] == "This is a successful task"
+        assert record.msg["event"] == "This is a successful task"
 
 
 class TestFailingTask:
     def test(self):
         with pytest.raises(Exception) as e:
-            celery.failing_task(foo='bar')
-        assert str(e.value) == 'This is a failed task'
+            celery.failing_task(foo="bar")
+        assert str(e.value) == "This is a failed task"
 
 
 class TestNestingTask:
@@ -25,7 +25,7 @@ class TestNestingTask:
         celery.nesting_task()
         assert len(caplog.records) == 1
         record = caplog.records[0]
-        assert record.msg['event'] == "This is a nesting task"
+        assert record.msg["event"] == "This is a nesting task"
 
 
 class TestNestedTask:
@@ -33,4 +33,4 @@ class TestNestedTask:
         celery.nested_task()
         assert len(caplog.records) == 1
         record = caplog.records[0]
-        assert record.msg['event'] == "This is a nested task"
+        assert record.msg["event"] == "This is a nested task"
