@@ -18,7 +18,7 @@ setup(
     packages=find_namespace_packages(
         include=["django_structlog", "django_structlog.*"]
     ),
-    install_requires=["django>=1.11" "structlog", "django-ipware"],
+    install_requires=["django>=1.11", "structlog", "django-ipware"],
     include_package_data=True,
     license="MIT",
     classifiers=[

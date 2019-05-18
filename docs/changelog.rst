@@ -2,6 +2,16 @@ Change Log
 ==========
 
 
+1.2.3 (May 18, 2019)
+--------------------
+
+*Bugfixes:*
+    - Fix ``structlog`` dependency not being installed
+
+*Improvements:*
+    - Use `black <https://github.com/python/black>`_ code formatter
+
+
 1.2.2 (May 13, 2019)
 --------------------
 
@@ -20,21 +30,21 @@ Change Log
 -------------------
 
 *Changes:*
-    - In the event `task_enqueued`, `task_id` and `task_name` are renamed `child_task_id` and `child_task_name` respectively to avoid override of `task_id` in nested tasks.
+    - In the event ``task_enqueued``, ``task_id`` and ``task_name`` are renamed ``child_task_id`` and ``child_task_name`` respectively to avoid override of ``task_id`` in nested tasks.
 
 
 1.1.6 (May 8, 2019)
 -------------------
 
 *New:*
-    - Add `task_name` when a task is enqueued
+    - Add ``task_name`` when a task is enqueued
 
 
 1.1.5 (May 8, 2019)
 -------------------
 
 *New:*
-    - Add support of tasks calling other tasks (introducing `parent_task_id`)
+    - Add support of tasks calling other tasks (introducing ``parent_task_id``)
 
 *Bugfixes:*
     - Fix missing packages
