@@ -7,23 +7,26 @@ python:
   - '3.5'
   - '3.6'
   - '3.7'
-install:
-  - pip install tox-travis tox flake8 coverage codecov
-after_success:
-  - codecov
-services:
-  - redis-server
+install: pip install tox-travis tox flake8 coverage codecov
+after_success: codecov
+services: redis-server
 jobs:
   include:
     - stage: doc
       name: 'Test build doc'
       python: '3.7'
-      install:
-        - pip install -r requirements_doc.txt
+      install: pip install -r requirements_doc.txt
       script:
         - cd docs
         - make html
         - make doctest
+      services: []
+      after_success: skip
+    - stage: lint
+      name: 'Linting'
+      python: '3.7'
+      install: pip install black
+      script: black --check .
       services: []
       after_success: skip
     - stage: deploy
