@@ -93,14 +93,13 @@ LOGGING = {
         },
         "key_value": {
             "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.processors.KeyValueRenderer(key_order=['timestamp', 'level', 'event', 'logger']),
+            "processor": structlog.processors.KeyValueRenderer(
+                key_order=["timestamp", "level", "event", "logger"]
+            ),
         },
     },
     "handlers": {
-        "colored_stream": {
-            "class": "logging.StreamHandler",
-            "formatter": "colored",
-        },
+        "colored_stream": {"class": "logging.StreamHandler", "formatter": "colored"},
         "json_file": {
             "class": "logging.handlers.WatchedFileHandler",
             "filename": "logs/json.log",
@@ -121,7 +120,7 @@ LOGGING = {
             "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
         },
-    }
+    },
 }
 
 structlog.configure(
@@ -144,6 +143,6 @@ structlog.configure(
 )
 
 MIDDLEWARE += [
-    'django_structlog.middlewares.RequestMiddleware',
-    'django_structlog.middlewares.CeleryMiddleware',
+    "django_structlog.middlewares.RequestMiddleware",
+    "django_structlog.middlewares.CeleryMiddleware",
 ]

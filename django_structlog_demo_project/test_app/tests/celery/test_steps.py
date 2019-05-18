@@ -6,7 +6,6 @@ from django_structlog.celery import steps
 
 
 class TestDjangoStructLogInitStep(TestCase):
-
     def test_call(self):
         from django_structlog.celery.receivers import (
             receiver_before_task_publish,
@@ -19,7 +18,8 @@ class TestDjangoStructLogInitStep(TestCase):
             receiver_task_unknown,
             receiver_task_rejected,
         )
-        with patch('celery.utils.dispatch.signal.Signal.connect') as mock_connect:
+
+        with patch("celery.utils.dispatch.signal.Signal.connect") as mock_connect:
             steps.DjangoStructLogInitStep(None)
 
         mock_connect.assert_has_calls(

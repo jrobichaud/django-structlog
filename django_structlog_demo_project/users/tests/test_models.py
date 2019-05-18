@@ -5,4 +5,6 @@ pytestmark = pytest.mark.django_db
 
 
 def test_user_get_absolute_url(user: settings.AUTH_USER_MODEL):
-    assert user.get_absolute_url() == "/users/{username}/".format(username=user.username)
+    assert user.get_absolute_url() == "/users/{username}/".format(
+        username=user.username
+    )

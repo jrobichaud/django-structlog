@@ -12,12 +12,11 @@ class CeleryMiddleware(object):
     ... ]
 
     """
+
     def __init__(self, get_response=None):
         self.get_response = get_response
-        from celery.signals import (
-            before_task_publish,
-            after_task_publish,
-        )
+        from celery.signals import before_task_publish, after_task_publish
+
         before_task_publish.connect(receiver_before_task_publish)
         after_task_publish.connect(receiver_after_task_publish)
 

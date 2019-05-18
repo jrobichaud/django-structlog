@@ -7,25 +7,18 @@ with open("README.rst", "r") as fh:
 
 
 setup(
-    name='django-structlog',
+    name="django-structlog",
     version=django_structlog.__version__,
-    author='Jules Robichaud-Gagnon',
-    author_email='j.robichaudg+pypi@gmail.com',
-    description='Structured Logging for Django',
+    author="Jules Robichaud-Gagnon",
+    author_email="j.robichaudg+pypi@gmail.com",
+    description="Structured Logging for Django",
     long_description=long_description,
     long_description_content_type="text/x-rst",
-    url='https://github.com/jrobichaud/django-structlog',
+    url="https://github.com/jrobichaud/django-structlog",
     packages=find_namespace_packages(
-        include=[
-            'django_structlog',
-            'django_structlog.*',
-        ]
+        include=["django_structlog", "django_structlog.*"]
     ),
-    install_requires=[
-        'django>=1.11'
-        'structlog',
-        'django-ipware',
-    ],
+    install_requires=["django>=1.11" "structlog", "django-ipware"],
     include_package_data=True,
     license="MIT",
     classifiers=[
@@ -42,5 +35,5 @@ setup(
         "Topic :: System :: Logging",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-    ]
+    ],
 )

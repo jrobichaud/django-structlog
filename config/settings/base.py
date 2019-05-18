@@ -244,12 +244,12 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "django_structlog_demo_project.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "django_structlog_demo_project.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = (
+    "django_structlog_demo_project.users.adapters.SocialAccountAdapter"
+)
 
 
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-INSTALLED_APPS += [
-    'django_structlog',
-]
+INSTALLED_APPS += ["django_structlog"]

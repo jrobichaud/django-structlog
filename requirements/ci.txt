@@ -50,7 +50,6 @@ django-extensions==2.1.6  # https://github.com/django-extensions/django-extensio
 django-coverage-plugin==1.6.0  # https://github.com/nedbat/django_coverage_plugin
 pytest-django==3.4.8  # https://github.com/pytest-dev/pytest-django
 
-
 # Setup tools
 # ------------------------------------------------------------------------------
 setuptools>=41.0.1
