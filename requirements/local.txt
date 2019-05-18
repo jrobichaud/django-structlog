@@ -2,8 +2,9 @@
 
 Werkzeug==0.15.2  # https://github.com/pallets/werkzeug
 ipdb==0.12  # https://github.com/gotcha/ipdb
-Sphinx==2.0.0  # https://github.com/sphinx-doc/sphinx
 psycopg2==2.8 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
+sphinx<2
+sphinx_rtd_theme
 
 # Testing
 # ------------------------------------------------------------------------------
@@ -30,4 +31,4 @@ pytest-django==3.4.8  # https://github.com/pytest-dev/pytest-django
 
 # pre-commit
 # ------------------------------------------------------------------------------
-pre-commit==1.12.0  # https://github.com/pre-commit/pre-commit
+pre-commit==1.16.1  # https://github.com/pre-commit/pre-commit

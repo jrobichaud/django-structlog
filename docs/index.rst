@@ -14,6 +14,7 @@ Contents, indices and tables
   api_documentation
   example_outputs
   running_tests
+  development
   demo
   changelog
   authors

@@ -24,8 +24,8 @@ services:
   postgres:
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: django_structlog_demo_project_production_postgres
+      dockerfile: ./compose/local/postgres/Dockerfile
+    image: django_structlog_demo_project_local_postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
       - local_postgres_data_backups:/backups
