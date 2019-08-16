@@ -116,6 +116,8 @@ In the same file as before
         )
 
 
+.. _celery_signals:
+
 Signals
 ^^^^^^^
 

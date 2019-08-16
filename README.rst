@@ -229,6 +229,8 @@ Start logging with ``structlog`` instead of ``logging``.
    import structlog
    logger = structlog.get_logger(__name__)
 
+.. _django_signals:
+
 Extending Request Log Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
