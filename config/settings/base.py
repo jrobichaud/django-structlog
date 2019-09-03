@@ -221,7 +221,6 @@ if USE_TZ:
 
 try:
     CELERY_BROKER_URL = env("CELERY_BROKER_URL")
-    print(CELERY_BROKER_URL)
 # This breaks when running tests locally.
 except ImproperlyConfigured:
     CELERY_BROKER_URL = "redis://0.0.0.0:6379/0"
