@@ -1,9 +1,9 @@
 import uuid
 
 import structlog
-
+import traceback
 from .. import signals
-
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 logger = structlog.getLogger(__name__)
 
@@ -41,10 +41,21 @@ class RequestMiddleware(object):
             )
             try:
                 response = self.get_response(request)
+
             except Exception as e:
-                logger.error("request_failed", exception=str(e))
+                traceback_object = e.__traceback__
+                formatted_traceback = traceback.format_tb(traceback_object)
+
+                logger.error(
+                    "request_failed",
+                    error_message=str(e),
+                    error_traceback=formatted_traceback,
+                    code=HTTP_500_INTERNAL_SERVER_ERROR,
+                )
                 raise
             else:
-                logger.info("request_finished", code=response.status_code)
+                logger.info(
+                    "request_finished", code=response.status_code, request=request
+                )
 
         return response
