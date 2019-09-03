@@ -153,6 +153,13 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertIsNone(record.msg["user_id"])
 
+        self.assertIn("code", record.msg)
+        self.assertEqual(record.msg["code"], 500)
+        self.assertIn("error_message", record.msg)
+        self.assertEqual(record.msg["error_message"], "This is an exception")
+        self.assertIn("error_traceback", record.msg)
+        self.assertEqual(type(record.msg["error_traceback"]), list)
+        self.assertIn("request", record.msg)
         with self.assertLogs(__name__, logging.INFO) as log_results:
             self.logger.info("hello")
         self.assertEqual(1, len(log_results.records))
