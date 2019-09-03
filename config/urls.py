@@ -52,11 +52,7 @@ if settings.DEBUG:
             default_views.page_not_found,
             kwargs={"exception": Exception("Page not Found")},
         ),
-        url(
-            r"^500/",
-            default_views.server_error,
-            kwargs={"exception": Exception("Error")},
-        ),
+        url(r"^500/", default_views.server_error),
         url(r"^uncaught_exception/", uncaught_exception_view),
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
