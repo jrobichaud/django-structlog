@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.3.0 (September 3, 2019)
+-------------------------
+
+*Improvements:*
+    - Improve django uncaught exception formatting. See `#7 <https://github.com/jrobichaud/django-structlog/pull/7>`_ . Special thanks to `@paulstuartparker <https://github.com/paulstuartparker>`_
+
 
 1.2.3 (May 18, 2019)
 --------------------
