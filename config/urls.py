@@ -7,6 +7,11 @@ from django.views import defaults as default_views
 
 from django_structlog_demo_project.home import views
 
+
+def uncaught_exception_view(request):
+    raise Exception("Uncaught Exception")
+
+
 urlpatterns = [
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     url(
@@ -48,6 +53,7 @@ if settings.DEBUG:
             kwargs={"exception": Exception("Page not Found")},
         ),
         url(r"^500/", default_views.server_error),
+        url(r"^uncaught_exception/", uncaught_exception_view),
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar

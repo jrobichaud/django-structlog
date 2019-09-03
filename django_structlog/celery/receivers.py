@@ -42,7 +42,8 @@ def receiver_task_success(result=None, **kwargs):
 def receiver_task_failure(
     task_id=None, exception=None, traceback=None, einfo=None, *args, **kwargs
 ):
-    logger.error("task_failed", error=str(exception))
+
+    logger.exception("task_failed", error=str(exception), exception=exception)
 
 
 def receiver_task_revoked(
