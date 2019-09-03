@@ -51,6 +51,7 @@ class RequestMiddleware(object):
                     error_message=str(e),
                     error_traceback=formatted_traceback,
                     code=HTTP_500_INTERNAL_SERVER_ERROR,
+                    request=request,
                 )
                 raise
             else:
