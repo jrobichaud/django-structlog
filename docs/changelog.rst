@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.3.1 (September 4, 2019)
+-------------------------
+
+*Bugfixes:*
+    - Remove extraneous dependency
+
+
 1.3.0 (September 3, 2019)
 -------------------------
 
