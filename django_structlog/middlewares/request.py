@@ -20,9 +20,6 @@ class RequestMiddleware(object):
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def check_user_into_request(self, request):
-        return True if getattr(request, 'user', None) else False
-
     def __call__(self, request):
         from ipware import get_client_ip
 
@@ -30,7 +27,7 @@ class RequestMiddleware(object):
         with structlog.threadlocal.tmp_bind(logger):
             logger.bind(request_id=request_id)
 
-            if self.check_user_into_request(request):
+            if hasattr(request, "user"):
                 logger.bind(user_id=request.user.id)
 
             ip, routable = get_client_ip(request)

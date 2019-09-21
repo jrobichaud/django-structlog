@@ -16,7 +16,7 @@ class TestRequestMiddleware(TestCase):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
 
-    def test_user_removed_from_request(self):
+    def test_process_request_without_user(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
@@ -39,6 +39,7 @@ class TestRequestMiddleware(TestCase):
 
         self.assertEqual("INFO", record.levelname)
         self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
         with self.assertLogs(__name__, logging.INFO) as log_results:
             self.logger.info("hello")
