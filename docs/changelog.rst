@@ -1,11 +1,18 @@
 Change Log
 ==========
 
+1.3.2 (September 21, 2019)
+--------------------------
+
+*Improvements:*
+    - Add support of projects without ``AuthenticationMiddleware``. See `#9 <https://github.com/jrobichaud/django-structlog/pull/9>`_ . Special thanks to `@dhararon <https://github.com/dhararon>`_
+
+
 1.3.1 (September 4, 2019)
 -------------------------
 
 *Bugfixes:*
-    - Remove extraneous dependency
+    - Remove extraneous ``rest-framework`` dependency introduced by `#7 <https://github.com/jrobichaud/django-structlog/pull/7>`_. See `#8 <https://github.com/jrobichaud/django-structlog/pull/8>`_ . Special thanks to `@ghickman <https://github.com/ghickman>`_
 
 
 1.3.0 (September 3, 2019)
