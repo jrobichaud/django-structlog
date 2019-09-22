@@ -27,12 +27,14 @@ These metadata are repeated on each log of the current request and will be also 
 +==================+==========================================================================================+
 | request_id       | UUID of the request                                                                      |
 +------------------+------------------------------------------------------------------------------------------+
-| user_id          | user's id or None (requires ``django.contrib.auth.middleware.AuthenticationMiddleware``) |
+| user_id          | user's id or None (requires `django.contrib.auth.middleware.AuthenticationMiddleware`_)  |
 +------------------+------------------------------------------------------------------------------------------+
 | ip               | request's ip                                                                             |
 +------------------+------------------------------------------------------------------------------------------+
 
 To bind more metadata from request see :ref:`django_signals`
+
+.. _`django.contrib.auth.middleware.AuthenticationMiddleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.contrib.auth.middleware
 
 
 Request Events Metadata
