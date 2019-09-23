@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
-from django_structlog_demo_project.home import views
+from django_structlog_demo_project.home import views, api_views
 
 
 def uncaught_exception_view(request):
@@ -19,6 +19,7 @@ urlpatterns = [
     ),
     url(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
     url(r"^nesting_task$", views.enqueue_nesting_task, name="enqueue_nesting_task"),
+    url(r"^api_view$", api_views.api_view, name="api_view"),
     url(
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),

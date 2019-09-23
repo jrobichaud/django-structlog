@@ -11,7 +11,6 @@ django-structlog
    :target: https://travis-ci.org/jrobichaud/django-structlog
    :alt: Build Status
 
-
 .. |pypi| image:: https://img.shields.io/pypi/v/django-structlog.svg
    :target: https://pypi.org/project/django-structlog/
    :alt: PyPI version
@@ -65,9 +64,17 @@ django-structlog
     :alt: Black
 
 
-django-structlog is a structured logging integration for Django project using `structlog <https://www.structlog.org/>`_
+django-structlog is a structured logging integration for `Django <https://www.djangoproject.com/>`_ project using `structlog <https://www.structlog.org/>`_
 
 Logging will then produce additional cohesive metadata on each logs that makes it easier to track events or incidents.
+
+
+Additional Popular Integrations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- `Django REST framework <https://www.django-rest-framework.org/>`_ is supported by default;
+- `Celery <http://www.celeryproject.org/>`_'s task logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/celery.html>`_ for details.
+
 
 Logging comparison
 ^^^^^^^^^^^^^^^^^^
