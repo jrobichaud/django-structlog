@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  doc:
+    build:
+      context: .
+      dockerfile: ./compose/local/doc/Dockerfile
+    image: django_structlog_demo_project_docs
+    volumes:
+      - .:/app:cached
+    working_dir: /app/docs
+    command: make html
+  doc_serve:
+    image: django_structlog_demo_project_docs
+    volumes:
+      - .:/app:cached
+    ports:
+      - "5001:5001"
+    working_dir: /app/docs/_build/html
+    command: python -m http.server 5001
+
