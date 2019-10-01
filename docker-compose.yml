@@ -13,7 +13,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - .:/app
+      - .:/app:cached
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -27,8 +27,8 @@ services:
       dockerfile: ./compose/local/postgres/Dockerfile
     image: django_structlog_demo_project_local_postgres
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_data_backups:/backups
+      - local_postgres_data:/var/lib/postgresql/data:cached
+      - local_postgres_data_backups:/backups:cached
     env_file:
       - ./.envs/.local/.postgres
 
@@ -43,7 +43,7 @@ services:
       - redis
       - postgres
     volumes:
-      - .:/app
+      - .:/app:cached
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -56,7 +56,7 @@ services:
       - redis
       - postgres
     volumes:
-      - .:/app
+      - .:/app:cached
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -68,7 +68,7 @@ services:
     ports:
       - "5555:5555"
     volumes:
-      - .:/app
+      - .:/app:cached
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
