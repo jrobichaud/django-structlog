@@ -19,4 +19,4 @@ services:
       - .:/app:cached
     command: /start
     environment:
-      - SPHINX_COMMAND=doctest
+      - SPHINX_COMMAND=doctest -E
