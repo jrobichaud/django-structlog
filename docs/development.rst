@@ -33,11 +33,3 @@ Building, Serving and Testing the Documentation Locally
 
    $ docker-compose -f docker-compose.docs.yml up --build
    Serving on http://0.0.0.0:5000
-
-.. HINT::
-   Tests are only ran once at the start of docker compose.  You need to restart to run the tests again.
-
-.. WARNING::
-   README.rst and LICENCE.rst are not watched for technical reasons. You need to restart the watch to get the changes.
-
-
