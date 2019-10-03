@@ -8,13 +8,15 @@ services:
     image: django_structlog_demo_project_docs
     volumes:
       - .:/app:cached
-    working_dir: /app
+    command: /start
+    environment:
+      - SPHINX_COMMAND=html
     ports:
       - "5000:5000"
-    command: /start
   docs-test:
     image: django_structlog_demo_project_docs
     volumes:
       - .:/app:cached
-    working_dir: /app/docs
-    command: make doctest
+    command: /start
+    environment:
+      - SPHINX_COMMAND=doctest
