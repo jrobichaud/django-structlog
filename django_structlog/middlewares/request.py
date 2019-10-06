@@ -28,7 +28,7 @@ class RequestMiddleware(object):
             logger.bind(request_id=request_id)
 
             if hasattr(request, "user"):
-                logger.bind(user_id=request.user.id)
+                logger.bind(user_id=request.user.pk)
 
             ip, routable = get_client_ip(request)
             logger.bind(ip=ip)
