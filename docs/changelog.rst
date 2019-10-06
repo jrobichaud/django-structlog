@@ -1,11 +1,19 @@
 Change Log
 ==========
 
+
+1.3.3 (October 6, 2019)
+--------------------------
+
+*Bugfix:*
+    - Fix support of different primary key for ``User`` model. See `#13 <https://github.com/jrobichaud/django-structlog/issues/13>`_. Special thanks to `@dhararon <https://github.com/dhararon>`_
+
+
 1.3.2 (September 21, 2019)
 --------------------------
 
 *Improvements:*
-    - Add support of projects without ``AuthenticationMiddleware``. See `#9 <https://github.com/jrobichaud/django-structlog/pull/9>`_ . Special thanks to `@dhararon <https://github.com/dhararon>`_
+    - Add support of projects without ``AuthenticationMiddleware``. See `#9 <https://github.com/jrobichaud/django-structlog/pull/9>`_. Special thanks to `@dhararon <https://github.com/dhararon>`_
 
 
 1.3.1 (September 4, 2019)
@@ -19,7 +27,7 @@ Change Log
 -------------------------
 
 *Improvements:*
-    - Improve django uncaught exception formatting. See `#7 <https://github.com/jrobichaud/django-structlog/pull/7>`_ . Special thanks to `@paulstuartparker <https://github.com/paulstuartparker>`_
+    - Improve django uncaught exception formatting. See `#7 <https://github.com/jrobichaud/django-structlog/pull/7>`_. Special thanks to `@paulstuartparker <https://github.com/paulstuartparker>`_
 
 
 1.2.3 (May 18, 2019)
