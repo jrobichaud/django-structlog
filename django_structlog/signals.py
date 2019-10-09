@@ -8,7 +8,7 @@ bind_extra_request_metadata = django.dispatch.Signal(
 
 >>> from django.dispatch import receiver
 >>> from django_structlog import signals
->>> 
+>>>
 >>> @receiver(signals.bind_extra_request_metadata)
 ... def bind_user_email(request, logger, **kwargs):
 ...     logger.bind(user_email=getattr(request.user, 'email', ''))
