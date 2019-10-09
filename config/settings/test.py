@@ -5,8 +5,8 @@ import os
 
 import structlog
 
-from .base import *  # noqa
-from .base import env
+from .base import *  # noqa: F403
+from .base import env, INSTALLED_APPS, ROOT_DIR
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -108,8 +108,8 @@ structlog.configure(
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(str(ROOT_DIR), "db.sqlite3"),  # noqa: F405
+        "NAME": os.path.join(str(ROOT_DIR), "db.sqlite3"),
     }
 }
 
-INSTALLED_APPS += ["django_structlog_demo_project.test_app"]  # noqa: F405
+INSTALLED_APPS += ["django_structlog_demo_project.test_app"]

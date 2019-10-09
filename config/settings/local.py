@@ -1,6 +1,6 @@
 import structlog
 
-from .base import *  # noqa
+from .base import *  # noqa: F403
 from .base import env
 
 # GENERAL
