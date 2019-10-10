@@ -29,6 +29,13 @@ jobs:
       script: black --check --verbose .
       services: []
       after_success: skip
+    - stage: flake8
+      name: 'flake8'
+      python: '3.7'
+      install: pip install flake8
+      script: flake8
+      services: []
+      after_success: skip
     - stage: deploy
       name: 'PyPI deployment'
       python: '3.7'

@@ -5,8 +5,8 @@ import os
 
 import structlog
 
-from .base import *  # noqa
-from .base import env
+from .base import *  # noqa: F403
+from .base import env, INSTALLED_APPS, ROOT_DIR
 
 # GENERAL
 # ------------------------------------------------------------------------------

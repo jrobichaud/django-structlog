@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch, call
+from unittest.mock import patch, call
 
 from django.test import TestCase
 
