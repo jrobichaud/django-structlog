@@ -6,13 +6,9 @@ pytestmark = pytest.mark.django_db
 
 
 def test_detail(user: settings.AUTH_USER_MODEL):
-    assert reverse(
-        "users:detail", kwargs={"username": user.username}
-    ) == "/users/{username}/".format(username=user.username)
-    assert (
-        resolve("/users/{username}/".format(username=user.username)).view_name
-        == "users:detail"
-    )
+    route = "/users/{username}/".format(username=user.username)
+    assert reverse("users:detail", kwargs={"username": user.username}) == route
+    assert resolve(route).view_name == "users:detail"
 
 
 def test_list():
