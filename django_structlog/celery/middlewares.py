@@ -1,7 +1,7 @@
 from ..celery.receivers import receiver_before_task_publish, receiver_after_task_publish
 
 
-class CeleryMiddleware(object):
+class CeleryMiddleware:
     """
     ``CeleryMiddleware`` initializes ``celery`` signals to pass ``django``'s request information to ``celery`` worker's logger.
 
