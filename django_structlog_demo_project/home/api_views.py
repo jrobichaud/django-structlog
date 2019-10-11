@@ -6,6 +6,6 @@ logger = structlog.get_logger(__name__)
 
 
 @api_view()
-def api_view(request):
+def home_api_view(request):
     logger.info("This is a rest-framework structured log")
     return Response({"message": "Hello, world!"})

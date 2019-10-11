@@ -7,7 +7,7 @@ from .. import signals
 logger = structlog.getLogger(__name__)
 
 
-class RequestMiddleware(object):
+class RequestMiddleware:
     """ ``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
     >>> MIDDLEWARE = [
@@ -30,7 +30,7 @@ class RequestMiddleware(object):
             if hasattr(request, "user"):
                 logger.bind(user_id=request.user.pk)
 
-            ip, routable = get_client_ip(request)
+            ip, _ = get_client_ip(request)
             logger.bind(ip=ip)
             signals.bind_extra_request_metadata.send(
                 sender=self.__class__, request=request, logger=logger

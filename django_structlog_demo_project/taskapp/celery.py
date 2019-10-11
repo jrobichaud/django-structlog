@@ -2,8 +2,7 @@ import logging
 import os
 
 import structlog
-from celery import Celery, shared_task
-from celery.signals import setup_logging
+from celery import Celery, shared_task, signals
 from django.apps import apps, AppConfig
 from django.conf import settings
 
@@ -27,7 +26,7 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.steps["worker"].add(DjangoStructLogInitStep)
 
 
-@setup_logging.connect
+@signals.setup_logging.connect
 def receiver_setup_logging(
     loglevel, logfile, format, colorize, **kwargs
 ):  # pragma: no cover
@@ -83,8 +82,6 @@ def failing_task(foo=None, **kwargs):
 
 @shared_task
 def nesting_task():
-    import structlog
-
     logger = structlog.getLogger(__name__)
     logger.bind(foo="Bar")
     logger.info("This is a nesting task")
@@ -94,7 +91,5 @@ def nesting_task():
 
 @shared_task
 def nested_task():
-    import structlog
-
     logger = structlog.getLogger(__name__)
     logger.info("This is a nested task")
