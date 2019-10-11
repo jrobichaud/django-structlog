@@ -36,6 +36,13 @@ jobs:
       script: flake8
       services: []
       after_success: skip
+    - stage: prospector
+      name: 'prospector'
+      python: '3.7'
+      install: pip install prospector
+      script: prospector
+      services: []
+      after_success: skip
     - stage: deploy
       name: 'PyPI deployment'
       python: '3.7'

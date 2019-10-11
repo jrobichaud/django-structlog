@@ -1,0 +1,7 @@
+ignore-paths:
+  - docs
+  - build
+
+uses:
+  - django
+  - celery
