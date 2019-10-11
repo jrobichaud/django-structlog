@@ -3,8 +3,6 @@
 Werkzeug==0.15.2  # https://github.com/pallets/werkzeug
 ipdb==0.12  # https://github.com/gotcha/ipdb
 psycopg2==2.8 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
-sphinx<2
-sphinx_rtd_theme
 
 # Testing
 # ------------------------------------------------------------------------------
