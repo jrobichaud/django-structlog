@@ -2,6 +2,8 @@ import uuid
 
 import structlog
 import traceback
+from django.http import Http404
+
 from .. import signals
 
 logger = structlog.getLogger(__name__)
@@ -18,6 +20,7 @@ class RequestMiddleware:
     """
 
     def __init__(self, get_response):
+        self._has_error = False
         self.get_response = get_response
 
     def __call__(self, request):
@@ -41,24 +44,30 @@ class RequestMiddleware:
                 request=request,
                 user_agent=request.META.get("HTTP_USER_AGENT"),
             )
-            try:
-                response = self.get_response(request)
-
-            except Exception as e:
-                traceback_object = e.__traceback__
-                formatted_traceback = traceback.format_tb(traceback_object)
-
-                logger.error(
-                    "request_failed",
-                    error_message=str(e),
-                    error_traceback=formatted_traceback,
-                    code=500,
-                    request=request,
-                )
-                raise
-            else:
+            self._has_error = False
+            response = self.get_response(request)
+            if not self._has_error:
                 logger.info(
                     "request_finished", code=response.status_code, request=request
                 )
 
         return response
+
+    def process_exception(self, request, exception):
+        if isinstance(exception, Http404):
+            # We don't log an exception here, and we don't set that we handled
+            # an error as we want the standard `request_finished` log message
+            # to be emitted.
+            return
+
+        self._has_error = True
+
+        traceback_object = exception.__traceback__
+        formatted_traceback = traceback.format_tb(traceback_object)
+        logger.exception(
+            "request_failed",
+            code=500,
+            request=request,
+            error=exception,
+            error_traceback=formatted_traceback,
+        )
