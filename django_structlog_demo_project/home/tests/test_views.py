@@ -21,3 +21,10 @@ class TestEnqueueNestingTask:
     def test(self):
         response = views.enqueue_nesting_task(None)
         assert response.status_code == 201
+
+
+class TestRaiseException:
+    def test(self):
+        with pytest.raises(Exception) as e:
+            views.raise_exception(None)
+        assert str(e.value) == "This is a view raising an exception."

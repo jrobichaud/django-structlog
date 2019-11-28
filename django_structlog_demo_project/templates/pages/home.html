@@ -20,6 +20,12 @@
         </form>
         <button type="submit" form="form3" value="Submit">Enqueue nesting task</button>
     </div>
+    <div>
+        <form action="{% url 'raise_exception' %}" method="post" id="form4">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form4" value="Submit">Raise exception</button>
+    </div>
 
     <div>
         <a href="{% url 'api_view' %}">rest-framework API View</a>

@@ -25,3 +25,7 @@ def enqueue_nesting_task(request):
     logger.info("Enqueuing nesting task")
     nesting_task.delay()
     return HttpResponse(status=201)
+
+
+def raise_exception(request):
+    raise Exception("This is a view raising an exception.")
