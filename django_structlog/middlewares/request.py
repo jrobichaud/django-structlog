@@ -20,8 +20,8 @@ class RequestMiddleware:
     """
 
     def __init__(self, get_response):
-        self._raised_exception = False
         self.get_response = get_response
+        self._raised_exception = False
 
     def __call__(self, request):
         from ipware import get_client_ip
