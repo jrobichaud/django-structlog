@@ -20,7 +20,7 @@ class RequestMiddleware:
     """
 
     def __init__(self, get_response):
-        self._has_error = False
+        self._raised_exception = False
         self.get_response = get_response
 
     def __call__(self, request):
@@ -44,9 +44,9 @@ class RequestMiddleware:
                 request=request,
                 user_agent=request.META.get("HTTP_USER_AGENT"),
             )
-            self._has_error = False
+            self._raised_exception = False
             response = self.get_response(request)
-            if not self._has_error:
+            if not self._raised_exception:
                 logger.info(
                     "request_finished", code=response.status_code, request=request
                 )
@@ -60,7 +60,7 @@ class RequestMiddleware:
             # to be emitted.
             return
 
-        self._has_error = True
+        self._raised_exception = True
 
         traceback_object = exception.__traceback__
         formatted_traceback = traceback.format_tb(traceback_object)
