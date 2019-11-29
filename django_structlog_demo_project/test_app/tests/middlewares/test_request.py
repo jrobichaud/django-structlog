@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser
 from django.dispatch import receiver
+from django.http import Http404, HttpResponseNotFound
 from django.test import TestCase, RequestFactory
 import structlog
 
@@ -155,19 +156,23 @@ class TestRequestMiddleware(TestCase):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         self.log_results = None
 
-        def get_response(_response):
-            raise Exception("This is an exception")
-
         request = self.factory.get("/foo")
         request.user = AnonymousUser()
 
-        middleware = middlewares.RequestMiddleware(get_response)
+        middleware = middlewares.RequestMiddleware(None)
+
+        exception = Exception("This is an exception")
+
+        def get_response(_response):
+            """ Simulate an exception """
+            middleware.process_exception(request, exception)
+
+        middleware.get_response = get_response
+
         with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
             logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results, self.assertRaises(Exception) as e:
+        ) as log_results:
             middleware(request)
-
-        self.assertEqual("This is an exception", str(e.exception))
 
         self.assertEqual(2, len(log_results.records))
         record = log_results.records[0]
@@ -186,11 +191,63 @@ class TestRequestMiddleware(TestCase):
 
         self.assertIn("code", record.msg)
         self.assertEqual(record.msg["code"], 500)
-        self.assertIn("error_message", record.msg)
-        self.assertEqual(record.msg["error_message"], "This is an exception")
+        self.assertIn("error", record.msg)
+        self.assertEqual(record.msg["error"], exception)
         self.assertIn("error_traceback", record.msg)
         self.assertEqual(type(record.msg["error_traceback"]), list)
         self.assertIn("request", record.msg)
+
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+
+    def test_process_request_404_are_processed_as_regular_requests(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        self.log_results = None
+
+        request = self.factory.get("/foo")
+        request.user = AnonymousUser()
+
+        middleware = middlewares.RequestMiddleware(None)
+
+        exception = Http404()
+
+        def get_response(_response):
+            """ Simulate an exception """
+            middleware.process_exception(request, exception)
+            return HttpResponseNotFound()
+
+        middleware.get_response = get_response
+
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            logging.getLogger("django_structlog"), logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        record = log_results.records[1]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        self.assertIn("code", record.msg)
+        self.assertEqual(record.msg["code"], 404)
+        self.assertNotIn("error", record.msg)
+        self.assertNotIn("error_traceback", record.msg)
+        self.assertIn("request", record.msg)
+
         with self.assertLogs(__name__, logging.INFO) as log_results:
             self.logger.info("hello")
         self.assertEqual(1, len(log_results.records))

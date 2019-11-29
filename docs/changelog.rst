@@ -1,9 +1,15 @@
 Change Log
 ==========
 
+1.3.4 (November 27, 2019)
+-------------------------
+
+*Bugfix:*
+    - Exception logging not working properly with ``DEBUG = False``. See `#19 <https://github.com/jrobichaud/django-structlog/issues/19>`_. Special thanks to `@danpalmer <https://github.com/danpalmer>`_
+
 
 1.3.3 (October 6, 2019)
---------------------------
+-----------------------
 
 *Bugfix:*
     - Fix support of different primary key for ``User`` model. See `#13 <https://github.com/jrobichaud/django-structlog/issues/13>`_. Special thanks to `@dhararon <https://github.com/dhararon>`_

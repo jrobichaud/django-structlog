@@ -51,7 +51,9 @@ These metadata appear once along with their associated event
 +------------------+------------------+------------------------+
 | request_finished | code             | request's status code  |
 +------------------+------------------+------------------------+
-| request_failed   | exception        | exception as string    |
+| request_failed   | error            | exception object       |
++------------------+------------------+------------------------+
+| request_failed   | error_traceback  | exception's traceback  |
 +------------------+------------------+------------------------+
 
 
