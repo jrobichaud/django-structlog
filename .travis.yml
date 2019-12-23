@@ -12,7 +12,7 @@ after_success: codecov
 services: redis-server
 jobs:
   include:
-    - stage: test_app
+    - stage: test_demo_app
       name: 'Test demo app'
       python: '3.7'
       install: pip install -r requirements.txt

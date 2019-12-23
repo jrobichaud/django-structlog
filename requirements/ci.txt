@@ -9,14 +9,7 @@ flower==0.9.3  # https://github.com/mher/flower
 # Django
 # ------------------------------------------------------------------------------
 django-environ==0.4.5  # https://github.com/joke2k/django-environ
-django-model-utils==3.1.2  # https://github.com/jazzband/django-model-utils
-django-allauth==0.39.1  # https://github.com/pennersr/django-allauth
-django-crispy-forms==1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.10.0  # https://github.com/niwinz/django-redis
-
-# Django REST Framework
-djangorestframework==3.9.2  # https://github.com/encode/django-rest-framework
-coreapi==2.3.3  # https://github.com/core-api/python-client
 
 structlog>=19.2.0,<20
 colorama>=0.4.1
@@ -44,8 +37,6 @@ pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 # ------------------------------------------------------------------------------
 factory-boy==2.11.1  # https://github.com/FactoryBoy/factory_boy
 
-django-debug-toolbar==1.11  # https://github.com/jazzband/django-debug-toolbar
-django-extensions==2.1.6  # https://github.com/django-extensions/django-extensions
 django-coverage-plugin==1.6.0  # https://github.com/nedbat/django_coverage_plugin
 pytest-django==3.4.8  # https://github.com/pytest-dev/pytest-django
 
