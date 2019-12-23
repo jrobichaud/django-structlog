@@ -3,29 +3,10 @@ With these settings, tests run faster.
 """
 import os
 
-import environ
-
 import structlog
 
-
-env = environ.Env()
-
-ROOT_DIR = (
-    environ.Path(__file__) - 3
-)  # (test_app/config/settings/base.py - 3 = test_app/)
-APPS_DIR = ROOT_DIR.path("test_app")
-
-# APPS
-# ------------------------------------------------------------------------------
-INSTALLED_APPS = [
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.sites",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-]
-
+from .base import *  # noqa: F403
+from .base import env, INSTALLED_APPS, ROOT_DIR
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -48,6 +29,25 @@ CACHES = {
         "LOCATION": "",
     }
 }
+
+# PASSWORDS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
+PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
+# TEMPLATES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#templates
+TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG  # noqa F405
+TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
+    (
+        "django.template.loaders.cached.Loader",
+        [
+            "django.template.loaders.filesystem.Loader",
+            "django.template.loaders.app_directories.Loader",
+        ],
+    )
+]
 
 # EMAIL
 # ------------------------------------------------------------------------------

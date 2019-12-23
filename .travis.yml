@@ -12,6 +12,17 @@ after_success: codecov
 services: redis-server
 jobs:
   include:
+    - stage: test_app
+      name: 'Test demo app'
+      python: '3.7'
+      install: pip install -r requirements.txt
+      env:
+        CELERY_BROKER_URL=redis://0.0.0.0:6379
+        DJANGO_SETTINGS_MODULE=config.settings.test_demo_app
+      script:
+        - pytest --cov=./ --cov-append django_structlog_demo_project
+      services: []
+      after_success: skip
     - stage: doc
       name: 'Test build doc'
       python: '3.7'
