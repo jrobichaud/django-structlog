@@ -112,4 +112,4 @@ DATABASES = {
     }
 }
 
-INSTALLED_APPS += ["test_app"]
+INSTALLED_APPS += ["django-structlog", "test_app"]
