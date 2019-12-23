@@ -21,8 +21,6 @@ jobs:
         DJANGO_SETTINGS_MODULE=config.settings.test_demo_app
       script:
         - pytest --cov=./ --cov-append django_structlog_demo_project
-      services: []
-      after_success: skip
     - stage: doc
       name: 'Test build doc'
       python: '3.7'
