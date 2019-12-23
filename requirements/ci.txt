@@ -1,27 +1,18 @@
-pytz==2018.9  # https://github.com/stub42/pytz
-python-slugify==3.0.2  # https://github.com/un33k/python-slugify
-Pillow==6.0.0  # https://github.com/python-pillow/Pillow
-argon2-cffi==19.1.0  # https://github.com/hynek/argon2_cffi
-whitenoise==4.1.2  # https://github.com/evansd/whitenoise
-redis==3.2.1  # https://github.com/antirez/redis
+redis==3.3.11  # https://github.com/antirez/redis
 flower==0.9.3  # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
 django-environ==0.4.5  # https://github.com/joke2k/django-environ
-django-redis==4.10.0  # https://github.com/niwinz/django-redis
+django-redis==4.11.0  # https://github.com/niwinz/django-redis
 
 structlog>=19.2.0,<20
-colorama>=0.4.1
+colorama>=0.4.3
 
-Werkzeug==0.15.2  # https://github.com/pallets/werkzeug
-ipdb==0.12  # https://github.com/gotcha/ipdb
-Sphinx==2.0.0  # https://github.com/sphinx-doc/sphinx
-psycopg2==2.8 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
+psycopg2==2.8.4 --no-binary psycopg2  # https://github.com/psycopg/psycopg2
 
 # Testing
 # ------------------------------------------------------------------------------
-mypy==0.700  # https://github.com/python/mypy
 pytest==4.4.0  # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.2  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==2.6.1
