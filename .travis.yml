@@ -20,7 +20,7 @@ jobs:
         CELERY_BROKER_URL=redis://0.0.0.0:6379
         DJANGO_SETTINGS_MODULE=config.settings.test_demo_app
       script:
-        - pytest --cov=./ --cov-append django_structlog_demo_project
+        - pytest  --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
     - stage: doc
       name: 'Test build doc'
       python: '3.7'
