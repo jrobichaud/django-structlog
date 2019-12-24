@@ -2,7 +2,7 @@ Change Log
 ==========
 
 1.3.5 (December 23, 2019)
---------------------------
+-------------------------
 
 *New:*
     - Add python 3.8, celery 4.4 and django 3.0 to the test matrix.
