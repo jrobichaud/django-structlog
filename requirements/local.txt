@@ -1,4 +1,28 @@
--r ./base.txt
+pytz==2018.9  # https://github.com/stub42/pytz
+python-slugify==3.0.2  # https://github.com/un33k/python-slugify
+Pillow==6.0.0  # https://github.com/python-pillow/Pillow
+argon2-cffi==19.1.0  # https://github.com/hynek/argon2_cffi
+whitenoise==4.1.2  # https://github.com/evansd/whitenoise
+redis==3.2.1  # https://github.com/antirez/redis
+celery==4.3.0  # pyup: < 5.0  # https://github.com/celery/celery
+flower==0.9.3  # https://github.com/mher/flower
+
+# Django
+# ------------------------------------------------------------------------------
+django>=2,<3  # pyup: < 2.1  # https://www.djangoproject.com/
+django-environ==0.4.5  # https://github.com/joke2k/django-environ
+django-model-utils==3.1.2  # https://github.com/jazzband/django-model-utils
+django-allauth==0.39.1  # https://github.com/pennersr/django-allauth
+django-crispy-forms==1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
+django-redis==4.10.0  # https://github.com/niwinz/django-redis
+
+# Django REST Framework
+djangorestframework==3.9.2  # https://github.com/encode/django-rest-framework
+coreapi==2.3.3  # https://github.com/core-api/python-client
+
+structlog>=19.2.0,<20
+colorama>=0.4.1
+django-ipware==2.1.0
 
 Werkzeug==0.15.2  # https://github.com/pallets/werkzeug
 ipdb==0.12  # https://github.com/gotcha/ipdb
