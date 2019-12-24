@@ -309,8 +309,9 @@ In another shell
 
 .. code-block:: bash
 
-   pip install -r requirements/base.txt
-   pytest
+   pip install -r requirements.txt
+   env CELERY_BROKER_URL=redis://0.0.0.0:6379 pytest test_app
+   env CELERY_BROKER_URL=redis://0.0.0.0:6379 DJANGO_SETTINGS_MODULE=config.settings.test_demo_app pytest django_structlog_demo_project
 
 .. inclusion-marker-running-tests-end
 
