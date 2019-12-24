@@ -1,6 +1,18 @@
 Change Log
 ==========
 
+1.3.5 (December 23, 2019)
+--------------------------
+
+*New:*
+    - Add python 3.8, celery 4.4 and django 3.0 to the test matrix.
+
+*Improvements:*
+    - Extract ``test_app`` from ``django_structlog_demo_app`` in order to test ``django_structlog`` all by itself
+    - Improve CI execution speed by merging stages
+    - Upgrade a few development depencencies
+
+
 1.3.4 (November 27, 2019)
 -------------------------
 
