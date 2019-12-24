@@ -1,7 +1,7 @@
 import logging
 from unittest.mock import patch, Mock
 
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.dispatch import receiver
 from django.http import Http404, HttpResponseNotFound
 from django.test import TestCase, RequestFactory
@@ -9,7 +9,6 @@ import structlog
 
 from django_structlog import middlewares
 from django_structlog.signals import bind_extra_request_metadata
-from django_structlog_demo_project.users.models import User
 
 
 class TestRequestMiddleware(TestCase):

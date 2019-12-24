@@ -7,13 +7,21 @@ python:
   - '3.5'
   - '3.6'
   - '3.7'
+  - '3.8'
 install: pip install tox-travis tox flake8 coverage codecov
 after_success: codecov
 services: redis-server
 jobs:
   include:
-    - stage: doc
-      name: 'Test build doc'
+    - name: 'Test demo app'
+      python: '3.7'
+      install: pip install codecov -r requirements.txt
+      env:
+        CELERY_BROKER_URL=redis://0.0.0.0:6379
+        DJANGO_SETTINGS_MODULE=config.settings.test_demo_app
+      script:
+        - pytest --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
+    - name: 'Test build doc'
       python: '3.7'
       install: pip install -r requirements/doc.txt
       script:
@@ -22,14 +30,14 @@ jobs:
         - make doctest
       services: []
       after_success: skip
-    - stage: black
+    - stage: linter
       name: 'black'
       python: '3.7'
       install: pip install black
       script: black --check --verbose .
       services: []
       after_success: skip
-    - stage: flake8
+    - stage: linter
       name: 'flake8'
       python: '3.7'
       install: pip install flake8
