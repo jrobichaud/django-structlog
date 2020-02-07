@@ -331,3 +331,4 @@ django_structlog_demo_project/media/
 .env
 .envs/*
 !.envs/.local/
+.vscode/
