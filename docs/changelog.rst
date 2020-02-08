@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.4.0 (February 7, 2020)
+------------------------
+
+*New:*
+    - Use ``HTTP_X_REQUEST_ID`` as ``request_id`` when provided in request. See `#22 <https://github.com/jrobichaud/django-structlog/issues/22>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_
+
+
 1.3.5 (December 23, 2019)
 -------------------------
 

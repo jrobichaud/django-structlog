@@ -5,6 +5,6 @@
 default_app_config = "django_structlog.apps.DjangoStructLogConfig"
 name = "django_structlog"
 
-VERSION = (1, 3, 5)
+VERSION = (1, 4, 0)
 
 __version__ = ".".join(str(v) for v in VERSION)
