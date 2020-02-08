@@ -1,11 +1,19 @@
 Change Log
 ==========
 
+
+1.4.1 (February 8, 2020)
+------------------------
+
+*New:*
+    - Bind ``X-Correlation-ID`` HTTP header's value as ``correlation_id`` when provided in request.
+
+
 1.4.0 (February 7, 2020)
 ------------------------
 
 *New:*
-    - Use ``HTTP_X_REQUEST_ID`` as ``request_id`` when provided in request. See `#22 <https://github.com/jrobichaud/django-structlog/issues/22>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_
+    - Use ``X-Request-ID`` HTTP header's value as ``request_id`` when provided in request. See `#22 <https://github.com/jrobichaud/django-structlog/issues/22>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_
 
 
 1.3.5 (December 23, 2019)
