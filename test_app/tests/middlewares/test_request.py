@@ -1,4 +1,5 @@
 import logging
+from unittest import mock
 from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser, User
@@ -8,6 +9,7 @@ from django.test import TestCase, RequestFactory
 import structlog
 
 from django_structlog import middlewares
+from django_structlog.middlewares.request import get_x_request_id
 from django_structlog.signals import bind_extra_request_metadata
 
 
@@ -282,3 +284,15 @@ class TestRequestMiddleware(TestCase):
 
     def tearDown(self):
         self.logger.new()
+
+
+class TestGetXRequestId(TestCase):
+    def test_django_22_or_higher(self):
+        mock_request = mock.MagicMock(spec=["headers"])
+        get_x_request_id(mock_request)
+        mock_request.headers.get.assert_called_once_with("x-request-id")
+
+    def test_django_prior_to_22(self):
+        mock_request = mock.MagicMock(spec=["META"])
+        get_x_request_id(mock_request)
+        mock_request.META.get.assert_called_once_with("HTTP_X_REQUEST_ID")

@@ -9,7 +9,7 @@ from .. import signals
 logger = structlog.getLogger(__name__)
 
 
-def get_x_request_id(request):  # pragma: no cover
+def get_x_request_id(request):
     if hasattr(request, "headers"):
         return request.headers.get("x-request-id")
 
