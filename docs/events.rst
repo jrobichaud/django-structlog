@@ -25,7 +25,7 @@ These metadata are repeated on each log of the current request and will be also 
 +------------------+------------------------------------------------------------------------------------------+
 | Key              | Value                                                                                    |
 +==================+==========================================================================================+
-| request_id       | UUID of the request                                                                      |
+| request_id       | UUID for the request or value of ``HTTP_X_REQUEST_ID`` header when provided              |
 +------------------+------------------------------------------------------------------------------------------+
 | user_id          | user's id or None (requires `django.contrib.auth.middleware.AuthenticationMiddleware`_)  |
 +------------------+------------------------------------------------------------------------------------------+
