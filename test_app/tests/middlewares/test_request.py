@@ -9,7 +9,7 @@ from django.test import TestCase, RequestFactory
 import structlog
 
 from django_structlog import middlewares
-from django_structlog.middlewares.request import get_x_request_id
+from django_structlog.middlewares.request import get_request_header
 from django_structlog.signals import bind_extra_request_metadata
 
 
@@ -17,12 +17,12 @@ class TestRequestMiddleware(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
+        self.log_results = None
 
     def test_process_request_without_user(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
-        self.log_results = None
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -53,7 +53,6 @@ class TestRequestMiddleware(TestCase):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
-        self.log_results = None
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -87,7 +86,6 @@ class TestRequestMiddleware(TestCase):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
-        self.log_results = None
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -128,7 +126,6 @@ class TestRequestMiddleware(TestCase):
 
         mock_response = Mock()
         mock_response.status_code.return_value = 200
-        self.log_results = None
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -155,7 +152,6 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_error(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
-        self.log_results = None
 
         request = self.factory.get("/foo")
         request.user = AnonymousUser()
@@ -207,7 +203,6 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_404_are_processed_as_regular_requests(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
-        self.log_results = None
 
         request = self.factory.get("/foo")
         request.user = AnonymousUser()
@@ -261,8 +256,6 @@ class TestRequestMiddleware(TestCase):
         mock_response.status_code.return_value = 200
         x_request_id = "my-fake-request-id"
 
-        self.log_results = None
-
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
                 self.logger.info("hello")
@@ -282,17 +275,41 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_request_id, record.msg["request_id"])
 
+    def test_should_log_correlation_id_from_request_x_correlation_id_header(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        x_correlation_id = "my-fake-correlation-id"
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = RequestFactory(HTTP_X_CORRELATION_ID=x_correlation_id).get("/foo")
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertEqual(x_correlation_id, record.msg["correlation_id"])
+
     def tearDown(self):
         self.logger.new()
 
 
-class TestGetXRequestId(TestCase):
+class TestGetRequestHeader(TestCase):
     def test_django_22_or_higher(self):
         mock_request = mock.MagicMock(spec=["headers"])
-        get_x_request_id(mock_request)
-        mock_request.headers.get.assert_called_once_with("x-request-id")
+        get_request_header(mock_request, "x-foo-bar", "HTTP_X_FOO_BAR")
+        mock_request.headers.get.assert_called_once_with("x-foo-bar")
 
     def test_django_prior_to_22(self):
         mock_request = mock.MagicMock(spec=["META"])
-        get_x_request_id(mock_request)
-        mock_request.META.get.assert_called_once_with("HTTP_X_REQUEST_ID")
+        get_request_header(mock_request, "x-foo-bar", "HTTP_X_FOO_BAR")
+        mock_request.META.get.assert_called_once_with("HTTP_X_FOO_BAR")

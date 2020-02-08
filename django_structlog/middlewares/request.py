@@ -9,11 +9,11 @@ from .. import signals
 logger = structlog.getLogger(__name__)
 
 
-def get_x_request_id(request):
+def get_request_header(request, header_key, meta_key):
     if hasattr(request, "headers"):
-        return request.headers.get("x-request-id")
+        return request.headers.get(header_key)
 
-    return request.META.get("HTTP_X_REQUEST_ID")
+    return request.META.get(meta_key)
 
 
 class RequestMiddleware:
@@ -33,12 +33,22 @@ class RequestMiddleware:
     def __call__(self, request):
         from ipware import get_client_ip
 
-        request_id = get_x_request_id(request) or str(uuid.uuid4())
+        request_id = get_request_header(
+            request, "x-request-id", "HTTP_X_REQUEST_ID"
+        ) or str(uuid.uuid4())
+
+        correlation_id = get_request_header(
+            request, "x-correlation-id", "HTTP_X_CORRELATION_ID"
+        )
+
         with structlog.threadlocal.tmp_bind(logger):
             logger.bind(request_id=request_id)
 
             if hasattr(request, "user"):
                 logger.bind(user_id=request.user.pk)
+
+            if correlation_id:
+                logger.bind(correlation_id=correlation_id)
 
             ip, _ = get_client_ip(request)
             logger.bind(ip=ip)
