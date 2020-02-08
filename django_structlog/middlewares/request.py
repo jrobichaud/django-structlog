@@ -9,6 +9,13 @@ from .. import signals
 logger = structlog.getLogger(__name__)
 
 
+def get_x_request_id(request):  # pragma: no cover
+    if hasattr(request, "headers"):
+        return request.headers.get("x-request-id")
+
+    return request.META.get("HTTP_X_REQUEST_ID")
+
+
 class RequestMiddleware:
     """ ``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
@@ -26,7 +33,7 @@ class RequestMiddleware:
     def __call__(self, request):
         from ipware import get_client_ip
 
-        request_id = str(uuid.uuid4())
+        request_id = get_x_request_id(request) or str(uuid.uuid4())
         with structlog.threadlocal.tmp_bind(logger):
             logger.bind(request_id=request_id)
 
