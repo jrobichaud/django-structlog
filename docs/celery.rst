@@ -121,7 +121,7 @@ In the same file as before
 Signals
 ^^^^^^^
 
-You can optionally connect to ``bind_extra_task_metadata`` signal in order to bind more metadata to the logger. This is called
+You can optionally connect to ``bind_extra_task_metadata`` signal in order to bind more metadata to the logger or override existing bound metadata. This is called
 in celery's ``receiver_task_pre_run``.
 
 .. code-block:: python

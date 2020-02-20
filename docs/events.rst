@@ -34,7 +34,7 @@ These metadata are repeated on each log of the current request and will be also 
 | ip               | request's ip                                                                             |
 +------------------+------------------------------------------------------------------------------------------+
 
-To bind more metadata from request see :ref:`django_signals`
+To bind more metadata or override existing metadata from request see :ref:`django_signals`
 
 .. _`django.contrib.auth.middleware.AuthenticationMiddleware`: https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.contrib.auth.middleware
 
@@ -97,7 +97,7 @@ Take note that all the caller's logger bound metadata are also bound to the task
 | parent_task_id   | UUID of the parent's task (if any) |
 +------------------+------------------------------------+
 
-To bind more metadata from task see :ref:`celery_signals`
+To bind more metadata or override existing metadata from task see :ref:`celery_signals`
 
 
 Task Event Metadata

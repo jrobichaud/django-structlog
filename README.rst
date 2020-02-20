@@ -243,7 +243,7 @@ Extending Request Log Metadata
 
 By default only a ``request_id`` and the ``user_id`` are bound from the request but pertinent log metadata may vary from a project to another.
 
-If you need to add more metadata from the request you can implement a convenient signal receiver to bind them.
+If you need to add more metadata from the request you can implement a convenient signal receiver to bind them. You can also override existing bound metadata the same way.
 
 .. code-block:: python
 
