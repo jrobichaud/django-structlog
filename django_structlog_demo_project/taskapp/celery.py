@@ -1,6 +1,7 @@
 import logging
 import os
 
+import celery
 import structlog
 from celery import Celery, shared_task, signals
 from django.apps import apps, AppConfig
@@ -20,7 +21,10 @@ app = Celery("django_structlog_demo_project")
 # pickle the object when using Windows.
 # - namespace='CELERY' means all celery-related configuration keys
 #   should have a `CELERY_` prefix.
-app.config_from_object("django.conf:settings", namespace="CELERY")
+if celery.VERSION >= (4,):
+    app.config_from_object("django.conf:settings", namespace="CELERY")
+else:
+    app.config_from_object("django.conf:settings")
 
 # A step to initialize django-structlog
 app.steps["worker"].add(DjangoStructLogInitStep)

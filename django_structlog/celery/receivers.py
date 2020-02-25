@@ -12,12 +12,19 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
     context = dict(immutable_logger._context)
     if "task_id" in context:
         context["parent_task_id"] = context.pop("task_id")
-    headers["__django_structlog__"] = context
+    import celery
+
+    if celery.VERSION > (4,):
+        headers["__django_structlog__"] = context
+    else:
+        body["__django_structlog__"] = context
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
     logger.info(
-        "task_enqueued", child_task_id=headers["id"], child_task_name=headers["task"]
+        "task_enqueued",
+        child_task_id=headers.get("id") if headers else body.get("id"),
+        child_task_name=headers.get("task") if headers else body.get("task"),
     )
 
 

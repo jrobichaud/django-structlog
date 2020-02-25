@@ -16,6 +16,7 @@ class DjangoStructLogInitStep(bootsteps.Step):
 
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
+        import celery
         from celery.signals import (
             before_task_publish,
             after_task_publish,
@@ -24,8 +25,6 @@ class DjangoStructLogInitStep(bootsteps.Step):
             task_success,
             task_failure,
             task_revoked,
-            task_unknown,
-            task_rejected,
         )
 
         before_task_publish.connect(receivers.receiver_before_task_publish)
@@ -35,5 +34,9 @@ class DjangoStructLogInitStep(bootsteps.Step):
         task_success.connect(receivers.receiver_task_success)
         task_failure.connect(receivers.receiver_task_failure)
         task_revoked.connect(receivers.receiver_task_revoked)
-        task_unknown.connect(receivers.receiver_task_unknown)
-        task_rejected.connect(receivers.receiver_task_rejected)
+        if celery.VERSION > (4,):
+
+            from celery.signals import task_unknown, task_rejected
+
+            task_unknown.connect(receivers.receiver_task_unknown)
+            task_rejected.connect(receivers.receiver_task_rejected)
