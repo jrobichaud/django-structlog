@@ -5,7 +5,7 @@ redis==3.2.1  # https://github.com/antirez/redis
 celery<4  # pyup: < 5.0  # https://github.com/celery/celery
 flower==0.9.3  # https://github.com/mher/flower
 kombu<4
-billiard==3.5.0.2
+# billiard==3.5.0.2
 
 # Django
 # ------------------------------------------------------------------------------
