@@ -1,6 +1,5 @@
 pytz==2018.9  # https://github.com/stub42/pytz
 python-slugify==3.0.2  # https://github.com/un33k/python-slugify
-argon2-cffi==19.1.0  # https://github.com/hynek/argon2_cffi
 whitenoise==4.1.2  # https://github.com/evansd/whitenoise
 redis==3.2.1  # https://github.com/antirez/redis
 celery==4.3.0  # pyup: < 5.0  # https://github.com/celery/celery
