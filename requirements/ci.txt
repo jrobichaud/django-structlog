@@ -1,4 +1,4 @@
-redis==3.3.11  # https://github.com/antirez/redis
+redis<3  # https://github.com/antirez/redis
 flower==0.9.3  # https://github.com/mher/flower
 
 # Django
