@@ -48,7 +48,8 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
 
-    def test_receiver_before_task_publish(self):
+    @mock.patch("celery.VERSION", new=(4, 0, 0))
+    def test_receiver_before_task_publish_celery_4(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
