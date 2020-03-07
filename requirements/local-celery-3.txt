@@ -1,0 +1,5 @@
+-r local-base.txt
+
+kombu<4
+celery<4
+redis<3
