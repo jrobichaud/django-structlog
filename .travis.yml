@@ -30,12 +30,12 @@ jobs:
         - make doctest
       services: []
       after_success: skip
-     - stage: coverage
-     name: 'coverage'
-     python: '3.7'
-     script: coverage report
-     services: []
-     after_success: skip
+    - stage: coverage
+      name: 'coverage'
+      python: '3.7'
+      script: coverage report
+      services: []
+      after_success: skip
     - stage: linter
       name: 'black'
       python: '3.7'
