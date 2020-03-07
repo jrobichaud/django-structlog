@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+1.5.0 (March 6, 2020)
+---------------------
+
+*Improvements:*
+    - Add support for celery 3. See `#26 <https://github.com/jrobichaud/django-structlog/issues/26>`_ and `#31 <https://github.com/jrobichaud/django-structlog/pull/31>`_. Special thanks to `@chiragjn <https://github.com/chiragjn>`_ and `@prik2693 <https://github.com/prik2693>`_
+
 
 1.4.1 (February 8, 2020)
 ------------------------

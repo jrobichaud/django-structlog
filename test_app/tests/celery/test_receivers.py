@@ -1,4 +1,5 @@
 import logging
+from unittest import mock
 from unittest.mock import Mock
 
 import structlog
@@ -47,7 +48,8 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
 
-    def test_receiver_before_task_publish(self):
+    @mock.patch("celery.VERSION", new=(4, 0, 0))
+    def test_receiver_before_task_publish_celery_4(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
@@ -72,6 +74,32 @@ class TestReceivers(TestCase):
             headers,
         )
 
+    @mock.patch("celery.VERSION", new=(3, 0, 0))
+    def test_receiver_before_task_publish_celery_3(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        expected_user_id = "1234"
+        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+
+        body = {}
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(
+                request_id=expected_uuid,
+                user_id=expected_user_id,
+                task_id=expected_parent_task_uuid,
+            )
+            receivers.receiver_before_task_publish(body=body)
+
+        self.assertDictEqual(
+            {
+                "__django_structlog__": {
+                    "request_id": expected_uuid,
+                    "user_id": expected_user_id,
+                    "parent_task_id": expected_parent_task_uuid,
+                }
+            },
+            body,
+        )
+
     def test_receiver_after_task_publish(self):
         expected_task_id = "00000000-0000-0000-0000-000000000000"
         expected_task_name = "Foo"
@@ -81,6 +109,25 @@ class TestReceivers(TestCase):
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
         ) as log_results:
             receivers.receiver_after_task_publish(headers=headers)
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_enqueued", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("child_task_id", record.msg)
+        self.assertEqual(expected_task_id, record.msg["child_task_id"])
+        self.assertIn("child_task_name", record.msg)
+        self.assertEqual(expected_task_name, record.msg["child_task_name"])
+
+    def test_receiver_after_task_publish_celery_3(self):
+        expected_task_id = "00000000-0000-0000-0000-000000000000"
+        expected_task_name = "Foo"
+        body = {"id": expected_task_id, "task": expected_task_name}
+
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receivers.receiver_after_task_publish(body=body)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]

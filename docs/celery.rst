@@ -1,8 +1,6 @@
 Celery Integration
 ==================
 
-``django-structlog`` supports ``celery`` 4.1 or higher. This is likely to change to follow `celery 4.5's release cycle <https://github.com/celery/celery/issues/4957>`_
-
 Getting Started with Celery
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,4 +1,8 @@
-FROM python:3.7-alpine
+ARG PYTHON_VERSION=3.7
+
+FROM python:${PYTHON_VERSION}-alpine
+
+ARG REQUIREMENTS_FILE=local.txt
 
 ENV PYTHONUNBUFFERED 1
 
@@ -15,7 +19,7 @@ RUN apk update \
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
-RUN pip install -r /requirements/local.txt
+RUN pip install -r /requirements/${REQUIREMENTS_FILE}
 
 COPY ./compose/local/django/entrypoint /entrypoint
 RUN sed -i 's/\r//' /entrypoint

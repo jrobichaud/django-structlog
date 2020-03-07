@@ -222,6 +222,9 @@ try:
 # This breaks when running tests locally.
 except ImproperlyConfigured:
     CELERY_BROKER_URL = "redis://0.0.0.0:6379/0"
+
+BROKER_URL = CELERY_BROKER_URL
+
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
 CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content

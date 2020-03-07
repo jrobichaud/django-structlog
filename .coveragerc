@@ -7,6 +7,5 @@ exclude_lines =
     pragma: no cover
     raise NotImplementedError
 
-fail_under = 100
 skip_covered = True
 show_missing = True
