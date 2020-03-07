@@ -33,7 +33,7 @@ jobs:
     - stage: coverage
       name: 'coverage'
       python: '3.7'
-      script: coverage report
+      script: coverage combine && coverage report -m
       services: []
       after_success: skip
     - stage: linter
