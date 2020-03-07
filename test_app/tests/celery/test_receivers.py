@@ -1,4 +1,5 @@
 import logging
+from unittest import mock
 from unittest.mock import Mock
 
 import structlog
@@ -70,6 +71,32 @@ class TestReceivers(TestCase):
                 }
             },
             headers,
+        )
+
+    @mock.patch("celery.VERSION", new=(3, 0, 0))
+    def test_receiver_before_task_publish_celery_3(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        expected_user_id = "1234"
+        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+
+        body = {}
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(
+                request_id=expected_uuid,
+                user_id=expected_user_id,
+                task_id=expected_parent_task_uuid,
+            )
+            receivers.receiver_before_task_publish(body=body)
+
+        self.assertDictEqual(
+            {
+                "__django_structlog__": {
+                    "request_id": expected_uuid,
+                    "user_id": expected_user_id,
+                    "parent_task_id": expected_parent_task_uuid,
+                }
+            },
+            body,
         )
 
     def test_receiver_after_task_publish(self):
