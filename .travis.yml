@@ -44,6 +44,12 @@ jobs:
       script: flake8
       services: []
       after_success: skip
+    - stage: coverage
+      name: 'coverage'
+      python: '3.7'
+      script: coverage report
+      services: []
+      after_success: skip
     - stage: deploy
       name: 'PyPI deployment'
       python: '3.7'
