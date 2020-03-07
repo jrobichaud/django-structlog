@@ -30,6 +30,12 @@ jobs:
         - make doctest
       services: []
       after_success: skip
+     - stage: coverage
+     name: 'coverage'
+     python: '3.7'
+     script: coverage report
+     services: []
+     after_success: skip
     - stage: linter
       name: 'black'
       python: '3.7'
@@ -42,12 +48,6 @@ jobs:
       python: '3.7'
       install: pip install flake8
       script: flake8
-      services: []
-      after_success: skip
-    - stage: coverage
-      name: 'coverage'
-      python: '3.7'
-      script: coverage report
       services: []
       after_success: skip
     - stage: deploy

@@ -1,11 +1,17 @@
+from unittest import skipUnless
 from unittest.mock import patch, call
 
+import celery
 from django.test import TestCase
 
 from django_structlog.celery import steps
 
 
 class TestDjangoStructLogInitStep(TestCase):
+    @skipUnless(
+        celery.VERSION >= (4, 0, 0),
+        "task_unknown and task_rejected were introduced in celery 4",
+    )
     def test_call(self):
         from celery.signals import (
             before_task_publish,
