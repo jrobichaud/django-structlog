@@ -31,11 +31,11 @@ def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
     logger.new()
     logger.bind(task_id=task_id)
+    metadata = getattr(task.request, "__django_structlog__", {})
+    logger.bind(**metadata)
     signals.bind_extra_task_metadata.send(
         sender=receiver_task_pre_run, task=task, logger=logger
     )
-    metadata = getattr(task.request, "__django_structlog__", {})
-    logger.bind(**metadata)
 
 
 def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
