@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.5.1 (March 18, 2020)
+----------------------
+
+*Improvements:*
+    - Allow to override celery task metadata from binding. See `#26 <https://github.com/jrobichaud/django-structlog/issues/32>`_ and `#33 <https://github.com/jrobichaud/django-structlog/pull/33>`_. Special thanks to `@chiragjn <https://github.com/chiragjn>`_
+
+
 1.5.0 (March 6, 2020)
 ---------------------
 
