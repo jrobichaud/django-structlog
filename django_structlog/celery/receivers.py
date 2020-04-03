@@ -12,6 +12,11 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
     context = dict(immutable_logger._context)
     if "task_id" in context:
         context["parent_task_id"] = context.pop("task_id")
+
+    signals.modify_context_before_task_publish.send(
+        sender=receiver_before_task_publish, context=context
+    )
+
     import celery
 
     if celery.VERSION > (4,):

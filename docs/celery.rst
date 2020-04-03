@@ -120,6 +120,25 @@ In the same file as before
 
 Signals
 ^^^^^^^
+modify_context_before_task_publish
+----------------------------------
+
+You can connect to ``modify_context_before_task_publish`` signal in order to modify the metadata before it is stored in the task's message.
+
+By example you can strip down the ``context`` to keep only some of the keys:
+
+.. code-block:: python
+
+    @receiver(signals.modify_context_before_task_publish)
+    def receiver_modify_context_before_task_publish(sender, signal, context):
+        keys_to_keep = {"request_id", "parent_task_id"}
+        new_dict = {key_to_keep: context[key_to_keep] for key_to_keep in keys_to_keep if key_to_keep in context}
+        context.clear()
+        context.update(new_dict)
+
+
+bind_extra_task_metadata
+------------------------
 
 You can optionally connect to ``bind_extra_task_metadata`` signal in order to bind more metadata to the logger or override existing bound metadata. This is called
 in celery's ``receiver_task_pre_run``.
@@ -131,3 +150,4 @@ in celery's ``receiver_task_pre_run``.
     @receiver(signals.bind_extra_task_metadata)
     def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
         logger.bind(correlation_id=task.request.correlation_id)
+

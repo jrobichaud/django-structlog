@@ -100,6 +100,80 @@ class TestReceivers(TestCase):
             body,
         )
 
+    @mock.patch("celery.VERSION", new=(4, 0, 0))
+    def test_signal_modify_context_before_task_publish_celery_4(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        user_id = "1234"
+        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+
+        @receiver(signals.modify_context_before_task_publish)
+        def receiver_modify_context_before_task_publish(sender, signal, context):
+            keys_to_keep = {"request_id", "parent_task_id"}
+            new_dict = {
+                key_to_keep: context[key_to_keep]
+                for key_to_keep in keys_to_keep
+                if key_to_keep in context
+            }
+            context.clear()
+            context.update(new_dict)
+
+        headers = {}
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(
+                request_id=expected_uuid,
+                user_id=user_id,
+                task_id=expected_parent_task_uuid,
+            )
+            receivers.receiver_before_task_publish(headers=headers)
+
+        self.assertDictEqual(
+            {
+                "__django_structlog__": {
+                    "request_id": expected_uuid,
+                    "parent_task_id": expected_parent_task_uuid,
+                }
+            },
+            headers,
+            "Only `request_id` and `parent_task_id` are preserved",
+        )
+
+    @mock.patch("celery.VERSION", new=(3, 0, 0))
+    def test_signal_modify_context_before_task_publish_celery_3(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        expected_user_id = "1234"
+        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+
+        @receiver(signals.modify_context_before_task_publish)
+        def receiver_modify_context_before_task_publish(sender, signal, context):
+            keys_to_keep = {"request_id", "parent_task_id"}
+            new_dict = {
+                key_to_keep: context[key_to_keep]
+                for key_to_keep in keys_to_keep
+                if key_to_keep in context
+            }
+            context.clear()
+            context.update(new_dict)
+
+        body = {}
+        with structlog.threadlocal.tmp_bind(self.logger):
+            self.logger.bind(
+                request_id=expected_uuid,
+                user_id=expected_user_id,
+                task_id=expected_parent_task_uuid,
+            )
+            receivers.receiver_before_task_publish(body=body)
+
+        self.assertDictEqual(
+            {
+                "__django_structlog__": {
+                    "request_id": expected_uuid,
+                    "parent_task_id": expected_parent_task_uuid,
+                }
+            },
+            body,
+            "Only `request_id` and `parent_task_id` are preserved",
+        )
+
     def test_receiver_after_task_publish(self):
         expected_task_id = "00000000-0000-0000-0000-000000000000"
         expected_task_name = "Foo"
@@ -169,7 +243,7 @@ class TestReceivers(TestCase):
             context,
         )
 
-    def test_signal(self):
+    def test_signal_bind_extra_task_metadata(self):
         @receiver(signals.bind_extra_task_metadata)
         def receiver_bind_extra_request_metadata(
             sender, signal, task=None, logger=None
