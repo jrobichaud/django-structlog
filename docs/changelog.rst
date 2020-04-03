@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.5.2 (April 2, 2020)
+---------------------
+
+*New:*
+    - Add ``modify_context_before_task_publish`` signal.
+
+
 1.5.1 (March 18, 2020)
 ----------------------
 
