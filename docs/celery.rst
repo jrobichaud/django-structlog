@@ -49,7 +49,7 @@ In the same file as before
 
     @setup_logging.connect
     def receiver_setup_logging(loglevel, logfile, format, colorize, **kwargs):  # pragma: no cover
-        logging.basicConfig(
+        logging.config.dictConfig(
             {
                "version": 1,
                "disable_existing_loggers": False,
