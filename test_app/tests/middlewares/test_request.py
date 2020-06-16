@@ -5,7 +5,7 @@ from unittest.mock import patch, Mock
 from django.contrib.auth.models import AnonymousUser, User
 from django.dispatch import receiver
 from django.http import Http404, HttpResponseNotFound
-from django.test import TestCase, RequestFactory
+from django.test import TestCase, RequestFactory, override_settings
 import structlog
 
 from django_structlog import middlewares
@@ -116,6 +116,89 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+
+    @override_settings(DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED=True)
+    def test_log_user_in_request_finished(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        mock_user = User.objects.create()
+
+        request = self.factory.get("/foo")
+
+        def get_response(_response):
+            request.user = mock_user
+            return mock_response
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertNotIn("user_id", record.msg)
+
+        record = log_results.records[1]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("request_finished", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
+
+    @override_settings(DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED=True)
+    def test_log_user_in_request_finished_with_exception(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        mock_user = User.objects.create()
+
+        request = self.factory.get("/foo")
+
+        middleware = middlewares.RequestMiddleware(None)
+        exception = Exception()
+
+        def get_response(_response):
+            request.user = mock_user
+            middleware.process_exception(request, exception)
+            return mock_response
+
+        middleware.get_response = get_response
+
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertNotIn("user_id", record.msg)
+
+        record = log_results.records[1]
+
+        self.assertEqual("ERROR", record.levelname)
+        self.assertEqual("request_failed", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("error", record.msg)
+        self.assertEqual(exception, record.msg["error"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
 
     def test_signal(self):
         @receiver(bind_extra_request_metadata)
