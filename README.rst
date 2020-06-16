@@ -72,24 +72,16 @@ Logging will then produce additional cohesive metadata on each logs that makes i
 Additional Popular Integrations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Celery <http://www.celeryproject.org/>`_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Celery's task logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/celery.html>`_ for details.
-
-
 `Django REST framework <https://www.django-rest-framework.org/>`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Using ``Django REST framework`` with ``rest_framework.authentication.TokenAuthentication`` (or other DRF authentications) will not add ``user_id`` in each logs since authentication is handled by the view.
+``Django REST framework`` is supported by default. But when using it with ``rest_framework.authentication.TokenAuthentication`` (or other DRF authentications)  ``user_id`` will be only be in ``request_finished`` and ``request_failed`` instead of each logs.
 
-Adding the following configuration to your app ``settings.py`` will add the ``user_id`` in the ``request_started`` and ``request_failed`` events:
+See `#37  <https://github.com/jrobichaud/django-structlog/issues/37>`_ for details.
 
-.. code-block:: python
-
-    DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED = True
-
-
-See `#37  <https://github.com/jrobichaud/django-structlog/issues/37>`_ for the details.
+`Celery <http://www.celeryproject.org/>`_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Celery's task logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/celery.html>`_ for details.
 
 
 Logging comparison

@@ -22,17 +22,19 @@ Request Bound Metadata
 
 These metadata are repeated on each log of the current request and will be also be repeated in all children Celery tasks.
 
-+------------------+------------------------------------------------------------------------------------------+
-| Key              | Value                                                                                    |
-+==================+==========================================================================================+
-| request_id       | UUID for the request or value of ``X-Request-ID`` HTTP header when provided              |
-+------------------+------------------------------------------------------------------------------------------+
-| correlation_id   | value of ``X-Correlation-ID`` HTTP header when provided                                  |
-+------------------+------------------------------------------------------------------------------------------+
-| user_id          | user's id or None (requires `django.contrib.auth.middleware.AuthenticationMiddleware`_)  |
-+------------------+------------------------------------------------------------------------------------------+
-| ip               | request's ip                                                                             |
-+------------------+------------------------------------------------------------------------------------------+
++------------------+------------------------------------------------------------------------------------------------------------------------+
+| Key              | Value                                                                                                                  |
++==================+========================================================================================================================+
+| request_id       | UUID for the request or value of ``X-Request-ID`` HTTP header when provided                                            |
++------------------+------------------------------------------------------------------------------------------------------------------------+
+| correlation_id   | value of ``X-Correlation-ID`` HTTP header when provided                                                                |
++------------------+------------------------------------------------------------------------------------------------------------------------+
+| user_id          | user's id or None (requires `django.contrib.auth.middleware.AuthenticationMiddleware`_)                                |
++                  +                                                                                                                        +
+|                  | `DRF <https://www.django-rest-framework.org/>`_: it will only be in ``request_finished`` and ``request_failed`` events |
++------------------+------------------------------------------------------------------------------------------------------------------------+
+| ip               | request's ip                                                                                                           |
++------------------+------------------------------------------------------------------------------------------------------------------------+
 
 To bind more metadata or override existing metadata from request see :ref:`django_signals`
 

@@ -3,7 +3,6 @@ import uuid
 import structlog
 import traceback
 from django.http import Http404
-from django.conf import settings
 
 from .. import signals
 
@@ -28,10 +27,6 @@ class RequestMiddleware:
     """
 
     def __init__(self, get_response):
-        self.log_user_in_request_finished = getattr(
-            settings, "DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED", False
-        )
-
         self.get_response = get_response
         self._raised_exception = False
 
@@ -47,10 +42,7 @@ class RequestMiddleware:
         )
 
         with structlog.threadlocal.tmp_bind(logger):
-            logger.bind(request_id=request_id)
-
-            if hasattr(request, "user"):
-                logger.bind(**self.get_request_user(request))
+            logger.bind(request_id=request_id, **self.get_request_user(request))
 
             if correlation_id:
                 logger.bind(correlation_id=correlation_id)
@@ -73,7 +65,7 @@ class RequestMiddleware:
                     "request_finished",
                     code=response.status_code,
                     request=request,
-                    **self.get_request_finished_optional_user_kwargs(request),
+                    **self.get_request_user(request),
                 )
 
         return response
@@ -95,15 +87,12 @@ class RequestMiddleware:
             request=request,
             error=exception,
             error_traceback=formatted_traceback,
-            **self.get_request_finished_optional_user_kwargs(request),
+            **self.get_request_user(request),
         )
-
-    def get_request_finished_optional_user_kwargs(self, request):
-        if hasattr(request, "user") and self.log_user_in_request_finished:
-            return self.get_request_user(request)
-        else:
-            return {}
 
     @staticmethod
     def get_request_user(request):
-        return {"user_id": request.user.pk}
+        if hasattr(request, "user"):
+            return {"user_id": request.user.pk}
+        else:
+            return {}

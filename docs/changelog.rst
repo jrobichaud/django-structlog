@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.5.4 (June 15, 2020)
+---------------------
+
+*Improvements:*
+    - Remove redundant ``DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED`` setting and just always make sure ``user_id`` is in ``request_finished`` and ``request_failed`` instead. See `#37 <https://github.com/jrobichaud/django-structlog/pull/37>`_.
+
+
 1.5.3 (June 15, 2020)
 ---------------------
 
