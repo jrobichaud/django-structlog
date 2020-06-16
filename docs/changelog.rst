@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.5.3 (June 15, 2020)
+---------------------
+
+*New:*
+    - Add ``DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED`` setting to support `Django REST framework <https://www.django-rest-framework.org/>`_. See `#37 <https://github.com/jrobichaud/django-structlog/pull/37>`_. Special thanks to `@immortaleeb <https://github.com/immortaleeb>`_.
+
+
 1.5.2 (April 2, 2020)
 ---------------------
 
