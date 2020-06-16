@@ -5,7 +5,7 @@ from unittest.mock import patch, Mock
 from django.contrib.auth.models import AnonymousUser, User
 from django.dispatch import receiver
 from django.http import Http404, HttpResponseNotFound
-from django.test import TestCase, RequestFactory, override_settings
+from django.test import TestCase, RequestFactory
 import structlog
 
 from django_structlog import middlewares
@@ -117,7 +117,6 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
 
-    @override_settings(DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED=True)
     def test_log_user_in_request_finished(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -155,7 +154,6 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
-    @override_settings(DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED=True)
     def test_log_user_in_request_finished_with_exception(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
