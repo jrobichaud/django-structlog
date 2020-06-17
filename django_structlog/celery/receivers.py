@@ -48,7 +48,7 @@ def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
 
 
 def receiver_task_success(result=None, **kwargs):
-    logger.info("task_succeed", result=str(result))
+    logger.info("task_succeeded")
 
 
 def receiver_task_failure(
