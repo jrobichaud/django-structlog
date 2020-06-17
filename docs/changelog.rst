@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.5.5 (June 16, 2020)
+---------------------
+
+*New:*
+    - Add ``bind_extra_request_finished_metadata`` and ``bind_extra_request_failed_metadata``. See `#39 <https://github.com/jrobichaud/django-structlog/pull/39>`_. Special thanks to `@prik2693 <https://github.com/prik2693>`_.
+
+
 1.5.4 (June 15, 2020)
 ---------------------
 
