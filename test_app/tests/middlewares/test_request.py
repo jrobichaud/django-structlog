@@ -10,7 +10,11 @@ import structlog
 
 from django_structlog import middlewares
 from django_structlog.middlewares.request import get_request_header
-from django_structlog.signals import bind_extra_request_metadata
+from django_structlog.signals import (
+    bind_extra_request_metadata,
+    bind_extra_request_finished_metadata,
+    bind_extra_request_failed_metadata,
+)
 
 
 class TestRequestMiddleware(TestCase):
@@ -198,7 +202,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
-    def test_signal(self):
+    def test_signal_bind_extra_request_metadata(self):
         @receiver(bind_extra_request_metadata)
         def receiver_bind_extra_request_metadata(
             sender, signal, request=None, logger=None
@@ -227,6 +231,104 @@ class TestRequestMiddleware(TestCase):
 
         self.assertEqual("INFO", record.levelname)
         self.assertIn("request_id", record.msg)
+        self.assertEqual(mock_user.email, record.msg["user_email"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
+
+    def test_signal_bind_extra_request_finished_metadata(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+
+        @receiver(bind_extra_request_finished_metadata)
+        def receiver_bind_extra_request_metadata(
+            sender, signal, request=None, logger=None, response=None
+        ):
+            self.assertEqual(response, mock_response)
+            logger.bind(user_email=getattr(request.user, "email", ""))
+
+        def get_response(_response):
+            return mock_response
+
+        request = self.factory.get("/foo")
+
+        mock_user = User.objects.create(email="foo@example.com")
+        request.user = mock_user
+
+        middleware = middlewares.RequestMiddleware(get_response)
+
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("event", record.msg)
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_email", record.msg)
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
+        record = log_results.records[1]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("event", record.msg)
+        self.assertEqual("request_finished", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertIn("user_email", record.msg)
+        self.assertEqual(mock_user.email, record.msg["user_email"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
+
+    def test_signal_bind_extra_request_failed_metadata(self):
+        expected_exception = Exception()
+
+        @receiver(bind_extra_request_failed_metadata)
+        def receiver_bind_extra_request_metadata(
+            sender, signal, request=None, logger=None, exception=None
+        ):
+            self.assertEqual(exception, expected_exception)
+            logger.bind(user_email=getattr(request.user, "email", ""))
+
+        request = self.factory.get("/foo")
+
+        mock_user = User.objects.create(email="foo@example.com")
+
+        request.user = mock_user
+        middleware = middlewares.RequestMiddleware(None)
+
+        mock_response = Mock()
+
+        def get_response(_response):
+            middleware.process_exception(request, expected_exception)
+            return mock_response
+
+        middleware.get_response = get_response
+
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("event", record.msg)
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_email", record.msg)
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(mock_user.id, record.msg["user_id"])
+        record = log_results.records[1]
+
+        self.assertEqual("ERROR", record.levelname)
+        self.assertIn("event", record.msg)
+        self.assertEqual("request_failed", record.msg["event"])
+        self.assertIn("request_id", record.msg)
+        self.assertIn("user_email", record.msg)
         self.assertEqual(mock_user.email, record.msg["user_email"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])

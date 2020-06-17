@@ -42,8 +42,8 @@ class RequestMiddleware:
         )
 
         with structlog.threadlocal.tmp_bind(logger):
-            logger.bind(request_id=request_id, **self.get_request_user(request))
-
+            logger.bind(request_id=request_id)
+            self.bind_user_id(request),
             if correlation_id:
                 logger.bind(correlation_id=correlation_id)
 
@@ -61,11 +61,15 @@ class RequestMiddleware:
             self._raised_exception = False
             response = self.get_response(request)
             if not self._raised_exception:
-                logger.info(
-                    "request_finished",
-                    code=response.status_code,
+                self.bind_user_id(request),
+                signals.bind_extra_request_finished_metadata.send(
+                    sender=self.__class__,
                     request=request,
-                    **self.get_request_user(request),
+                    logger=logger,
+                    response=response,
+                )
+                logger.info(
+                    "request_finished", code=response.status_code, request=request
                 )
 
         return response
@@ -81,18 +85,19 @@ class RequestMiddleware:
 
         traceback_object = exception.__traceback__
         formatted_traceback = traceback.format_tb(traceback_object)
+        self.bind_user_id(request),
+        signals.bind_extra_request_failed_metadata.send(
+            sender=self.__class__, request=request, logger=logger, exception=exception
+        )
         logger.exception(
             "request_failed",
             code=500,
             request=request,
             error=exception,
             error_traceback=formatted_traceback,
-            **self.get_request_user(request),
         )
 
     @staticmethod
-    def get_request_user(request):
+    def bind_user_id(request):
         if hasattr(request, "user"):
-            return {"user_id": request.user.pk}
-        else:
-            return {}
+            logger.bind(user_id=request.user.pk)
