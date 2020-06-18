@@ -52,7 +52,7 @@ jobs:
       install: skip
       deploy:
         provider: pypi
-        user: jrobichaud
+        user: __token__
         password:
           secure: SiwyPhGfzc/ztfrZfse7NGp2vELyqqpkuGQkyZGcyg+WD5Umyl5PhSUY8yowKOrz2mM5x4yXRD+doXnPVpYfTvhHLNzCOOqGCBSNM2VFm/5KP17YbKwSUIxXi67cEIZjD04nMFQwaA2zADmleA1e3/pqQSZr2juEt1XttttZx9O2PsgwOZ1adeeN65j/nPf5LX3sd51NfcYI+dkv6Bhd5ATl5mZ/rbjtBQ/XA80jCA1fYPpLh8rv0KVMnhfcTN0+ukbqzcirjjU1q362pdbY80NxHuQfXoX/3tr/U4Aym64hyZsLMbmLZAlxHh9F8c9ohcmCeeS9ywRFPWiZ4am2UAV4WVanWEERrylsnIWHuTW6FXVwKbgk5DP5xcGZjXnh5SS2KHK7V1BSKKRyaS1s6XILlUtphe5SZoM+b5hksYoio/Xzg174kDSD9M9pMb0WMohyxQVRAgBi9QldSP6jkj/oMZYKDU7goaL8qD22ZsXFjzUBkxbHdtrmzSsh0CerKv1IoBCrVUDob8zvXArbOB58qbs6bKhD62hrriDSJGTcz6LYuzBSgX+cPnfJ2wisIFKoOMGUlbGx2f40O7vuxzbCRKff/6SP0MBwneARNP7MsR79fD/YTASu4a8GT2X6sn2KlmQt6mt0KZ4Yoa5u2PTwK9lp7DvbXihuIuRrOHA=
         on:
