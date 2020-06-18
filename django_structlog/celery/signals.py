@@ -32,3 +32,15 @@ modify_context_before_task_publish = django.dispatch.Signal(providing_args=["con
 ...     context.update(new_dict)
 
 """
+
+pre_task_succeeded = django.dispatch.Signal(providing_args=["task", "logger", "result"])
+""" Signal to add ``structlog`` bindings from ``celery``'s successful task.
+
+>>> from django.dispatch import receiver
+>>> from django_structlog.celery import signals
+>>>
+>>> @receiver(signals.pre_task_succeeded)
+... def receiver_pre_task_succeeded(sender, signal, logger=None, result=None):
+...     logger.bind(result=str(result))
+
+"""
