@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+
+1.6.0 (June 17, 2020)
+---------------------
+
+*Changes:*
+    - ``task_succeed`` is now ``task_succeeded``. Special thanks to `@PawelMorawian <https://github.com/PawelMorawian>`_.
+    - Remove ``result`` from ``task_succeeded`` log (may be added back, see below). Special thanks to `@PawelMorawian <https://github.com/PawelMorawian>`_ as well.
+    - Add ``django_structlog.celery.signals.pre_task_succeeded``. To be able to bind ``result`` if someone really needs it.
+
+
 1.5.5 (June 16, 2020)
 ---------------------
 
