@@ -288,6 +288,12 @@ class TestReceivers(TestCase):
     def test_receiver_task_success(self):
         expected_result = "foo"
 
+        @receiver(signals.pre_task_succeeded)
+        def receiver_pre_task_succeeded(
+            sender, signal, task=None, logger=None, result=None
+        ):
+            logger.bind(result=result)
+
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
         ) as log_results:
@@ -295,7 +301,7 @@ class TestReceivers(TestCase):
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
-        self.assertEqual("task_succeed", record.msg["event"])
+        self.assertEqual("task_succeeded", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("result", record.msg)
         self.assertEqual(expected_result, record.msg["result"])
