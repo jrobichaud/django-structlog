@@ -7,8 +7,8 @@ django-structlog
 | |django| |python| |license| |black|
 | |watchers| |stars| |forks|
 
-.. |build-status| image:: https://secure.travis-ci.org/jrobichaud/django-structlog.svg?branch=master
-   :target: https://travis-ci.org/jrobichaud/django-structlog
+.. |build-status| image:: https://api.travis-ci.com/jrobichaud/django-structlog.svg?branch=master
+   :target: https://travis-ci.com/jrobichaud/django-structlog
    :alt: Build Status
 
 .. |pypi| image:: https://img.shields.io/pypi/v/django-structlog.svg
