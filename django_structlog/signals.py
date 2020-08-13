@@ -1,9 +1,7 @@
 import django.dispatch
 
 
-bind_extra_request_metadata = django.dispatch.Signal(
-    providing_args=["request", "logger"]
-)
+bind_extra_request_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s request.
 
 >>> from django.dispatch import receiver
@@ -15,9 +13,7 @@ bind_extra_request_metadata = django.dispatch.Signal(
 
 """
 
-bind_extra_request_finished_metadata = django.dispatch.Signal(
-    providing_args=["request", "logger", "response"]
-)
+bind_extra_request_finished_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s finished request and response.
 
 >>> from django.dispatch import receiver
@@ -29,9 +25,7 @@ bind_extra_request_finished_metadata = django.dispatch.Signal(
 
 """
 
-bind_extra_request_failed_metadata = django.dispatch.Signal(
-    providing_args=["request", "logger", "exception"]
-)
+bind_extra_request_failed_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s failed request and exception.
 
 >>> from django.dispatch import receiver

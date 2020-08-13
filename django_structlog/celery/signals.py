@@ -1,7 +1,7 @@
 import django.dispatch
 
 
-bind_extra_task_metadata = django.dispatch.Signal(providing_args=["task", "logger"])
+bind_extra_task_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``celery``'s task.
 
 >>> from django.dispatch import receiver
@@ -14,7 +14,7 @@ bind_extra_task_metadata = django.dispatch.Signal(providing_args=["task", "logge
 """
 
 
-modify_context_before_task_publish = django.dispatch.Signal(providing_args=["context"])
+modify_context_before_task_publish = django.dispatch.Signal()
 """ Signal to modify context passed over to ``celery`` task's context. You must modify the ``context`` dict.
 
 >>> from django.dispatch import receiver
@@ -33,7 +33,7 @@ modify_context_before_task_publish = django.dispatch.Signal(providing_args=["con
 
 """
 
-pre_task_succeeded = django.dispatch.Signal(providing_args=["task", "logger", "result"])
+pre_task_succeeded = django.dispatch.Signal()
 """ Signal to add ``structlog`` bindings from ``celery``'s successful task.
 
 >>> from django.dispatch import receiver
