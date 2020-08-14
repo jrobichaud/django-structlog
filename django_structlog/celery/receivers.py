@@ -50,7 +50,7 @@ def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
 def receiver_task_success(result=None, **kwargs):
     with structlog.threadlocal.tmp_bind(logger):
         signals.pre_task_succeeded.send(
-            sender=receiver_task_pre_run, logger=logger, result=result
+            sender=receiver_task_success, logger=logger, result=result
         )
         logger.info("task_succeeded")
 
