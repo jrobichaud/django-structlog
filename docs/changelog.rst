@@ -1,6 +1,19 @@
 Change Log
 ==========
 
+1.6.1 (August 13, 2020)
+-----------------------
+
+*Fixes:*
+    - Removed ``providing_args`` from signals to fix django 4.0 deprecation warnings introduced by django 3.1. See `#44 <https://github.com/jrobichaud/django-structlog/pull/44>`_. Special thanks to `@ticosax <https://github.com/ticosax>`_.
+    - Fix ``sender`` of ``signals.pre_task_succeeded``
+    - Documented signal parameters in doc strings and ``API documentation`` to replace ``providing_args``
+
+*Others:*
+    - Add ``django`` 3.0 and 3.1 to the test matrix and ``pypi`` supported frameworks metadata
+    - Fix reference of the previous ci in the documentation
+
+
 
 1.6.0 (June 17, 2020)
 ---------------------
