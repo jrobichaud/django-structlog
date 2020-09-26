@@ -33,14 +33,14 @@ jobs:
     - stage: linter
       name: 'black'
       python: '3.7'
-      install: pip install black
+      install: pip install -r requirements/black.txt
       script: black --check --verbose .
       services: []
       after_success: skip
     - stage: linter
       name: 'flake8'
       python: '3.7'
-      install: pip install flake8
+      install: pip install -r requirements/flake8.txt
       script: flake8
       services: []
       after_success: skip

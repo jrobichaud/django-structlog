@@ -17,7 +17,7 @@ def get_request_header(request, header_key, meta_key):
 
 
 class RequestMiddleware:
-    """ ``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
     >>> MIDDLEWARE = [
     ...     # ...
