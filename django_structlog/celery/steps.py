@@ -4,7 +4,7 @@ from . import receivers
 
 
 class DjangoStructLogInitStep(bootsteps.Step):
-    """ ``celery`` worker boot step to initialize ``django_structlog``.
+    """``celery`` worker boot step to initialize ``django_structlog``.
 
     >>> from celery import Celery
     >>> from django_structlog.celery.steps import DjangoStructLogInitStep
