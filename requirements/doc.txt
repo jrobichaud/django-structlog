@@ -3,4 +3,4 @@ sphinx_rtd_theme
 celery==4.3.0
 django>=2.2,<3
 structlog
-sphinx-autobuild>=0.7.1
+sphinx-autobuild==2020.9.1
