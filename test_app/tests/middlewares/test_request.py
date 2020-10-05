@@ -1,4 +1,5 @@
 import logging
+import uuid
 from unittest import mock
 from unittest.mock import patch, Mock
 
@@ -113,6 +114,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("request_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
         self.assertIn("user_id", record.msg)
+        self.assertIsInstance(record.msg["user_id"], int)
         self.assertEqual(mock_user.id, record.msg["user_id"])
         with self.assertLogs(__name__, logging.INFO) as log_results:
             self.logger.info("hello")
@@ -120,6 +122,34 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+
+    def test_process_request_user_uuid(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = self.factory.get("/foo")
+
+        mock_user = mock.Mock()
+        mock_user.pk = uuid.UUID(expected_uuid)
+        request.user = mock_user
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("user_id", record.msg)
+        self.assertIsInstance(record.msg["user_id"], str)
+        self.assertEqual(expected_uuid, record.msg["user_id"])
 
     def test_log_user_in_request_finished(self):
         mock_response = Mock()
