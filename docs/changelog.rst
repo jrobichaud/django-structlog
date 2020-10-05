@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.6.2 (October 4, 2020)
+-----------------------
+
+*Fixes:*
+    - Fix UUID as User pk causing issues. See `#52 <https://github.com/jrobichaud/django-structlog/pull/52>`_ `#45 <https://github.com/jrobichaud/django-structlog/pull/45>`_ and `#51 <https://github.com/jrobichaud/django-structlog/issues/51>`_. Special thanks to `@fadedDexofan <https://github.com/fadedDexofan>`_.
+
+
 1.6.1 (August 13, 2020)
 -----------------------
 
@@ -12,7 +19,6 @@ Change Log
 *Others:*
     - Add ``django`` 3.0 and 3.1 to the test matrix and ``pypi`` supported frameworks metadata
     - Fix reference of the previous ci in the documentation
-
 
 
 1.6.0 (June 17, 2020)
