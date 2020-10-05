@@ -100,4 +100,7 @@ class RequestMiddleware:
     @staticmethod
     def bind_user_id(request):
         if hasattr(request, "user"):
-            logger.bind(user_id=request.user.pk)
+            user_id = request.user.pk
+            if isinstance(user_id, uuid.UUID):
+                user_id = str(user_id)
+            logger.bind(user_id=user_id)
