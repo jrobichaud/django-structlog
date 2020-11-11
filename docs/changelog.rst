@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+1.6.3 (November 11, 2020)
+-------------------------
+
+*Improvements:*
+    - Call stack of exception in log is now an appropriate string. See `#54 <https://github.com/jrobichaud/django-structlog/pull/54>`_. Special thanks to `@debfx <https://github.com/debfx>`_.
+
+
 1.6.2 (October 4, 2020)
 -----------------------
 
