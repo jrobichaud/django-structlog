@@ -404,7 +404,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("error", record.msg)
         self.assertEqual(record.msg["error"], exception)
         self.assertIn("error_traceback", record.msg)
-        self.assertEqual(type(record.msg["error_traceback"]), list)
+        self.assertEqual(type(record.msg["error_traceback"]), str)
         self.assertIn("request", record.msg)
 
         with self.assertLogs(__name__, logging.INFO) as log_results:
