@@ -17,7 +17,6 @@ services:
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
-    restart: on-failure
     ports:
       - "8000:8000"
     command: /start
