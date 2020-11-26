@@ -40,7 +40,6 @@ def receiver_setup_logging(
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
             structlog.processors.UnicodeDecoder(),
-            structlog.processors.ExceptionPrettyPrinter(),
             # structlog.processors.KeyValueRenderer(),
             structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],

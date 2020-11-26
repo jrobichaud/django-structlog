@@ -1,7 +1,6 @@
 import uuid
 
 import structlog
-import traceback
 from django.http import Http404
 
 from .. import signals
@@ -83,8 +82,6 @@ class RequestMiddleware:
 
         self._raised_exception = True
 
-        traceback_object = exception.__traceback__
-        formatted_traceback = "".join(traceback.format_tb(traceback_object))
         self.bind_user_id(request),
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__, request=request, logger=logger, exception=exception
@@ -93,8 +90,6 @@ class RequestMiddleware:
             "request_failed",
             code=500,
             request=request,
-            error=exception,
-            error_traceback=formatted_traceback,
         )
 
     @staticmethod

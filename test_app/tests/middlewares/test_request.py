@@ -1,4 +1,5 @@
 import logging
+import traceback
 import uuid
 from unittest import mock
 from unittest.mock import patch, Mock
@@ -23,6 +24,7 @@ class TestRequestMiddleware(TestCase):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
         self.log_results = None
+        self.exception_traceback = None
 
     def test_process_request_without_user(self):
         mock_response = Mock()
@@ -233,7 +235,11 @@ class TestRequestMiddleware(TestCase):
 
         def get_response(_response):
             request.user = mock_user
-            middleware.process_exception(request, exception)
+            try:
+                raise exception
+            except Exception as e:
+                middleware.process_exception(request, e)
+                self.exception_traceback = traceback.format_exc()
             return mock_response
 
         middleware.get_response = get_response
@@ -258,8 +264,8 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("request_failed", record.msg["event"])
         self.assertIn("request_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
-        self.assertIn("error", record.msg)
-        self.assertEqual(exception, record.msg["error"])
+        self.assertIn("exception", record.msg)
+        self.assertEqual(self.exception_traceback.strip(), record.msg["exception"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
@@ -406,7 +412,11 @@ class TestRequestMiddleware(TestCase):
 
         def get_response(_response):
             """ Simulate an exception """
-            middleware.process_exception(request, exception)
+            try:
+                raise exception
+            except Exception as e:
+                middleware.process_exception(request, e)
+                self.exception_traceback = traceback.format_exc()
 
         middleware.get_response = get_response
 
@@ -432,10 +442,8 @@ class TestRequestMiddleware(TestCase):
 
         self.assertIn("code", record.msg)
         self.assertEqual(record.msg["code"], 500)
-        self.assertIn("error", record.msg)
-        self.assertEqual(record.msg["error"], exception)
-        self.assertIn("error_traceback", record.msg)
-        self.assertEqual(type(record.msg["error_traceback"]), str)
+        self.assertIn("exception", record.msg)
+        self.assertEqual(self.exception_traceback.strip(), record.msg["exception"])
         self.assertIn("request", record.msg)
 
         with self.assertLogs(__name__, logging.INFO) as log_results:
