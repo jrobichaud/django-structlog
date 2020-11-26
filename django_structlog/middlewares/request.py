@@ -99,7 +99,7 @@ class RequestMiddleware:
 
     @staticmethod
     def bind_user_id(request):
-        if hasattr(request, "user"):
+        if hasattr(request, "user") and request.user is not None:
             user_id = request.user.pk
             if isinstance(user_id, uuid.UUID):
                 user_id = str(user_id)

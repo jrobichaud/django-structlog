@@ -54,6 +54,37 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
 
+    def test_process_request_with_null_user(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = self.factory.get("/foo")
+        request.user = None
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        with patch("uuid.UUID.__str__", return_value=expected_uuid):
+            middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn("request_id", record.msg)
+
     def test_process_request_anonymous(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
