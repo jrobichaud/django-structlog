@@ -301,6 +301,23 @@ Json file (\ ``logs/json.log``\ )
 
 .. inclusion-marker-example-outputs-end
 
+.. inclusion-marker-upgrade-guide-begin
+
+Upgrade Guide
+=============
+
+.. _upgrade_2.0:
+
+Upgrading to 2.0+
+-----------------
+
+``django-structlog`` was originally developed using the debug configuration `ExceptionPrettyPrinter <https://www.structlog.org/en/stable/api.html#structlog.processors.ExceptionPrettyPrinter>`_ which led to incorrect handling of exception.
+
+- remove ``structlog.processors.ExceptionPrettyPrinter(),`` of your processors.
+- make sure you have ``structlog.processors.format_exc_info,`` in your processors if you want appropriate exception logging.
+
+.. inclusion-marker-upgrade-guide-end
+
 .. inclusion-marker-running-tests-begin
 
 Running the tests

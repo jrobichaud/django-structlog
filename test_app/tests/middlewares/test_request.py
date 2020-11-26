@@ -492,8 +492,7 @@ class TestRequestMiddleware(TestCase):
 
         self.assertIn("code", record.msg)
         self.assertEqual(record.msg["code"], 404)
-        self.assertNotIn("error", record.msg)
-        self.assertNotIn("error_traceback", record.msg)
+        self.assertNotIn("exception", record.msg)
         self.assertIn("request", record.msg)
 
         with self.assertLogs(__name__, logging.INFO) as log_results:

@@ -46,20 +46,19 @@ Request Events Metadata
 
 These metadata appear once along with their associated event
 
-+------------------+------------------+------------------------+
-| Event            | Key              | Value                  |
-+==================+==================+========================+
-| request_started  | request          | request as string      |
-+------------------+------------------+------------------------+
-| request_started  | user_agent       | request's user agent   |
-+------------------+------------------+------------------------+
-| request_finished | code             | request's status code  |
-+------------------+------------------+------------------------+
-| request_failed   | error            | exception object       |
-+------------------+------------------+------------------------+
-| request_failed   | error_traceback  | exception's traceback  |
-+------------------+------------------+------------------------+
++------------------+------------------+--------------------------------------------------------------+
+| Event            | Key              | Value                                                        |
++==================+==================+==============================================================+
+| request_started  | request          | request as string                                            |
++------------------+------------------+--------------------------------------------------------------+
+| request_started  | user_agent       | request's user agent                                         |
++------------------+------------------+--------------------------------------------------------------+
+| request_finished | code             | request's status code                                        |
++------------------+------------------+--------------------------------------------------------------+
+| request_failed   | exception        | exception traceback (requires format_exc_info_)              |
++------------------+------------------+--------------------------------------------------------------+
 
+.. _format_exc_info: https://www.structlog.org/en/stable/api.html#structlog.processors.format_exc_info
 
 CeleryMiddleware
 ----------------

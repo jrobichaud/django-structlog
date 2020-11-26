@@ -18,6 +18,7 @@ Contents, indices and tables
   development
   demo
   changelog
+  upgrade_guide
   authors
   acknowledgements
   licence

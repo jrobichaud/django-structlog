@@ -1,6 +1,19 @@
 Change Log
 ==========
 
+2.0.0 (November 25, 2020)
+-------------------------
+
+*Upgrade*
+    - There are necessary configuration changes needed. See :ref:`upgrade_2.0` for the details.
+
+*Changes:*
+    - No longer add ``error`` and ``error_traceback``. See `#55 <https://github.com/jrobichaud/django-structlog/issues/55>`_ and :ref:`upgrade_2.0`. Special thanks to `@debfx <https://github.com/debfx>`_.
+
+*Fixes:*
+    - Fix crash when request's user is ``None`` for `django-oauth-toolkit <https://github.com/jazzband/django-oauth-toolkit>`_. See `#56 <https://github.com/jrobichaud/django-structlog/issues/56>`_. Special thanks to `@nicholasamorim <https://github.com/nicholasamorim>`_.
+
+
 1.6.3 (November 11, 2020)
 -------------------------
 
