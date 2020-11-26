@@ -309,7 +309,7 @@ Upgrade Guide
 .. _upgrade_2.0:
 
 Upgrading to 2.0+
------------------
+^^^^^^^^^^^^^^^^^
 
 ``django-structlog`` was originally developed using the debug configuration `ExceptionPrettyPrinter <https://www.structlog.org/en/stable/api.html#structlog.processors.ExceptionPrettyPrinter>`_ which led to incorrect handling of exception.
 
