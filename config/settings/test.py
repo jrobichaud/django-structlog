@@ -2,11 +2,9 @@
 With these settings, tests run faster.
 """
 import os
-
 import environ
 
 import structlog
-
 
 env = environ.Env()
 
