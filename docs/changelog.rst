@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2.1.0 (November 26, 2020)
+-------------------------
+
+*New*
+    - :class:`django_structlog.processors.inject_context_dict` for standard python loggers. See `#24 <https://github.com/jrobichaud/django-structlog/issues/24>`_. Special thanks to `@debfx <https://github.com/debfx>`_.
+
+
 2.0.0 (November 25, 2020)
 -------------------------
 
