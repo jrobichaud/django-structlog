@@ -266,6 +266,13 @@ If you need to add more metadata from the request you can implement a convenient
 
 .. inclusion-marker-getting-started-end
 
+Standard Loggers
+^^^^^^^^^^^^^^^^
+
+It is also possible to log using standard python logger.
+
+See the processor ``django_structlog.processors.inject_context_dict`` in the documentation.
+
 .. inclusion-marker-example-outputs-begin
 
 Example outputs
