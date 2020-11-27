@@ -1,5 +1,6 @@
 import structlog
 
+from django_structlog.processors import inject_context_dict
 from .base import *  # noqa: F403
 from .base import env
 
@@ -86,16 +87,37 @@ LOGGING = {
         "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.JSONRenderer(),
+            "foreign_pre_chain": [
+                inject_context_dict,
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+                structlog.stdlib.PositionalArgumentsFormatter(),
+            ],
         },
         "colored": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(colors=True),
+            "foreign_pre_chain": [
+                inject_context_dict,
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+                structlog.stdlib.PositionalArgumentsFormatter(),
+            ],
         },
         "key_value": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.KeyValueRenderer(
                 key_order=["timestamp", "level", "event", "logger"]
             ),
+            "foreign_pre_chain": [
+                inject_context_dict,
+                structlog.processors.TimeStamper(fmt="iso"),
+                structlog.stdlib.add_logger_name,
+                structlog.stdlib.add_log_level,
+                structlog.stdlib.PositionalArgumentsFormatter(),
+            ],
         },
     },
     "handlers": {
@@ -117,6 +139,10 @@ LOGGING = {
             "level": "INFO",
         },
         "django_structlog_demo_project": {
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
+            "level": "INFO",
+        },
+        "foreign_logger": {
             "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
         },

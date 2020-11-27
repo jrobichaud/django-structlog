@@ -28,3 +28,9 @@ class TestRaiseException:
         with pytest.raises(Exception) as e:
             views.raise_exception(None)
         assert str(e.value) == "This is a view raising an exception."
+
+
+class TestLogWithStandardLogger:
+    def test(self):
+        response = views.log_with_standard_logger(None)
+        assert response.status_code == 200
