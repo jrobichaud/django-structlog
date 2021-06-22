@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2.1.1 (June 22, 2021)
+-------------------------
+
+*Others*
+    - Add ``django`` 3.2 and ``python`` 3.9 to the test matrix and ``pypi`` metadata. See `#65 <https://github.com/jrobichaud/django-structlog/pull/65>`_. Special thanks to `@kashewnuts <https://github.com/kashewnuts>`_.
+
+
 2.1.0 (November 26, 2020)
 -------------------------
 
