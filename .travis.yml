@@ -8,6 +8,7 @@ python:
   - '3.6'
   - '3.7'
   - '3.8'
+  - '3.9'
 install: pip install tox-travis tox flake8 coverage codecov
 after_success: codecov
 services: redis-server
