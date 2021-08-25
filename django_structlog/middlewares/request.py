@@ -1,6 +1,7 @@
 import uuid
 
 import structlog
+from django.core.permissions import PermissionDenied
 from django.http import Http404
 
 from .. import signals
@@ -74,7 +75,7 @@ class RequestMiddleware:
         return response
 
     def process_exception(self, request, exception):
-        if isinstance(exception, Http404):
+        if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
             # an error as we want the standard `request_finished` log message
             # to be emitted.
