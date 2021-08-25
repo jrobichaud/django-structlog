@@ -1,7 +1,7 @@
 import uuid
 
 import structlog
-from django.core.permissions import PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
 from .. import signals
