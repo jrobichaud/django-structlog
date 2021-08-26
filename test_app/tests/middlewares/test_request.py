@@ -7,7 +7,7 @@ from unittest.mock import patch, Mock
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
-from django.http import Http404, HttpResponseNotFound
+from django.http import Http404, HttpResponseNotFound, HttpResponseForbidden
 from django.test import TestCase, RequestFactory
 import structlog
 
@@ -467,7 +467,7 @@ class TestRequestMiddleware(TestCase):
         def get_response(_response):
             """ Simulate an exception """
             middleware.process_exception(request, exception)
-            return HttpResponseNotFound()
+            return HttpResponseForbidden()
 
         middleware.get_response = get_response
 
@@ -492,7 +492,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIsNone(record.msg["user_id"])
 
         self.assertIn("code", record.msg)
-        self.assertEqual(record.msg["code"], 404)
+        self.assertEqual(record.msg["code"], 403)
         self.assertNotIn("exception", record.msg)
         self.assertIn("request", record.msg)
 
