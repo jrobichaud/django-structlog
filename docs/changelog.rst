@@ -1,24 +1,31 @@
 Change Log
 ==========
 
+2.1.2 (August 31, 2021)
+-----------------------
+
+*Fixes:*
+    - ``django.core.exceptions.PermissionDenied`` is no longer logged as 500 but 403. See `#68 <https://github.com/jrobichaud/django-structlog/pull/68>`_. Special thanks to `@rabbit-aaron <https://github.com/rabbit-aaron>`_.
+
+
 2.1.1 (June 22, 2021)
 -------------------------
 
-*Others*
+*Others:*
     - Add ``django`` 3.2 and ``python`` 3.9 to the test matrix and ``pypi`` metadata. See `#65 <https://github.com/jrobichaud/django-structlog/pull/65>`_. Special thanks to `@kashewnuts <https://github.com/kashewnuts>`_.
 
 
 2.1.0 (November 26, 2020)
 -------------------------
 
-*New*
+*New:*
     - :class:`django_structlog.processors.inject_context_dict` for standard python loggers. See `#24 <https://github.com/jrobichaud/django-structlog/issues/24>`_. Special thanks to `@debfx <https://github.com/debfx>`_.
 
 
 2.0.0 (November 25, 2020)
 -------------------------
 
-*Upgrade*
+*Upgrade:*
     - There are necessary configuration changes needed. See :ref:`upgrade_2.0` for the details.
 
 *Changes:*

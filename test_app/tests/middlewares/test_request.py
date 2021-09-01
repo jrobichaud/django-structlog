@@ -502,7 +502,7 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
-    
+
     def test_process_request_404_are_processed_as_regular_requests(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
