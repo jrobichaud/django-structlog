@@ -5,8 +5,9 @@ from unittest import mock
 from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser, User
+from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
-from django.http import Http404, HttpResponseNotFound
+from django.http import Http404, HttpResponseNotFound, HttpResponseForbidden
 from django.test import TestCase, RequestFactory
 import structlog
 
@@ -453,6 +454,55 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
 
+    def test_process_request_403_are_processed_as_regular_requests(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        request = self.factory.get("/foo")
+        request.user = AnonymousUser()
+
+        middleware = middlewares.RequestMiddleware(None)
+
+        exception = PermissionDenied()
+
+        def get_response(_response):
+            """ Simulate an exception """
+            middleware.process_exception(request, exception)
+            return HttpResponseForbidden()
+
+        middleware.get_response = get_response
+
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            logging.getLogger("django_structlog"), logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        record = log_results.records[1]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        self.assertIn("code", record.msg)
+        self.assertEqual(record.msg["code"], 403)
+        self.assertNotIn("exception", record.msg)
+        self.assertIn("request", record.msg)
+
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+    
     def test_process_request_404_are_processed_as_regular_requests(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
