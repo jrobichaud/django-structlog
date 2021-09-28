@@ -1,6 +1,5 @@
 language: python
 dist: xenial
-sudo: false
 script: tox
 cache: pip
 python:
