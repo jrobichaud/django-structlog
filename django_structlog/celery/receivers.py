@@ -56,9 +56,26 @@ def receiver_task_success(result=None, **kwargs):
 
 
 def receiver_task_failure(
-    task_id=None, exception=None, traceback=None, einfo=None, *args, **kwargs
+    task_id=None,
+    exception=None,
+    traceback=None,
+    einfo=None,
+    sender=None,
+    *args,
+    **kwargs
 ):
-    logger.exception("task_failed", error=str(exception), exception=exception)
+    throws = getattr(sender, "throws", ())
+    if isinstance(exception, throws):
+        logger.info(
+            "task_failed",
+            error=str(exception),
+        )
+    else:
+        logger.exception(
+            "task_failed",
+            error=str(exception),
+            exception=exception,
+        )
 
 
 def receiver_task_revoked(

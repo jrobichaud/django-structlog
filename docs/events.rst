@@ -66,23 +66,25 @@ CeleryMiddleware
 Task Events
 ^^^^^^^^^^^
 
-+--------------------+---------+------------------------------------------------+
-| Event              | Type    | Description                                    |
-+====================+=========+================================================+
-| task_enqueued      | INFO    | A task was enqueued by request or another task |
-+--------------------+---------+------------------------------------------------+
-| task_retrying      | WARNING | Worker retry task                              |
-+--------------------+---------+------------------------------------------------+
-| task_succeeded     | INFO    | Task completed successfully                    |
-+--------------------+---------+------------------------------------------------+
-| task_failed        | ERROR   | Task failed                                    |
-+--------------------+---------+------------------------------------------------+
-| task_revoked       | WARNING | Task was canceled                              |
-+--------------------+---------+------------------------------------------------+
-| task_not_found     | ERROR   | Celery app did not discover the requested task |
-+--------------------+---------+------------------------------------------------+
-| task_task_rejected | ERROR   | Task could not be enqueued                     |
-+--------------------+---------+------------------------------------------------+
++--------------------+-------------+------------------------------------------------+
+| Event              | Type        | Description                                    |
++====================+=============+================================================+
+| task_enqueued      | INFO        | A task was enqueued by request or another task |
++--------------------+-------------+------------------------------------------------+
+| task_retrying      | WARNING     | Worker retry task                              |
++--------------------+-------------+------------------------------------------------+
+| task_succeeded     | INFO        | Task completed successfully                    |
++--------------------+-------------+------------------------------------------------+
+| task_failed        | ERROR/INFO* | Task failed                                    |
++--------------------+-------------+------------------------------------------------+
+| task_revoked       | WARNING     | Task was canceled                              |
++--------------------+-------------+------------------------------------------------+
+| task_not_found     | ERROR       | Celery app did not discover the requested task |
++--------------------+-------------+------------------------------------------------+
+| task_task_rejected | ERROR       | Task could not be enqueued                     |
++--------------------+-------------+------------------------------------------------+
+
+\* if task threw an expected exception, it will logged as ``INFO``. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_
 
 Task Bound Metadata
 ^^^^^^^^^^^^^^^^^^^
@@ -117,6 +119,8 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_failed      | error            | exception as string                    |
 +------------------+------------------+----------------------------------------+
+| task_failed      | exception*       | exception's traceback                  |
++------------------+------------------+----------------------------------------+
 | task_revoked     | terminated       | Set to True if the task was terminated |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | signum           | see Celery's documentation             |
@@ -124,4 +128,4 @@ These metadata appear once along with their associated event
 | task_revoked     | expired          | see Celery's documentation             |
 +------------------+------------------+----------------------------------------+
 
-
+\* if task threw an expected exception, ``exception`` will be omitted. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_
