@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2.1.3 (September 28, 2021)
+--------------------------
+
+*Fixes:*
+    - Implement `Celery Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_' behaviour of logging expected exception as ``INFO`` with no tracebacks. See `#62 <https://github.com/jrobichaud/django-structlog/issues/62>`_ and `#70 <https://github.com/jrobichaud/django-structlog/pull/70>`_. Special thanks to `@meunomemauricio <https://github.com/meunomemauricio>`_.
+
+
 2.1.2 (August 31, 2021)
 -----------------------
 
