@@ -21,7 +21,7 @@ colorama>=0.4.1
 django-ipware==2.1.0
 
 Werkzeug==0.15.2  # https://github.com/pallets/werkzeug
-ipdb==0.12  # https://github.com/gotcha/ipdb
+ipdb==0.13.9  # https://github.com/gotcha/ipdb
 psycopg2-binary==2.8 # https://github.com/psycopg/psycopg2
 
 # Testing
