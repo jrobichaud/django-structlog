@@ -319,6 +319,28 @@ class TestReceivers(TestCase):
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("error", record.msg)
+        self.assertIn("exception", record.msg)
+        self.assertEqual(expected_exception, record.msg["error"])
+
+    def test_receiver_task_failure_with_throws(self):
+        expected_exception = "foo"
+
+        mock_sender = Mock()
+        mock_sender.throws = (Exception,)
+
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receivers.receiver_task_failure(
+                exception=Exception("foo"), sender=mock_sender
+            )
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_failed", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("error", record.msg)
+        self.assertNotIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
     def test_receiver_task_revoked(self):
