@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2.2.0 (November 18, 2021)
+-------------------------
+
+*Changes:*
+    - Requests were logged as ``<WSGIRequest: GET '/'>`` (as an object) and now they are logged like this ``GET /`` (as a string). See `#72 <https://github.com/jrobichaud/django-structlog/issues/72>`_. Special thanks to `@humitos <https://github.com/humitos>`_.
+
+
 2.1.3 (September 28, 2021)
 --------------------------
 
