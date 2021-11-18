@@ -55,7 +55,7 @@ class RequestMiddleware:
 
             logger.info(
                 "request_started",
-                request=request,
+                request=self.format_request(request),
                 user_agent=request.META.get("HTTP_USER_AGENT"),
             )
             self._raised_exception = False
@@ -69,10 +69,16 @@ class RequestMiddleware:
                     response=response,
                 )
                 logger.info(
-                    "request_finished", code=response.status_code, request=request
+                    "request_finished",
+                    code=response.status_code,
+                    request=self.format_request(request),
                 )
 
         return response
+
+    @staticmethod
+    def format_request(request):
+        return "%s %s" % (request.method, request.get_full_path())
 
     def process_exception(self, request, exception):
         if isinstance(exception, (Http404, PermissionDenied)):
@@ -85,12 +91,15 @@ class RequestMiddleware:
 
         self.bind_user_id(request),
         signals.bind_extra_request_failed_metadata.send(
-            sender=self.__class__, request=request, logger=logger, exception=exception
+            sender=self.__class__,
+            request=request,
+            logger=logger,
+            exception=exception,
         )
         logger.exception(
             "request_failed",
             code=500,
-            request=request,
+            request=self.format_request(request),
         )
 
     @staticmethod
