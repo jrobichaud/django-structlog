@@ -98,6 +98,7 @@ In the same file as before
 
         structlog.configure(
             processors=[
+                structlog.contextvars.merge_contextvars,
                 structlog.stdlib.filter_by_level,
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.stdlib.add_logger_name,
@@ -108,7 +109,6 @@ In the same file as before
                 structlog.processors.UnicodeDecoder(),
                 structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
             ],
-            context_class=structlog.threadlocal.wrap_dict(dict),
             logger_factory=structlog.stdlib.LoggerFactory(),
             wrapper_class=structlog.stdlib.BoundLogger,
             cache_logger_on_first_use=True,
@@ -145,8 +145,9 @@ in celery's ``receiver_task_pre_run``.
 .. code-block:: python
 
     from django_structlog.celery import signals
+    import structlog
 
     @receiver(signals.bind_extra_task_metadata)
     def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
-        logger.bind(correlation_id=task.request.correlation_id)
+        structlog.contextvars.bind_contextvars(correlation_id=task.request.correlation_id)
 

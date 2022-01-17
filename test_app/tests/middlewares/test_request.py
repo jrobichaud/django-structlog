@@ -275,7 +275,7 @@ class TestRequestMiddleware(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, request=None, logger=None
         ):
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
 
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -312,7 +312,7 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, response=None
         ):
             self.assertEqual(response, mock_response)
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
 
         def get_response(_response):
             return mock_response
@@ -358,7 +358,7 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, exception=None
         ):
             self.assertEqual(exception, expected_exception)
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
 
         request = self.factory.get("/foo")
 

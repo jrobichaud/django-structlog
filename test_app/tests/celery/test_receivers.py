@@ -31,12 +31,11 @@ class TestReceivers(TestCase):
         before_task_publish.connect(receivers.receiver_before_task_publish)
         after_task_publish.connect(receivers.receiver_after_task_publish)
         try:
-            with structlog.threadlocal.tmp_bind(self.logger):
-                self.logger.bind(request_id=expected_uuid)
-                with self.assertLogs(
-                    logging.getLogger("django_structlog.celery.receivers"), logging.INFO
-                ) as log_results:
-                    test_task.delay("foo")
+            structlog.contextvars.bind_contextvars(request_id=expected_uuid)
+            with self.assertLogs(
+                logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+            ) as log_results:
+                test_task.delay("foo")
         finally:
             before_task_publish.disconnect(receivers.receiver_before_task_publish)
             after_task_publish.disconnect(receivers.receiver_after_task_publish)
@@ -55,13 +54,12 @@ class TestReceivers(TestCase):
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
 
         headers = {}
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(
-                request_id=expected_uuid,
-                user_id=expected_user_id,
-                task_id=expected_parent_task_uuid,
-            )
-            receivers.receiver_before_task_publish(headers=headers)
+        structlog.contextvars.bind_contextvars(
+            request_id=expected_uuid,
+            user_id=expected_user_id,
+            task_id=expected_parent_task_uuid,
+        )
+        receivers.receiver_before_task_publish(headers=headers)
 
         self.assertDictEqual(
             {
@@ -81,13 +79,12 @@ class TestReceivers(TestCase):
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
 
         body = {}
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(
-                request_id=expected_uuid,
-                user_id=expected_user_id,
-                task_id=expected_parent_task_uuid,
-            )
-            receivers.receiver_before_task_publish(body=body)
+        structlog.contextvars.bind_contextvars(
+            request_id=expected_uuid,
+            user_id=expected_user_id,
+            task_id=expected_parent_task_uuid,
+        )
+        receivers.receiver_before_task_publish(body=body)
 
         self.assertDictEqual(
             {
@@ -118,13 +115,12 @@ class TestReceivers(TestCase):
             context.update(new_dict)
 
         headers = {}
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(
-                request_id=expected_uuid,
-                user_id=user_id,
-                task_id=expected_parent_task_uuid,
-            )
-            receivers.receiver_before_task_publish(headers=headers)
+        structlog.contextvars.bind_contextvars(
+            request_id=expected_uuid,
+            user_id=user_id,
+            task_id=expected_parent_task_uuid,
+        )
+        receivers.receiver_before_task_publish(headers=headers)
 
         self.assertDictEqual(
             {
@@ -155,13 +151,12 @@ class TestReceivers(TestCase):
             context.update(new_dict)
 
         body = {}
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(
-                request_id=expected_uuid,
-                user_id=expected_user_id,
-                task_id=expected_parent_task_uuid,
-            )
-            receivers.receiver_before_task_publish(body=body)
+        structlog.contextvars.bind_contextvars(
+            request_id=expected_uuid,
+            user_id=expected_user_id,
+            task_id=expected_parent_task_uuid,
+        )
+        receivers.receiver_before_task_publish(body=body)
 
         self.assertDictEqual(
             {
@@ -222,17 +217,13 @@ class TestReceivers(TestCase):
             "request_id": expected_request_uuid,
             "user_id": expected_user_id,
         }
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(foo="bar")
+        structlog.contextvars.bind_contextvars(foo="bar")
 
-            structlog.threadlocal.as_immutable(self.logger)
-            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-            context = immutable_logger._context
-            self.assertDictEqual({"foo": "bar"}, context)
+        context = structlog.contextvars.get_merged_contextvars(self.logger)
+        self.assertDictEqual({"foo": "bar"}, context)
 
-            receivers.receiver_task_pre_run(task_id, task)
-            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-            context = immutable_logger._context
+        receivers.receiver_task_pre_run(task_id, task)
+        context = structlog.contextvars.get_merged_contextvars(self.logger)
 
         self.assertDictEqual(
             {
@@ -248,24 +239,20 @@ class TestReceivers(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, task=None, logger=None
         ):
-            logger.bind(correlation_id=task.request.correlation_id)
+            structlog.contextvars.bind_contextvars(correlation_id=task.request.correlation_id)
 
         expected_correlation_uuid = "00000000-0000-0000-0000-000000000000"
         task_id = "11111111-1111-1111-1111-111111111111"
         task = Mock()
         task.request = Mock()
         task.request.correlation_id = expected_correlation_uuid
-        with structlog.threadlocal.tmp_bind(self.logger):
-            self.logger.bind(foo="bar")
+        structlog.contextvars.bind_contextvars(foo="bar")
 
-            structlog.threadlocal.as_immutable(self.logger)
-            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-            context = immutable_logger._context
-            self.assertDictEqual({"foo": "bar"}, context)
+        context = structlog.contextvars.get_merged_contextvars(self.logger)
+        self.assertDictEqual({"foo": "bar"}, context)
 
-            receivers.receiver_task_pre_run(task_id, task)
-            immutable_logger = structlog.threadlocal.as_immutable(self.logger)
-            context = immutable_logger._context
+        receivers.receiver_task_pre_run(task_id, task)
+        context = structlog.contextvars.get_merged_contextvars(self.logger)
 
         self.assertEqual(context["correlation_id"], expected_correlation_uuid)
         self.assertEqual(context["task_id"], task_id)
@@ -292,7 +279,7 @@ class TestReceivers(TestCase):
         def receiver_pre_task_succeeded(
             sender, signal, task=None, logger=None, result=None
         ):
-            logger.bind(result=result)
+            structlog.contextvars.bind_contextvars(result=result)
 
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO

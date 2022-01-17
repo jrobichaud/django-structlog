@@ -221,6 +221,7 @@ Add appropriate structlog configuration to your ``settings.py``
 
    structlog.configure(
        processors=[
+           structlog.contextvars.merge_contextvars,
            structlog.stdlib.filter_by_level,
            structlog.processors.TimeStamper(fmt="iso"),
            structlog.stdlib.add_logger_name,
@@ -231,7 +232,6 @@ Add appropriate structlog configuration to your ``settings.py``
            structlog.processors.UnicodeDecoder(),
            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
        ],
-       context_class=structlog.threadlocal.wrap_dict(dict),
        logger_factory=structlog.stdlib.LoggerFactory(),
        wrapper_class=structlog.stdlib.BoundLogger,
        cache_logger_on_first_use=True,
@@ -258,11 +258,12 @@ If you need to add more metadata from the request you can implement a convenient
    from django.dispatch import receiver
 
    from django_structlog.signals import bind_extra_request_metadata
+   import structlog
 
 
    @receiver(bind_extra_request_metadata)
    def bind_user_email(request, logger, **kwargs):
-       logger.bind(user_email=getattr(request.user, 'email', ''))
+       structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
 
 
 .. inclusion-marker-getting-started-end

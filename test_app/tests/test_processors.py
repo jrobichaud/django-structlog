@@ -8,10 +8,12 @@ logger = structlog.getLogger(__name__)
 
 
 class TestInjectContextDict(TestCase):
+    def tearDown(self):
+        structlog.contextvars.clear_contextvars()
+
     def test(self):
         event_dict = {}
-        with structlog.threadlocal.tmp_bind(logger):
-            logger.bind(foo="bar")
-            processors.inject_context_dict(None, None, event_dict)
+        structlog.contextvars.bind_contextvars(foo="bar")
+        processors.inject_context_dict(None, None, event_dict)
 
         self.assertDictEqual({"foo": "bar"}, event_dict)
