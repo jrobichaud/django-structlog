@@ -15,6 +15,9 @@ class TestReceivers(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
+    
+    def tearDown(self):
+        structlog.contextvars.clear_contextvars()
 
     def test_defer_task(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
@@ -376,6 +379,3 @@ class TestReceivers(TestCase):
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("message", record.msg)
         self.assertEqual(expected_message, record.msg["message"])
-
-    def tearDown(self):
-        structlog.contextvars.clear_contextvars()

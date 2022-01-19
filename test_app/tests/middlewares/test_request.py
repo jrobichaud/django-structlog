@@ -27,6 +27,9 @@ class TestRequestMiddleware(TestCase):
         self.log_results = None
         self.exception_traceback = None
 
+    def tearDown(self):
+        structlog.contextvars.clear_contextvars()
+
     def test_process_request_without_user(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -599,9 +602,6 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
-
-    def tearDown(self):
-        structlog.contextvars.clear_contextvars()
 
 
 class TestGetRequestHeader(TestCase):
