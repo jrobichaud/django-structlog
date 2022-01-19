@@ -43,7 +43,6 @@ def receiver_task_pre_run(task_id, task, *args, **kwargs):
 
 def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
     logger.warning("task_retrying", reason=reason)
-    # structlog.contextvars.clear_contextvars()
 
 
 def receiver_task_success(result=None, **kwargs):
@@ -75,7 +74,6 @@ def receiver_task_failure(
             error=str(exception),
             exception=exception,
         )
-    # structlog.contextvars.clear_contextvars()
 
 
 def receiver_task_revoked(
@@ -84,14 +82,11 @@ def receiver_task_revoked(
     logger.warning(
         "task_revoked", terminated=terminated, signum=signum, expired=expired
     )
-    # structlog.contextvars.clear_contextvars()
 
 
 def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
     logger.error("task_not_found", message=message)
-    # structlog.contextvars.clear_contextvars()
 
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):
     logger.error("task_rejected", message=message)
-    # structlog.contextvars.clear_contextvars()

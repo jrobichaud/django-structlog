@@ -32,7 +32,6 @@ class RequestMiddleware:
 
     def __call__(self, request):
         from ipware import get_client_ip
-        # structlog.contextvars.clear_contextvars()
 
         request_id = get_request_header(
             request, "x-request-id", "HTTP_X_REQUEST_ID"

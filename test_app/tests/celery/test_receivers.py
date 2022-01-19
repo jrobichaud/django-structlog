@@ -378,4 +378,4 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_message, record.msg["message"])
 
     def tearDown(self):
-        self.logger.new()
+        structlog.contextvars.clear_contextvars()

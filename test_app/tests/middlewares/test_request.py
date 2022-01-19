@@ -601,7 +601,7 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
     def tearDown(self):
-        self.logger.new()
+        structlog.contextvars.clear_contextvars()
 
 
 class TestGetRequestHeader(TestCase):
