@@ -1,0 +1,93 @@
+name: django-structlog
+on:
+  - pull_request
+jobs:
+  test-demo-app:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install codecov -r requirements.txt
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.4.0
+      - name: Test demo app
+        env:
+          CELERY_BROKER_URL: redis://0.0.0.0:6379
+          DJANGO_SETTINGS_MODULE: config.settings.test_demo_app
+        run: pytest --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          # - '3.5'
+          # - '3.6'
+          - '3.7'
+          - '3.8'
+          #- '3.9'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install tox tox-gh-actions
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.4.0
+      - name: Test with tox
+        run: tox
+  test-docs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/doc.txt
+      - name: make html
+        working-directory: docs
+        run: make html
+      - name: make doctest
+        working-directory: docs
+        run: make doctest
+  black:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/black.txt
+      - name: run black
+        run: black --check --verbose .
+  flake8:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.7'
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/flake8.txt
+      - name: run flake8
+        run: flake8
