@@ -1,4 +1,4 @@
-name: django-structlog
+name: ci
 on:
   - push
 jobs:
