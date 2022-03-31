@@ -278,7 +278,9 @@ class TestRequestMiddleware(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, request=None, logger=None
         ):
-            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -315,7 +317,9 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, response=None
         ):
             self.assertEqual(response, mock_response)
-            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         def get_response(_response):
             return mock_response
@@ -361,7 +365,9 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, exception=None
         ):
             self.assertEqual(exception, expected_exception)
-            structlog.contextvars.bind_contextvars(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         request = self.factory.get("/foo")
 
@@ -415,7 +421,7 @@ class TestRequestMiddleware(TestCase):
         exception = Exception("This is an exception")
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             try:
                 raise exception
             except Exception as e:
@@ -468,7 +474,7 @@ class TestRequestMiddleware(TestCase):
         exception = PermissionDenied()
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             middleware.process_exception(request, exception)
             return HttpResponseForbidden()
 
@@ -517,7 +523,7 @@ class TestRequestMiddleware(TestCase):
         exception = Http404()
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             middleware.process_exception(request, exception)
             return HttpResponseNotFound()
 
