@@ -42,6 +42,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install -U setuptools
           python -m pip install codecov tox tox-gh-actions
       - name: Start Redis
         uses: supercharge/redis-github-action@1.4.0
