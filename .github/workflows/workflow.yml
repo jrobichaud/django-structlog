@@ -1,6 +1,6 @@
 name: django-structlog
 on:
-  - pull_request
+  - push
 jobs:
   test-demo-app:
     runs-on: ubuntu-latest
