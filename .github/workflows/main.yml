@@ -51,6 +51,9 @@ jobs:
       - name: codecov
         run: codecov
   test-docs:
+    needs:
+      - test-demo-app
+      - test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -69,6 +72,9 @@ jobs:
         working-directory: docs
         run: make doctest
   black:
+    needs:
+      - test-demo-app
+      - test
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -83,6 +89,9 @@ jobs:
       - name: run black
         run: black --check --verbose .
   flake8:
+    needs:
+      - test-demo-app
+      - test
     runs-on: ubuntu-latest
     strategy:
       matrix:
