@@ -15,7 +15,7 @@ class TestReceivers(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
-    
+
     def tearDown(self):
         structlog.contextvars.clear_contextvars()
 
@@ -242,7 +242,9 @@ class TestReceivers(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, task=None, logger=None
         ):
-            structlog.contextvars.bind_contextvars(correlation_id=task.request.correlation_id)
+            structlog.contextvars.bind_contextvars(
+                correlation_id=task.request.correlation_id
+            )
 
         expected_correlation_uuid = "00000000-0000-0000-0000-000000000000"
         task_id = "11111111-1111-1111-1111-111111111111"
