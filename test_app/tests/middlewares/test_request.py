@@ -412,7 +412,7 @@ class TestRequestMiddleware(TestCase):
         exception = Exception("This is an exception")
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             try:
                 raise exception
             except Exception as e:
@@ -465,7 +465,7 @@ class TestRequestMiddleware(TestCase):
         exception = PermissionDenied()
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             middleware.process_exception(request, exception)
             return HttpResponseForbidden()
 
@@ -514,7 +514,7 @@ class TestRequestMiddleware(TestCase):
         exception = Http404()
 
         def get_response(_response):
-            """ Simulate an exception """
+            """Simulate an exception"""
             middleware.process_exception(request, exception)
             return HttpResponseNotFound()
 
