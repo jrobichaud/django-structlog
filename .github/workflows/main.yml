@@ -105,6 +105,16 @@ jobs:
       - flake8
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -U setuptools
+          python -m pip install -U build
+      - name: build sdist
+        run: python -m build --sdist
+      - name: build wheel
+        run: python -m build --wheel
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
