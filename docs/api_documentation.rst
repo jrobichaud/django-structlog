@@ -17,11 +17,6 @@ django_structlog
 .. automodule:: django_structlog.signals
     :members: bind_extra_request_metadata, bind_extra_request_finished_metadata, bind_extra_request_failed_metadata
 
-.. automodule:: django_structlog.processors
-    :members: inject_context_dict
-    :undoc-members:
-    :show-inheritance:
-
 
 django_structlog.celery
 ^^^^^^^^^^^^^^^^^^^^^^^

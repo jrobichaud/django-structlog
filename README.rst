@@ -315,6 +315,67 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_3.0:
+
+Upgrading to 3.0+
+^^^^^^^^^^^^^^^^^
+
+``django-structlog`` now use  `structlog.contextvars.bind_contextvars <https://www.structlog.org/en/stable/contextvars.html>`_ instead of ``threadlocal``.
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires python 3.7+
+- requires structlog 21.4.0+
+
+
+
+
+Changes you need to do
+~~~~~~~~~~~~~~~~~~~~~~
+
+1. Update structlog settings
+----------------------------
+
+- add ``structlog.contextvars.merge_contextvars`` as first processors (line 3)
+- remove ``context_class=structlog.threadlocal.wrap_dict(dict),`` (line 14)
+
+
+.. code-block:: python
+   :emphasize-lines:  3,14
+   :linenos:
+
+   structlog.configure(
+       processors=[
+           structlog.contextvars.merge_contextvars,
+           structlog.stdlib.filter_by_level,
+           structlog.processors.TimeStamper(fmt="iso"),
+           structlog.stdlib.add_logger_name,
+           structlog.stdlib.add_log_level,
+           structlog.stdlib.PositionalArgumentsFormatter(),
+           structlog.processors.StackInfoRenderer(),
+           structlog.processors.format_exc_info,
+           structlog.processors.UnicodeDecoder(),
+           structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+       ],
+       # context_class=structlog.threadlocal.wrap_dict(dict),
+       logger_factory=structlog.stdlib.LoggerFactory(),
+       wrapper_class=structlog.stdlib.BoundLogger,
+       cache_logger_on_first_use=True,
+   )
+
+2. Replace all ``logger.bind`` with ``structlog.contextvars.bind_contextvars``
+------------------------------------------------------------------------------
+
+.. code-block:: python
+   :emphasize-lines: 3,4
+   :linenos:
+
+   @receiver(bind_extra_request_metadata)
+   def bind_user_email(request, logger, **kwargs):
+      # logger.bind(user_email=getattr(request.user, 'email', ''))
+      structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+
+
 .. _upgrade_2.0:
 
 Upgrading to 2.0+
