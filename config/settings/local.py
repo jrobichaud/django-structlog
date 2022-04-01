@@ -1,6 +1,5 @@
 import structlog
 
-from django_structlog.processors import inject_context_dict
 from .base import *  # noqa: F403
 from .base import env
 
@@ -88,7 +87,6 @@ LOGGING = {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.JSONRenderer(),
             "foreign_pre_chain": [
-                inject_context_dict,
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
@@ -99,7 +97,6 @@ LOGGING = {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(colors=True),
             "foreign_pre_chain": [
-                inject_context_dict,
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
@@ -112,7 +109,6 @@ LOGGING = {
                 key_order=["timestamp", "level", "event", "logger"]
             ),
             "foreign_pre_chain": [
-                inject_context_dict,
                 structlog.processors.TimeStamper(fmt="iso"),
                 structlog.stdlib.add_logger_name,
                 structlog.stdlib.add_log_level,
