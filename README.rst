@@ -265,14 +265,39 @@ If you need to add more metadata from the request you can implement a convenient
        structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
 
 
-.. inclusion-marker-getting-started-end
-
 Standard Loggers
 ^^^^^^^^^^^^^^^^
 
 It is also possible to log using standard python logger.
 
-See the processor ``django_structlog.processors.inject_context_dict`` in the documentation.
+In your formatters, add the ``foreign_pre_chain`` section, and then add ``structlog.contextvars.merge_contextvars``:
+
+.. code-block:: python
+
+   LOGGING = {
+       "version": 1,
+       "disable_existing_loggers": False,
+       "formatters": {
+           "json_formatter": {
+               "()": structlog.stdlib.ProcessorFormatter,
+               "processor": structlog.processors.JSONRenderer(),
+               # Add this section:
+               "foreign_pre_chain": [
+                   structlog.contextvars.merge_contextvars, # <---- add this
+                   # customize the rest as you need
+                   structlog.processors.TimeStamper(fmt="iso"),
+                   structlog.stdlib.add_logger_name,
+                   structlog.stdlib.add_log_level,
+                   structlog.stdlib.PositionalArgumentsFormatter(),
+               ],
+           },
+       },
+       ...
+    }
+
+
+.. inclusion-marker-getting-started-end
+
 
 .. inclusion-marker-example-outputs-begin
 
@@ -327,27 +352,23 @@ Minimum requirements
 - requires structlog 21.4.0+
 
 
-
-
 Changes you need to do
 ~~~~~~~~~~~~~~~~~~~~~~
 
 1. Update structlog settings
 ----------------------------
 
-- add ``structlog.contextvars.merge_contextvars`` as first processors (line 3)
-- remove ``context_class=structlog.threadlocal.wrap_dict(dict),`` (line 14)
-- add ``structlog.contextvars.merge_contextvars`` for foreign_pre_chain (line 29)
-- remove ``django_structlog.processors.inject_context_dict,`` (line 30)
+- add ``structlog.contextvars.merge_contextvars`` as first ``processors``
+- remove ``context_class=structlog.threadlocal.wrap_dict(dict),``
+- (if you use standard loggers) add ``structlog.contextvars.merge_contextvars`` in `foreign_pre_chain`
+- (if you use standard loggers) remove ``django_structlog.processors.inject_context_dict,``
 
 
 .. code-block:: python
-   :emphasize-lines:  3,14,29,30
-   :linenos:
 
    structlog.configure(
        processors=[
-           structlog.contextvars.merge_contextvars,
+           structlog.contextvars.merge_contextvars, # <---- add this
            structlog.stdlib.filter_by_level,
            structlog.processors.TimeStamper(fmt="iso"),
            structlog.stdlib.add_logger_name,
@@ -358,11 +379,12 @@ Changes you need to do
            structlog.processors.UnicodeDecoder(),
            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
        ],
-       # context_class=structlog.threadlocal.wrap_dict(dict),
+       # context_class=structlog.threadlocal.wrap_dict(dict), # <---- remove this
        logger_factory=structlog.stdlib.LoggerFactory(),
        cache_logger_on_first_use=True,
    )
 
+   # If you use standard logging
    LOGGING = {
        "version": 1,
        "disable_existing_loggers": False,
@@ -370,10 +392,9 @@ Changes you need to do
            "json_formatter": {
                "()": structlog.stdlib.ProcessorFormatter,
                "processor": structlog.processors.JSONRenderer(),
-               # ADD THIS SECTION
                "foreign_pre_chain": [
-                   structlog.contextvars.merge_contextvars,
-                   # django_structlog.processors.inject_context_dict,
+                   structlog.contextvars.merge_contextvars, # <---- add this
+                   # django_structlog.processors.inject_context_dict, # <---- remove this
                    structlog.processors.TimeStamper(fmt="iso"),
                    structlog.stdlib.add_logger_name,
                    structlog.stdlib.add_log_level,
@@ -384,18 +405,16 @@ Changes you need to do
        ...
     }
 
+
 2. Replace all ``logger.bind`` with ``structlog.contextvars.bind_contextvars``
 ------------------------------------------------------------------------------
 
 .. code-block:: python
-   :emphasize-lines: 3,4
-   :linenos:
 
    @receiver(bind_extra_request_metadata)
    def bind_user_email(request, logger, **kwargs):
       # logger.bind(user_email=getattr(request.user, 'email', ''))
       structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
-
 
 .. _upgrade_2.0:
 

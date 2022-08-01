@@ -1,6 +1,21 @@
 Change Log
 ==========
 
+3.0.0 (August 1st, 2022)
+------------------------
+
+See: :ref:`upgrade_3.0`
+
+*Changes:*
+    - ``django-structlog`` now uses ``structlog.contextvars`` instead of ``structlog.threadlocal``. See the upgrade guide for more information (:ref:`upgrade_3.0`) and `#78 <https://github.com/jrobichaud/django-structlog/pull/78>`_. Special thanks to `@AndrewGuenther <https://github.com/AndrewGuenther>`_  and `@shimizukawa <https://github.com/shimizukawa>`_.
+        - removed ``django_structlog.processors.inject_context_dict``
+        - minimum requirements change to ``python`` 3.7+
+        - minimum requirements change to ``structlog`` 21.5
+
+*Others:*
+
+    - Remove ``wrapper_class`` from the configuration
+
 2.2.0 (November 18, 2021)
 -------------------------
 
