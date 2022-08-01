@@ -23,7 +23,7 @@ Start Demo App
 
 .. code-block:: bash
 
-   $ docker-compose up --build
+   $ docker compose up --build
 
 
 Building, Serving and Testing the Documentation Locally
@@ -31,5 +31,5 @@ Building, Serving and Testing the Documentation Locally
 
 .. code-block:: bash
 
-   $ docker-compose -f docker-compose.docs.yml up --build
+   $ docker compose -p django-structlog-docs -f docker-compose.docs.yml up --build
    Serving on http://0.0.0.0:5000

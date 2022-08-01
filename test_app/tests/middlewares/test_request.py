@@ -27,6 +27,9 @@ class TestRequestMiddleware(TestCase):
         self.log_results = None
         self.exception_traceback = None
 
+    def tearDown(self):
+        structlog.contextvars.clear_contextvars()
+
     def test_process_request_without_user(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -275,7 +278,9 @@ class TestRequestMiddleware(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, request=None, logger=None
         ):
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         mock_response = Mock()
         mock_response.status_code.return_value = 200
@@ -312,7 +317,9 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, response=None
         ):
             self.assertEqual(response, mock_response)
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         def get_response(_response):
             return mock_response
@@ -358,7 +365,9 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, exception=None
         ):
             self.assertEqual(exception, expected_exception)
-            logger.bind(user_email=getattr(request.user, "email", ""))
+            structlog.contextvars.bind_contextvars(
+                user_email=getattr(request.user, "email", "")
+            )
 
         request = self.factory.get("/foo")
 
@@ -599,9 +608,6 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
-
-    def tearDown(self):
-        self.logger.new()
 
 
 class TestGetRequestHeader(TestCase):

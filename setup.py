@@ -18,7 +18,7 @@ setup(
     packages=find_namespace_packages(
         include=["django_structlog", "django_structlog.*"]
     ),
-    install_requires=["django>=1.11", "structlog", "django-ipware"],
+    install_requires=["django>=1.11", "structlog>=21.4.0", "django-ipware"],
     include_package_data=True,
     license="MIT",
     classifiers=[
@@ -31,8 +31,6 @@ setup(
         "Framework :: Django :: 3.1",
         "Framework :: Django :: 3.2",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",

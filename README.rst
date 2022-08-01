@@ -221,6 +221,7 @@ Add appropriate structlog configuration to your ``settings.py``
 
    structlog.configure(
        processors=[
+           structlog.contextvars.merge_contextvars,
            structlog.stdlib.filter_by_level,
            structlog.processors.TimeStamper(fmt="iso"),
            structlog.stdlib.add_logger_name,
@@ -231,9 +232,7 @@ Add appropriate structlog configuration to your ``settings.py``
            structlog.processors.UnicodeDecoder(),
            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
        ],
-       context_class=structlog.threadlocal.wrap_dict(dict),
        logger_factory=structlog.stdlib.LoggerFactory(),
-       wrapper_class=structlog.stdlib.BoundLogger,
        cache_logger_on_first_use=True,
    )
 
@@ -258,21 +257,47 @@ If you need to add more metadata from the request you can implement a convenient
    from django.dispatch import receiver
 
    from django_structlog.signals import bind_extra_request_metadata
+   import structlog
 
 
    @receiver(bind_extra_request_metadata)
    def bind_user_email(request, logger, **kwargs):
-       logger.bind(user_email=getattr(request.user, 'email', ''))
+       structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
 
-
-.. inclusion-marker-getting-started-end
 
 Standard Loggers
 ^^^^^^^^^^^^^^^^
 
 It is also possible to log using standard python logger.
 
-See the processor ``django_structlog.processors.inject_context_dict`` in the documentation.
+In your formatters, add the ``foreign_pre_chain`` section, and then add ``structlog.contextvars.merge_contextvars``:
+
+.. code-block:: python
+
+   LOGGING = {
+       "version": 1,
+       "disable_existing_loggers": False,
+       "formatters": {
+           "json_formatter": {
+               "()": structlog.stdlib.ProcessorFormatter,
+               "processor": structlog.processors.JSONRenderer(),
+               # Add this section:
+               "foreign_pre_chain": [
+                   structlog.contextvars.merge_contextvars, # <---- add this
+                   # customize the rest as you need
+                   structlog.processors.TimeStamper(fmt="iso"),
+                   structlog.stdlib.add_logger_name,
+                   structlog.stdlib.add_log_level,
+                   structlog.stdlib.PositionalArgumentsFormatter(),
+               ],
+           },
+       },
+       ...
+    }
+
+
+.. inclusion-marker-getting-started-end
+
 
 .. inclusion-marker-example-outputs-begin
 
@@ -313,6 +338,83 @@ Json file (\ ``logs/json.log``\ )
 
 Upgrade Guide
 =============
+
+.. _upgrade_3.0:
+
+Upgrading to 3.0+
+^^^^^^^^^^^^^^^^^
+
+``django-structlog`` now use  `structlog.contextvars.bind_contextvars <https://www.structlog.org/en/stable/contextvars.html>`_ instead of ``threadlocal``.
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires python 3.7+
+- requires structlog 21.4.0+
+
+
+Changes you need to do
+~~~~~~~~~~~~~~~~~~~~~~
+
+1. Update structlog settings
+----------------------------
+
+- add ``structlog.contextvars.merge_contextvars`` as first ``processors``
+- remove ``context_class=structlog.threadlocal.wrap_dict(dict),``
+- (if you use standard loggers) add ``structlog.contextvars.merge_contextvars`` in `foreign_pre_chain`
+- (if you use standard loggers) remove ``django_structlog.processors.inject_context_dict,``
+
+
+.. code-block:: python
+
+   structlog.configure(
+       processors=[
+           structlog.contextvars.merge_contextvars, # <---- add this
+           structlog.stdlib.filter_by_level,
+           structlog.processors.TimeStamper(fmt="iso"),
+           structlog.stdlib.add_logger_name,
+           structlog.stdlib.add_log_level,
+           structlog.stdlib.PositionalArgumentsFormatter(),
+           structlog.processors.StackInfoRenderer(),
+           structlog.processors.format_exc_info,
+           structlog.processors.UnicodeDecoder(),
+           structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+       ],
+       # context_class=structlog.threadlocal.wrap_dict(dict), # <---- remove this
+       logger_factory=structlog.stdlib.LoggerFactory(),
+       cache_logger_on_first_use=True,
+   )
+
+   # If you use standard logging
+   LOGGING = {
+       "version": 1,
+       "disable_existing_loggers": False,
+       "formatters": {
+           "json_formatter": {
+               "()": structlog.stdlib.ProcessorFormatter,
+               "processor": structlog.processors.JSONRenderer(),
+               "foreign_pre_chain": [
+                   structlog.contextvars.merge_contextvars, # <---- add this
+                   # django_structlog.processors.inject_context_dict, # <---- remove this
+                   structlog.processors.TimeStamper(fmt="iso"),
+                   structlog.stdlib.add_logger_name,
+                   structlog.stdlib.add_log_level,
+                   structlog.stdlib.PositionalArgumentsFormatter(),
+               ],
+           },
+       },
+       ...
+    }
+
+
+2. Replace all ``logger.bind`` with ``structlog.contextvars.bind_contextvars``
+------------------------------------------------------------------------------
+
+.. code-block:: python
+
+   @receiver(bind_extra_request_metadata)
+   def bind_user_email(request, logger, **kwargs):
+      # logger.bind(user_email=getattr(request.user, 'email', ''))
+      structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
 
 .. _upgrade_2.0:
 

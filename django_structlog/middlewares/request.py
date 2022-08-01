@@ -41,39 +41,39 @@ class RequestMiddleware:
             request, "x-correlation-id", "HTTP_X_CORRELATION_ID"
         )
 
-        with structlog.threadlocal.tmp_bind(logger):
-            logger.bind(request_id=request_id)
+        structlog.contextvars.bind_contextvars(request_id=request_id)
+        self.bind_user_id(request),
+        if correlation_id:
+            structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
+
+        ip, _ = get_client_ip(request)
+        structlog.contextvars.bind_contextvars(ip=ip)
+        signals.bind_extra_request_metadata.send(
+            sender=self.__class__, request=request, logger=logger
+        )
+
+        logger.info(
+            "request_started",
+            request=self.format_request(request),
+            user_agent=request.META.get("HTTP_USER_AGENT"),
+        )
+        self._raised_exception = False
+        response = self.get_response(request)
+        if not self._raised_exception:
             self.bind_user_id(request),
-            if correlation_id:
-                logger.bind(correlation_id=correlation_id)
-
-            ip, _ = get_client_ip(request)
-            logger.bind(ip=ip)
-            signals.bind_extra_request_metadata.send(
-                sender=self.__class__, request=request, logger=logger
+            signals.bind_extra_request_finished_metadata.send(
+                sender=self.__class__,
+                request=request,
+                logger=logger,
+                response=response,
             )
-
             logger.info(
-                "request_started",
+                "request_finished",
+                code=response.status_code,
                 request=self.format_request(request),
-                user_agent=request.META.get("HTTP_USER_AGENT"),
             )
-            self._raised_exception = False
-            response = self.get_response(request)
-            if not self._raised_exception:
-                self.bind_user_id(request),
-                signals.bind_extra_request_finished_metadata.send(
-                    sender=self.__class__,
-                    request=request,
-                    logger=logger,
-                    response=response,
-                )
-                logger.info(
-                    "request_finished",
-                    code=response.status_code,
-                    request=self.format_request(request),
-                )
 
+        structlog.contextvars.clear_contextvars()
         return response
 
     @staticmethod
@@ -108,4 +108,4 @@ class RequestMiddleware:
             user_id = request.user.pk
             if isinstance(user_id, uuid.UUID):
                 user_id = str(user_id)
-            logger.bind(user_id=user_id)
+            structlog.contextvars.bind_contextvars(user_id=user_id)

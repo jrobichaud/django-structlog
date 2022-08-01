@@ -7,9 +7,7 @@ logger = structlog.getLogger(__name__)
 
 
 def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
-    immutable_logger = structlog.threadlocal.as_immutable(logger)
-    # noinspection PyProtectedMember
-    context = dict(immutable_logger._context)
+    context = structlog.contextvars.get_merged_contextvars(logger)
     if "task_id" in context:
         context["parent_task_id"] = context.pop("task_id")
 
@@ -34,10 +32,10 @@ def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
 
 
 def receiver_task_pre_run(task_id, task, *args, **kwargs):
-    logger.new()
-    logger.bind(task_id=task_id)
+    structlog.contextvars.clear_contextvars()
+    structlog.contextvars.bind_contextvars(task_id=task_id)
     metadata = getattr(task.request, "__django_structlog__", {})
-    logger.bind(**metadata)
+    structlog.contextvars.bind_contextvars(**metadata)
     signals.bind_extra_task_metadata.send(
         sender=receiver_task_pre_run, task=task, logger=logger
     )
@@ -48,11 +46,10 @@ def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
 
 
 def receiver_task_success(result=None, **kwargs):
-    with structlog.threadlocal.tmp_bind(logger):
-        signals.pre_task_succeeded.send(
-            sender=receiver_task_success, logger=logger, result=result
-        )
-        logger.info("task_succeeded")
+    signals.pre_task_succeeded.send(
+        sender=receiver_task_success, logger=logger, result=result
+    )
+    logger.info("task_succeeded")
 
 
 def receiver_task_failure(
@@ -62,7 +59,7 @@ def receiver_task_failure(
     einfo=None,
     sender=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     throws = getattr(sender, "throws", ())
     if isinstance(exception, throws):

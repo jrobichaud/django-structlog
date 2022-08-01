@@ -9,10 +9,11 @@ bind_extra_task_metadata = django.dispatch.Signal()
 
 >>> from django.dispatch import receiver
 >>> from django_structlog.celery import signals
+>>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_task_metadata)
 ... def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
-...     logger.bind(correlation_id=task.request.correlation_id)
+...     structlog.contextvars.bind_contextvars(correlation_id=task.request.correlation_id)
 
 """
 
@@ -46,9 +47,10 @@ pre_task_succeeded = django.dispatch.Signal()
 
 >>> from django.dispatch import receiver
 >>> from django_structlog.celery import signals
+>>> import structlog
 >>>
 >>> @receiver(signals.pre_task_succeeded)
 ... def receiver_pre_task_succeeded(sender, signal, logger=None, result=None):
-...     logger.bind(result=str(result))
+...     structlog.contextvars.bind_contextvars(result=str(result))
 
 """
