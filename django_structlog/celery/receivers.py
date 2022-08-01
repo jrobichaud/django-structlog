@@ -50,7 +50,6 @@ def receiver_task_success(result=None, **kwargs):
         sender=receiver_task_success, logger=logger, result=result
     )
     logger.info("task_succeeded")
-    structlog.contextvars.clear_contextvars()
 
 
 def receiver_task_failure(
