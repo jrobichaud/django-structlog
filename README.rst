@@ -338,10 +338,12 @@ Changes you need to do
 
 - add ``structlog.contextvars.merge_contextvars`` as first processors (line 3)
 - remove ``context_class=structlog.threadlocal.wrap_dict(dict),`` (line 14)
+- add ``structlog.contextvars.merge_contextvars`` for foreign_pre_chain (line 29)
+- remove ``django_structlog.processors.inject_context_dict,`` (line 30)
 
 
 .. code-block:: python
-   :emphasize-lines:  3,14
+   :emphasize-lines:  3,14,29,30
    :linenos:
 
    structlog.configure(
@@ -362,6 +364,27 @@ Changes you need to do
        wrapper_class=structlog.stdlib.BoundLogger,
        cache_logger_on_first_use=True,
    )
+
+   LOGGING = {
+       "version": 1,
+       "disable_existing_loggers": False,
+       "formatters": {
+           "json_formatter": {
+               "()": structlog.stdlib.ProcessorFormatter,
+               "processor": structlog.processors.JSONRenderer(),
+               # ADD THIS SECTION
+               "foreign_pre_chain": [
+                   structlog.contextvars.merge_contextvars,
+                   # django_structlog.processors.inject_context_dict,
+                   structlog.processors.TimeStamper(fmt="iso"),
+                   structlog.stdlib.add_logger_name,
+                   structlog.stdlib.add_log_level,
+                   structlog.stdlib.PositionalArgumentsFormatter(),
+               ],
+           },
+       },
+       ...
+    }
 
 2. Replace all ``logger.bind`` with ``structlog.contextvars.bind_contextvars``
 ------------------------------------------------------------------------------
