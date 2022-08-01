@@ -59,7 +59,7 @@ def receiver_task_failure(
     einfo=None,
     sender=None,
     *args,
-    **kwargs
+    **kwargs,
 ):
     throws = getattr(sender, "throws", ())
     if isinstance(exception, throws):
