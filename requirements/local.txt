@@ -2,4 +2,4 @@
 
 redis==3.4.1  # https://github.com/antirez/redis
 celery==5.2.7  # pyup: < 5.0  # https://github.com/celery/celery
-kombu==5.0.2
+kombu==5.2.4
