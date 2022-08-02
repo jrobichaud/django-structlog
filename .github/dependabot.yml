@@ -15,5 +15,4 @@ updates:
       interval: weekly
     ignore:
       - dependency-name: "sphinx"
-        update-types: [ "version-update:semver-major" ]
       - dependency-name: "jinja2"
