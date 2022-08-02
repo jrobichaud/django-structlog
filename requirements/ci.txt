@@ -2,7 +2,7 @@ flower==0.9.3  # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
-django-environ==0.4.5  # https://github.com/joke2k/django-environ
+django-environ==0.9.0  # https://github.com/joke2k/django-environ
 django-redis==4.11.0  # https://github.com/niwinz/django-redis
 
 structlog>=21.4.0
