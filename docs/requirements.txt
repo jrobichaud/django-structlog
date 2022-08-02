@@ -1,4 +1,4 @@
-sphinx<2
+sphinx<6
 sphinx_rtd_theme
 celery==5.2.7
 django>=3.2,<4
