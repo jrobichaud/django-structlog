@@ -12,9 +12,12 @@ See: :ref:`upgrade_3.0`
         - minimum requirements change to ``python`` 3.7+
         - minimum requirements change to ``structlog`` 21.5
 
-*Others:*
+*New:*
+    - Add python 3.10, celery 5.2 and django 4.0 to the test matrix.
 
+*Others:*
     - Remove ``wrapper_class`` from the configuration
+
 
 2.2.0 (November 18, 2021)
 -------------------------
