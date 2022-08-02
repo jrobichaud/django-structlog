@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  django:
-    build:
-      args:
-        PYTHON_VERSION: 3.6
-        REQUIREMENTS_FILE: local-celery-3.txt
