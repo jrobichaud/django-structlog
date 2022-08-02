@@ -188,6 +188,32 @@ class TestRequestMiddleware(TestCase):
         self.assertIsInstance(record.msg["user_id"], str)
         self.assertEqual(expected_uuid, record.msg["user_id"])
 
+    def test_process_request_user_without_id(self):
+        mock_response = Mock()
+        mock_response.status_code.return_value = 200
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = self.factory.get("/foo")
+
+        class SimpleUser:
+            pass
+
+        request.user = SimpleUser()
+        middleware = middlewares.RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
     def test_log_user_in_request_finished(self):
         mock_response = Mock()
         mock_response.status_code.return_value = 200
