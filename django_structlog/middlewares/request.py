@@ -42,7 +42,7 @@ class RequestMiddleware:
         )
 
         structlog.contextvars.bind_contextvars(request_id=request_id)
-        self.bind_user_id(request),
+        self.bind_user_id(request)
         if correlation_id:
             structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
 
@@ -60,7 +60,7 @@ class RequestMiddleware:
         self._raised_exception = False
         response = self.get_response(request)
         if not self._raised_exception:
-            self.bind_user_id(request),
+            self.bind_user_id(request)
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
                 request=request,
@@ -89,7 +89,7 @@ class RequestMiddleware:
 
         self._raised_exception = True
 
-        self.bind_user_id(request),
+        self.bind_user_id(request)
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__,
             request=request,
