@@ -1,1 +1,1 @@
-black==22.3.0  # https://github.com/ambv/black
+black==22.6.0  # https://github.com/ambv/black
