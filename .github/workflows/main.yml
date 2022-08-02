@@ -1,6 +1,11 @@
 name: ci
 on:
-  - push
+  push:
+    branches:
+      - master
+      - release/**
+  pull_request: {}
+
 jobs:
   test-demo-app:
     runs-on: ubuntu-latest
