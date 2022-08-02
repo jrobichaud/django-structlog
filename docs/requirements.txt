@@ -1,7 +1,7 @@
 sphinx<2
 sphinx_rtd_theme
 celery==5.2.7
-django>=2.2,<3
+django>=3.2,<4
 structlog
-sphinx-autobuild==2020.9.1
+sphinx-autobuild==2021.3.14
 Jinja2<3.1
