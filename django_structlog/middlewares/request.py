@@ -105,7 +105,9 @@ class RequestMiddleware:
     @staticmethod
     def bind_user_id(request):
         if hasattr(request, "user") and request.user is not None:
-            user_id = request.user.pk
-            if isinstance(user_id, uuid.UUID):
-                user_id = str(user_id)
+            user_id = None
+            if hasattr(request.user, "pk"):
+                user_id = request.user.pk
+                if isinstance(user_id, uuid.UUID):
+                    user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
