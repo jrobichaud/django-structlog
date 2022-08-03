@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+3.0.1 (August 2nd, 2022)
+------------------------
+
+*Fixes:*
+    - ``AttributeError`` with custom User without ``pk``. See `#80 <https://github.com/jrobichaud/django-structlog/issues/80>`_. Special thanks to `@mlegner <https://github.com/mlegner>`_.
+
+*Others:*
+    - Add ``dependabot`` to manage dependencies. See `#83 <https://github.com/jrobichaud/django-structlog/pull/83>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
+    - Upgrade various development packages
+
+
 3.0.0 (August 1st, 2022)
 ------------------------
 
