@@ -24,7 +24,7 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
-    logger.info(
+    logger.debug(
         "task_enqueued",
         child_task_id=headers.get("id") if headers else body.get("id"),
         child_task_name=headers.get("task") if headers else body.get("task"),
@@ -49,7 +49,7 @@ def receiver_task_success(result=None, **kwargs):
     signals.pre_task_succeeded.send(
         sender=receiver_task_success, logger=logger, result=result
     )
-    logger.info("task_succeeded")
+    logger.debug("task_succeeded")
 
 
 def receiver_task_failure(
