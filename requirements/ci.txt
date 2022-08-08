@@ -1,4 +1,4 @@
-flower==0.9.3  # https://github.com/mher/flower
+flower==1.2.0  # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
