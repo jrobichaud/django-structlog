@@ -26,7 +26,7 @@ psycopg2-binary==2.9.3 # https://github.com/psycopg/psycopg2
 # Testing
 # ------------------------------------------------------------------------------
 mypy==0.971  # https://github.com/python/mypy
-pytest==7.1.2   # https://github.com/pytest-dev/pytest
+pytest==7.1.3   # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.5  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==3.0.0
 
