@@ -1,0 +1,26 @@
+name: gh-pages
+on:
+  workflow_run:
+    workflows: ["ci"]
+    branches: [master]
+    types:
+      - completed
+jobs:
+  deploy-gh-pages:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r docs/requirements.txt
+          pip install ghp-import
+      - name: make html
+        working-directory: docs
+        run: make html
+      - name: Deploy Documentation
+        run: |
+          pip install ghp-import
+          ghp-import -n -p -m "Documentation git hash $(git rev-parse --short HEAD)" -f docs/_build/html
