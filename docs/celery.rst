@@ -128,7 +128,7 @@ By example you can strip down the ``context`` to keep only some of the keys:
 .. code-block:: python
 
     @receiver(signals.modify_context_before_task_publish)
-    def receiver_modify_context_before_task_publish(sender, signal, context):
+    def receiver_modify_context_before_task_publish(sender, signal, context, **kwargs):
         keys_to_keep = {"request_id", "parent_task_id"}
         new_dict = {key_to_keep: context[key_to_keep] for key_to_keep in keys_to_keep if key_to_keep in context}
         context.clear()
@@ -147,6 +147,6 @@ in celery's ``receiver_task_pre_run``.
     import structlog
 
     @receiver(signals.bind_extra_task_metadata)
-    def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None):
+    def receiver_bind_extra_request_metadata(sender, signal, task=None, logger=None, **kwargs):
         structlog.contextvars.bind_contextvars(correlation_id=task.request.correlation_id)
 
