@@ -76,10 +76,6 @@ ENV/
 # mkdocs documentation
 /site
 
-# mypy
-.mypy_cache/
-
-
 ### Node template
 # Logs
 logs
