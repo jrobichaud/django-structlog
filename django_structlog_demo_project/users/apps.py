@@ -5,9 +5,8 @@ class UsersAppConfig(AppConfig):
 
     name = "django_structlog_demo_project.users"
     verbose_name = "Users"
+    default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
-        try:
-            import users.signals  # noqa F401
-        except ImportError:
-            pass
+        # noinspection PyUnresolvedReferences
+        from . import signals  # noqa F401
