@@ -1,5 +1,5 @@
-sphinx<2
-sphinx_rtd_theme
+sphinx<5
+sphinx_rtd_theme<2
 celery==5.2.7
 django>=3.2,<5
 structlog
