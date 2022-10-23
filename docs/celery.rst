@@ -6,6 +6,17 @@ Getting Started with Celery
 
 In order to be able to support celery you need to configure both your webapp and your workers
 
+
+Replace your requirements
+-------------------------
+
+First of all, make sure your ``django-structlog`` installation knows you use ``celery`` in order validate compatibility with your installed version. See `Installing “Extras” <https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras>`_ for more information.
+
+Replace ``django-structlog`` with ``django-structlog[celery]`` in your ``requirements.txt``.
+
+.. code-block:: python
+    django-structlog[celery]==X.Y.Z
+
 Add CeleryMiddleWare in your web app
 ------------------------------------
 

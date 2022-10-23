@@ -339,6 +339,33 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_4.0:
+
+Upgrading to 4.0+
+^^^^^^^^^^^^^^^^^
+
+``django-structlog`` drops support of django below 3.2.
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires django 3.2+
+- requires python 3.7+
+- requires structlog 21.4.0+
+- (optionally) requires celery 5.1+
+
+
+Changes if you use ``celery``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can now install ``django-structlog`` explicitly with ``celery`` extra in order to validate the compatibility with your version of ``celery``.
+
+
+.. code-block:: bash
+
+    django-structlog[celery]==4.0.0
+
+See `Installing “Extras” <https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras>`_ for more information about this ``pip`` feature.
+
 .. _upgrade_3.0:
 
 Upgrading to 3.0+

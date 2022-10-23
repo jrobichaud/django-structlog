@@ -18,7 +18,11 @@ setup(
     packages=find_namespace_packages(
         include=["django_structlog", "django_structlog.*"]
     ),
+    python_requires=">=3.7",
     install_requires=["django>=3.2", "structlog>=21.4.0", "django-ipware"],
+    extras_require={
+        "celery": ["celery>=5.1"],
+    },
     include_package_data=True,
     license="MIT",
     classifiers=[

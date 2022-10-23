@@ -1,6 +1,23 @@
 Change Log
 ==========
 
+4.0.0 (October 22nd, 2022)
+--------------------------
+
+See: :ref:`upgrade_4.0`
+
+*Changes:*
+    - ``django-structlog`` will now on follow LTS versions of Python, Django, and Celery. See `#110 <https://github.com/jrobichaud/django-structlog/pull/110>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_ for his convincing arguments.
+
+*New:*
+    - You can now install ``django-structlog`` with ``celery`` extra. Specifying ``django-structlog[celery]==4.0.0`` in ``requirements.txt`` will make sure your ``celery``'s version is compatible.
+
+*Others:*
+    - Upgrade or remove various development packages
+    - Upgrade local development environment from python 3.7 to 3.10 and from django 3.2 to django 4.1
+    - Added a `gh-pages <https://jrobichaud.github.io/django-structlog/>`_
+
+
 3.0.1 (August 2nd, 2022)
 ------------------------
 
