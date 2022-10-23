@@ -15,6 +15,7 @@ First of all, make sure your ``django-structlog`` installation knows you use ``c
 Replace ``django-structlog`` with ``django-structlog[celery]`` in your ``requirements.txt``.
 
 .. code-block:: python
+
     django-structlog[celery]==X.Y.Z
 
 Add CeleryMiddleWare in your web app
