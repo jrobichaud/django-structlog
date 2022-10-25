@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+
+4.0.1 (October 25nd, 2022)
+--------------------------
+
+*New:*
+    - Add support to ``python`` 3.11. See `#142 <https://github.com/jrobichaud/django-structlog/pull/142>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
+
+
 4.0.0 (October 22nd, 2022)
 --------------------------
 
