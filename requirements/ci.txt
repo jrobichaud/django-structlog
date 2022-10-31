@@ -8,7 +8,7 @@ django-redis==4.11.0  # https://github.com/niwinz/django-redis
 structlog>=21.4.0
 colorama>=0.4.3
 
-psycopg2-binary==2.9.4  # https://github.com/psycopg/psycopg2
+psycopg2-binary==2.9.5  # https://github.com/psycopg/psycopg2
 
 # Testing
 # ------------------------------------------------------------------------------
