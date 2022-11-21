@@ -15,7 +15,7 @@ django-redis==5.2.0  # https://github.com/niwinz/django-redis
 djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
-structlog==22.1.0
+structlog==22.2.0
 colorama==0.4.6
 django-ipware==4.0.2
 
