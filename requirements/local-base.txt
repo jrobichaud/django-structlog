@@ -1,5 +1,5 @@
 pytz==2022.6  # https://github.com/stub42/pytz
-python-slugify==6.1.2  # https://github.com/un33k/python-slugify
+python-slugify==7.0.0  # https://github.com/un33k/python-slugify
 whitenoise==6.2.0  # https://github.com/evansd/whitenoise
 
 # Django
