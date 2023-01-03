@@ -486,7 +486,7 @@ Demo app
 
    docker-compose up --build
 
-Open ``http://0.0.0.0:8000/`` in your browser.
+Open ``http://127.0.0.1:8000/`` in your browser.
 
 Navigate while looking into the log files and shell's output.
 
