@@ -32,4 +32,4 @@ Building, Serving and Testing the Documentation Locally
 .. code-block:: bash
 
    $ docker compose -p django-structlog-docs -f docker-compose.docs.yml up --build
-   Serving on http://0.0.0.0:5000
+   Serving on http://127.0.0.1:5000
