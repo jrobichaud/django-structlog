@@ -460,19 +460,15 @@ Upgrading to 2.0+
 Running the tests
 =================
 
-Note: For the moment redis is needed to run the tests. The easiest way start docker's demo.
+Note: For the moment redis is needed to run the tests. The easiest way is to start docker demo's redis.
 
 .. code-block:: bash
 
-   docker-compose up --build
-
-In another shell
-
-.. code-block:: bash
-
+   docker compose up -d redis
    pip install -r requirements.txt
-   env CELERY_BROKER_URL=redis://0.0.0.0:6379 pytest test_app
+   env CELERY_BROKER_URL=redis://0.0.0.0:6379 DJANGO_SETTINGS_MODULE=config.settings.test pytest test_app
    env CELERY_BROKER_URL=redis://0.0.0.0:6379 DJANGO_SETTINGS_MODULE=config.settings.test_demo_app pytest django_structlog_demo_project
+   docker compose stop redis
 
 .. inclusion-marker-running-tests-end
 
@@ -484,7 +480,7 @@ Demo app
 
 .. code-block:: bash
 
-   docker-compose up --build
+   docker compose up --build
 
 Open ``http://127.0.0.1:8000/`` in your browser.
 
