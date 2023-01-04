@@ -57,11 +57,6 @@ class CeleryAppConfig(AppConfig):
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print("Request: {request}".format(request=self.request))  # pragma: no cover
-
-
 @shared_task
 def successful_task(foo=None):
     import structlog
@@ -88,3 +83,9 @@ def nesting_task():
 def nested_task():
     logger = structlog.getLogger(__name__)
     logger.info("This is a nested task")
+
+
+@shared_task()
+def scheduled_task():
+    logger = structlog.getLogger(__name__)
+    logger.info("This is a scheduled task")

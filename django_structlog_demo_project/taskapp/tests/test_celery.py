@@ -34,3 +34,11 @@ class TestNestedTask:
         assert len(caplog.records) == 1
         record = caplog.records[0]
         assert record.msg["event"] == "This is a nested task"
+
+
+class TestScheduledTask:
+    def test(self, caplog):
+        celery.scheduled_task()
+        assert len(caplog.records) == 1
+        record = caplog.records[0]
+        assert record.msg["event"] == "This is a scheduled task"
