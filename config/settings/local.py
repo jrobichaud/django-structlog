@@ -70,6 +70,13 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-eager-propagates
 CELERY_TASK_EAGER_PROPAGATES = True
 
+CELERY_BEAT_SCHEDULE = {
+    "example-scheduled-task": {
+        "task": "django_structlog_demo_project.taskapp.celery.scheduled_task",
+        "schedule": 30.0,
+    },
+}
+
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
