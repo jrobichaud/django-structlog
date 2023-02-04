@@ -17,6 +17,7 @@ services:
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
+    tty: true # needed for colors to show in console logs
     ports:
       - "8000:8000"
     command: /start
@@ -47,8 +48,9 @@ services:
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
-      
+
     command: /start-celeryworker
+    tty: true # needed for colors to show in console logs
 
   celerybeat:
     image: django_structlog_demo_project_local_django
@@ -60,8 +62,9 @@ services:
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
-      
+
     command: /start-celerybeat
+    tty: true # needed for colors to show in console logs
 
   flower:
     image: django_structlog_demo_project_local_django
