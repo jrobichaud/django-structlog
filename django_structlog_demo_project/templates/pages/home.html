@@ -35,6 +35,13 @@
     </div>
 
     <div>
+        <form action="{% url 'async_view' %}" method="post" id="form6" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form6">Async View</button>
+    </div>
+
+    <div>
         <a href="{% url 'api_view' %}">rest-framework API View</a>
     </div>
 
