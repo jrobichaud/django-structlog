@@ -35,7 +35,6 @@ class DjangoStructLogInitStep(bootsteps.Step):
         task_failure.connect(receivers.receiver_task_failure)
         task_revoked.connect(receivers.receiver_task_revoked)
         if celery.VERSION > (4,):
-
             from celery.signals import task_unknown, task_rejected
 
             task_unknown.connect(receivers.receiver_task_unknown)
