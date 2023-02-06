@@ -17,7 +17,6 @@ def update_site_forward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("sites", "0002_alter_domain_unique")]
 
     operations = [migrations.RunPython(update_site_forward, migrations.RunPython.noop)]
