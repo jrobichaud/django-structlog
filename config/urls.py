@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(
         r"^standard_logger", views.log_with_standard_logger, name="standard_logger"
     ),
+    re_path(r"^async_view", views.async_view, name="async_view"),
     re_path(r"^api_view$", api_views.home_api_view, name="api_view"),
     re_path(
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"

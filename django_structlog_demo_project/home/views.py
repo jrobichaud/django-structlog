@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import structlog
@@ -31,6 +32,13 @@ def enqueue_nesting_task(request):
 
 def log_with_standard_logger(request):
     logging.getLogger("foreign_logger").info("This is a standard logger")
+    return HttpResponse(status=200)
+
+
+async def async_view(request):
+    logging.getLogger("foreign_logger").info("This this is an async view 1")
+    await asyncio.sleep(1)
+    logging.getLogger("foreign_logger").info("This this is an async view 2")
     return HttpResponse(status=200)
 
 

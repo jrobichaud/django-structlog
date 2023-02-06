@@ -3,6 +3,7 @@ import pytest
 from .. import views
 
 pytestmark = pytest.mark.django_db
+pytest_plugins = ("pytest_asyncio",)
 
 
 class TestEnqueueSuccessfulTask:
@@ -33,4 +34,11 @@ class TestRaiseException:
 class TestLogWithStandardLogger:
     def test(self):
         response = views.log_with_standard_logger(None)
+        assert response.status_code == 200
+
+
+@pytest.mark.asyncio
+class TestAsyncView:
+    async def test(self):
+        response = await views.async_view(None)
         assert response.status_code == 200

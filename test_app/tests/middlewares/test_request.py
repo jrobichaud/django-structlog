@@ -635,6 +635,26 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
+    async def test_async_middleware(self):
+        mock_response = Mock()
+
+        async def async_get_response(request):
+            return mock_response
+
+        middleware = middlewares.RequestMiddleware(async_get_response)
+        self.assertIsInstance(middleware, middlewares.request.AsyncRequestMiddleware)
+
+        mock_request = Mock()
+        with patch(
+            "django_structlog.middlewares.request.AsyncRequestMiddleware.prepare"
+        ) as mock_prepare, patch(
+            "django_structlog.middlewares.request.AsyncRequestMiddleware.handle_response"
+        ) as mock_handle_response:
+            response = await middleware(mock_request)
+        self.assertEqual(response, mock_response)
+        mock_prepare.assert_called_once_with(mock_request)
+        mock_handle_response.assert_called_once_with(mock_request, mock_response)
+
 
 class TestGetRequestHeader(TestCase):
     def test_django_22_or_higher(self):

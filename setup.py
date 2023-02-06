@@ -19,7 +19,7 @@ setup(
         include=["django_structlog", "django_structlog.*"]
     ),
     python_requires=">=3.7",
-    install_requires=["django>=3.2", "structlog>=21.4.0", "django-ipware"],
+    install_requires=["django>=3.2", "structlog>=21.4.0", "django-ipware", "asgiref"],
     extras_require={
         "celery": ["celery>=5.1"],
     },
