@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+4.1.0 (February 4th, 2023)
+--------------------------
+
+*New:*
+    - Add `async view <https://docs.djangoproject.com/en/4.1/topics/async/#async-views>`_ support. See `#180 <https://github.com/jrobichaud/django-structlog/pull/180>`_. Special thanks to `@DamianMel <https://github.com/DamianMel>`_.
+
+*Others:*
+    - Add colours in log in the demo project. See `63bdb4d <https://github.com/jrobichaud/django-structlog/commit/63bdb4d>`_ to update your projects. Special thanks to `@RoscoeTheDog <https://github.com/RoscoeTheDog>`_.
+    - Upgrade or remove various development packages
+
 
 4.0.1 (October 25nd, 2022)
 --------------------------
