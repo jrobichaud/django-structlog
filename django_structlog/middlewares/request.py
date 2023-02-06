@@ -20,15 +20,6 @@ def get_request_header(request, header_key, meta_key):
 
 
 class BaseRequestMiddleWare:
-    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
-
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.RequestMiddleware',
-    ... ]
-
-    """
-
     def __init__(self, get_response):
         self.get_response = get_response
         self._raised_exception = False
@@ -130,6 +121,15 @@ class AsyncRequestMiddleware(BaseRequestMiddleWare):
 # noinspection PyPep8Naming
 @sync_and_async_middleware
 def RequestMiddleware(get_response):
+    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+
+    >>> MIDDLEWARE = [
+    ...     # ...
+    ...     'django_structlog.middlewares.RequestMiddleware',
+    ... ]
+
+    """
+
     # One-time configuration and initialization goes here.
     if asyncio.iscoroutinefunction(get_response):
         return AsyncRequestMiddleware(get_response)
