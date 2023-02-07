@@ -1,3 +1,54 @@
+[project]
+ name = "django-structlog"
+ description = "Structured Logging for Django"
+ authors = [
+   { name = "Jules Robichaud-Gagnon", email = "j.robichaudg+pypi@gmail.com" },
+ ]
+ readme = "README.rst"
+ dynamic = ["version"]
+ requires-python = ">=3.7"
+ license = { text = "MIT" }
+ dependencies = [
+   "django>=3.2",
+   "structlog>=21.4.0",
+   "django-ipware",
+   "asgiref",
+ ]
+ classifiers = [
+   "Framework :: Django",
+   "Framework :: Django :: 3.2",
+   "Framework :: Django :: 4.0",
+   "Framework :: Django :: 4.1",
+   "Programming Language :: Python :: 3",
+   "Programming Language :: Python :: 3.7",
+   "Programming Language :: Python :: 3.8",
+   "Programming Language :: Python :: 3.9",
+   "Programming Language :: Python :: 3.10",
+   "Programming Language :: Python :: 3.11",
+   "Topic :: System :: Logging",
+   "License :: OSI Approved :: MIT License",
+   "Operating System :: OS Independent",
+ ]
+
+[project.urls]
+  homepage = "https://github.com/jrobichaud/django-structlog"
+  repository = "https://github.com/jrobichaud/django-structlog"
+  documentation = "https://django-structlog.readthedocs.io"
+
+[project.optional-dependencies]
+  celery = [
+    "celery>=5.1"
+  ]
+
+[tool.setuptools.dynamic]
+  version = { attr = "django_structlog.__version__" }
+
+[tool.setuptools.packages.find]
+  include = [
+    "django_structlog",
+    "django_structlog.*",
+  ]
+
 [tool.black]
   line-length = 88
   target-version = ['py37', 'py38', 'py39', 'py310', 'py311']

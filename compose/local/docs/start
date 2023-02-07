@@ -26,6 +26,5 @@ sphinx-autobuild docs /docs/_build/html \
 --ignore "manage.py" \
 --ignore "MANIFEST.in" \
 --ignore "*.toml" \
---ignore "setup.py" \
 --ignore "*.log" \
 --ignore "*.ini"
