@@ -7,6 +7,9 @@ Change Log
 *New:*
     - Add `async view <https://docs.djangoproject.com/en/4.1/topics/async/#async-views>`_ support. See `#180 <https://github.com/jrobichaud/django-structlog/pull/180>`_. Special thanks to `@DamianMel <https://github.com/DamianMel>`_.
 
+*Changes:*
+    - ``RequestMiddleware`` is no longer a class but a function due to async view support. This should only affect projects using the middleware not as intended. If this cause you problems, please refer to this issue `#183 <https://github.com/jrobichaud/django-structlog/issues/183>`_, `the documentation <https://django-structlog.readthedocs.io>`_ or feel free to open a new issue. Special thanks to `@gvangool <https://github.com/gvangool>`_ for pointing that out.
+
 *Others:*
     - Add colours in log in the demo project. See `63bdb4d <https://github.com/jrobichaud/django-structlog/commit/63bdb4d>`_ to update your projects. Special thanks to `@RoscoeTheDog <https://github.com/RoscoeTheDog>`_.
     - Upgrade or remove various development packages
