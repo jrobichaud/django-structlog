@@ -1,34 +1,34 @@
 [project]
- name = "django-structlog"
- description = "Structured Logging for Django"
- authors = [
-   { name = "Jules Robichaud-Gagnon", email = "j.robichaudg+pypi@gmail.com" },
- ]
- readme = "README.rst"
- dynamic = ["version"]
- requires-python = ">=3.7"
- license = { text = "MIT" }
- dependencies = [
-   "django>=3.2",
-   "structlog>=21.4.0",
-   "django-ipware",
-   "asgiref",
- ]
- classifiers = [
-   "Framework :: Django",
-   "Framework :: Django :: 3.2",
-   "Framework :: Django :: 4.0",
-   "Framework :: Django :: 4.1",
-   "Programming Language :: Python :: 3",
-   "Programming Language :: Python :: 3.7",
-   "Programming Language :: Python :: 3.8",
-   "Programming Language :: Python :: 3.9",
-   "Programming Language :: Python :: 3.10",
-   "Programming Language :: Python :: 3.11",
-   "Topic :: System :: Logging",
-   "License :: OSI Approved :: MIT License",
-   "Operating System :: OS Independent",
- ]
+  name = "django-structlog"
+  description = "Structured Logging for Django"
+  authors = [
+    { name = "Jules Robichaud-Gagnon", email = "j.robichaudg+pypi@gmail.com" },
+  ]
+  readme = "README.rst"
+  dynamic = ["version"]
+  requires-python = ">=3.7"
+  license = { text = "MIT" }
+  dependencies = [
+    "django>=3.2",
+    "structlog>=21.4.0",
+    "django-ipware",
+    "asgiref",
+  ]
+  classifiers = [
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.0",
+    "Framework :: Django :: 4.1",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: System :: Logging",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+  ]
 
 [project.urls]
   homepage = "https://github.com/jrobichaud/django-structlog"
@@ -65,3 +65,43 @@
   | dist
   )/
   '''
+
+[tool.pytest.ini_options]
+  DJANGO_SETTINGS_MODULE = "config.settings.test_demo_app"
+
+[tool.tox]
+  legacy_tox_ini = """
+    [tox]
+    # Test against latest supported version of each of python for each Django version.
+    #
+    # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
+    envlist =
+        py{37,38,39,310}-django32-celery51-redis{3,4}-kombu5,
+        py{38,39,310,311}-django4{0,1}-celery52-redis{3,4}-kombu5,
+
+    [gh-actions]
+    python =
+        3.7: py37
+        3.8: py38
+        3.9: py39
+        3.10: py310
+        3.11: py311
+
+    [testenv]
+    setenv =
+        PYTHONPATH={toxinidir}
+        CELERY_BROKER_URL=redis://0.0.0.0:6379
+        DJANGO_SETTINGS_MODULE=config.settings.test
+    deps =
+        redis3: redis>=3, <4
+        redis4: redis>=4, <5
+        kombu5: kombu<6
+        celery51: Celery >=5.1, <5.2
+        celery52: Celery >=5.2, <5.3
+        django32: Django >=3.2, <3.3
+        django40: Django >=4.0, <4.1
+        django41: Django >=4.1, <4.2
+        -r{toxinidir}/requirements/ci.txt
+
+    commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
+    """
