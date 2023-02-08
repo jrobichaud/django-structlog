@@ -5,7 +5,7 @@ volumes:
   local_postgres_data_backups: {}
 
 services:
-  django:
+  django: &django
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -21,6 +21,12 @@ services:
     ports:
       - "8000:8000"
     command: /start
+
+  django_asgi:
+    <<: *django
+    ports:
+      - "8001:8000"
+    command: /start_asgi
 
   postgres:
     build:

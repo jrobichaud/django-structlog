@@ -635,13 +635,15 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
-    async def test_async_middleware(self):
+
+class TestRequestMiddlewareRouter(TestCase):
+    async def test_async(self):
         mock_response = Mock()
 
         async def async_get_response(request):
             return mock_response
 
-        middleware = middlewares.RequestMiddleware(async_get_response)
+        middleware = middlewares.request_middleware_router(async_get_response)
         self.assertIsInstance(middleware, middlewares.request.AsyncRequestMiddleware)
 
         mock_request = Mock()
@@ -651,6 +653,26 @@ class TestRequestMiddleware(TestCase):
             "django_structlog.middlewares.request.AsyncRequestMiddleware.handle_response"
         ) as mock_handle_response:
             response = await middleware(mock_request)
+        self.assertEqual(response, mock_response)
+        mock_prepare.assert_called_once_with(mock_request)
+        mock_handle_response.assert_called_once_with(mock_request, mock_response)
+
+    def test_sync(self):
+        mock_response = Mock()
+
+        def get_response(request):
+            return mock_response
+
+        middleware = middlewares.request_middleware_router(get_response)
+        self.assertIsInstance(middleware, middlewares.request.SyncRequestMiddleware)
+
+        mock_request = Mock()
+        with patch(
+            "django_structlog.middlewares.request.SyncRequestMiddleware.prepare"
+        ) as mock_prepare, patch(
+            "django_structlog.middlewares.request.SyncRequestMiddleware.handle_response"
+        ) as mock_handle_response:
+            response = middleware(mock_request)
         self.assertEqual(response, mock_response)
         mock_prepare.assert_called_once_with(mock_request)
         mock_handle_response.assert_called_once_with(mock_request, mock_response)

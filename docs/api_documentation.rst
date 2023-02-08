@@ -10,7 +10,7 @@ django_structlog
     :show-inheritance:
 
 .. automodule:: django_structlog.middlewares
-    :members: RequestMiddleware
+    :members: RequestMiddleware, request_middleware_router
     :undoc-members:
     :show-inheritance:
 

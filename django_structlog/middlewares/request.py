@@ -103,6 +103,9 @@ class BaseRequestMiddleWare:
 
 
 class SyncRequestMiddleware(BaseRequestMiddleWare):
+    sync_capable = True
+    async_capable = False
+
     def __call__(self, request):
         self.prepare(request)
         response = self.get_response(request)
@@ -111,6 +114,9 @@ class SyncRequestMiddleware(BaseRequestMiddleWare):
 
 
 class AsyncRequestMiddleware(BaseRequestMiddleWare):
+    sync_capable = False
+    async_capable = True
+
     async def __call__(self, request):
         await sync.sync_to_async(self.prepare)(request)
         response = await self.get_response(request)
@@ -118,9 +124,7 @@ class AsyncRequestMiddleware(BaseRequestMiddleWare):
         return response
 
 
-# noinspection PyPep8Naming
-@sync_and_async_middleware
-def RequestMiddleware(get_response):
+class RequestMiddleware(SyncRequestMiddleware):
     """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
     >>> MIDDLEWARE = [
@@ -130,7 +134,19 @@ def RequestMiddleware(get_response):
 
     """
 
-    # One-time configuration and initialization goes here.
+
+@sync_and_async_middleware
+def request_middleware_router(get_response):
+    """``request_middleware_router`` select automatically between async or sync middleware.
+
+    Use as a replacement for `django_structlog.middlewares.RequestMiddleware`
+
+    >>> MIDDLEWARE = [
+    ...     # ...
+    ...     'django_structlog.middlewares.request_middleware_router',
+    ... ]
+
+    """
     if asyncio.iscoroutinefunction(get_response):
         return AsyncRequestMiddleware(get_response)
     return SyncRequestMiddleware(get_response)

@@ -117,7 +117,24 @@ MIDDLEWARE = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = "/static/"
+if env.bool("ASGI", default=False):
+    # asgi will use static files from the runserver_plus
+    STATIC_URL = "http://127.0.0.1:8000/static/"
+else:
+    # runserver_plus serve static files with cors disabled
+    STATIC_URL = "/static/"
+    # fix cors https://stackoverflow.com/a/66688806/2115513
+    from django.contrib.staticfiles import handlers
+
+    # extend StaticFilesHandler to add "Access-Control-Allow-Origin" to every response
+    class CORSStaticFilesHandler(handlers.StaticFilesHandler):
+        def serve(self, request):
+            response = super().serve(request)
+            response["Access-Control-Allow-Origin"] = "*"
+            return response
+
+    # monkeypatch handlers to use our class instead of the original StaticFilesHandler
+    handlers.StaticFilesHandler = CORSStaticFilesHandler
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders

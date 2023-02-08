@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+ASGI=true python -m uvicorn config.asgi:application --host=0.0.0.0 --reload
