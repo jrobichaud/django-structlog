@@ -18,7 +18,6 @@ pytest-cov==4.0.0
 
 # Code quality
 # ------------------------------------------------------------------------------
--r flake8.txt
 coverage==7.1.0  # https://github.com/nedbat/coveragepy
 pylint-django==2.0.6  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
