@@ -36,9 +36,9 @@ def log_with_standard_logger(request):
 
 
 async def async_view(request):
-    logging.getLogger("foreign_logger").info("This this is an async view 1")
-    await asyncio.sleep(1)
-    logging.getLogger("foreign_logger").info("This this is an async view 2")
+    for num in range(1, 2):
+        await asyncio.sleep(1)
+        logger.info(f"This this is an async view {num}")
     return HttpResponse(status=200)
 
 

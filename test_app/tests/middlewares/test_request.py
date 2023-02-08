@@ -635,13 +635,13 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
-    async def test_async_middleware(self):
+    async def test_request_middleware_router(self):
         mock_response = Mock()
 
         async def async_get_response(request):
             return mock_response
 
-        middleware = middlewares.RequestMiddleware(async_get_response)
+        middleware = middlewares.request_middleware_router(async_get_response)
         self.assertIsInstance(middleware, middlewares.request.AsyncRequestMiddleware)
 
         mock_request = Mock()

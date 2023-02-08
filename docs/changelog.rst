@@ -1,6 +1,20 @@
 Change Log
 ==========
 
+4.1.1 (February 7th, 2023)
+--------------------------
+
+*New:*
+    - Add :class:`django_structlog.middlewares.request_middleware_router` to choose automatically between Async or Sync middleware
+
+* Rollbacks from 4.1.0 :*
+    - Rollback ``RequestMiddleware`` not being a class anymore, its an internal ``SyncRequestMiddleware``
+
+*Others:*
+    - Migrate project to ``pyproject.toml`` instead of ``setup.py``
+    - Add `asgi` server to demo project see :ref:`development`.
+
+
 4.1.0 (February 4th, 2023)
 --------------------------
 

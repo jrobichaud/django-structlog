@@ -1,3 +1,5 @@
+.. _development:
+
 Development
 ===========
 
@@ -24,6 +26,10 @@ Start Demo App
 .. code-block:: bash
 
    $ docker compose up --build
+
+
+- WSGI server: Open ``http://127.0.0.1:8000/`` in your browser.
+- ASGI server: Open ``http://127.0.0.1:8001/`` in your browser.
 
 
 Building, Serving and Testing the Documentation Locally
