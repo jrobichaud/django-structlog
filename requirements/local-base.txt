@@ -25,7 +25,7 @@ psycopg2-binary==2.9.5 # https://github.com/psycopg/psycopg2
 
 # Testing
 # ------------------------------------------------------------------------------
-pytest==7.2.1   # https://github.com/pytest-dev/pytest
+pytest==7.2.2   # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.6  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==4.0.0
 pytest-asyncio==0.20.3 # https://github.com/pytest-dev/pytest-asyncio
