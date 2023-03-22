@@ -128,6 +128,7 @@ class AsyncRequestMiddleware(BaseRequestMiddleWare):
         # (coroutine has been deprecated in Python 3.11)
         return await self.get_response(request)
 
+
 class RequestMiddleware(SyncRequestMiddleware):
     """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
