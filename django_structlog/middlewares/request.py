@@ -119,10 +119,14 @@ class AsyncRequestMiddleware(BaseRequestMiddleWare):
 
     async def __call__(self, request):
         await sync.sync_to_async(self.prepare)(request)
-        response = await self.get_response(request)
+        response = await self.delay_response(request)
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
+    async def delay_response(self, request):
+        # acts as coroutine that doesn't block the event loop
+        # (coroutine has been deprecated in Python 3.11)
+        return await self.get_response(request)
 
 class RequestMiddleware(SyncRequestMiddleware):
     """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
@@ -148,6 +152,5 @@ def request_middleware_router(get_response):
 
     """
     if asyncio.iscoroutinefunction(get_response):
-        # coroutine can be started and resumed so it doesn't block the event loop
-        return AsyncRequestMiddleware(asyncio.coroutine(get_response))
+        return AsyncRequestMiddleware(get_response)
     return SyncRequestMiddleware(get_response)
