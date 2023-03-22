@@ -148,5 +148,6 @@ def request_middleware_router(get_response):
 
     """
     if asyncio.iscoroutinefunction(get_response):
-        return AsyncRequestMiddleware(get_response)
+        # coroutine can be started and resumed so it doesn't block the event loop
+        return AsyncRequestMiddleware(asyncio.coroutine(get_response))
     return SyncRequestMiddleware(get_response)
