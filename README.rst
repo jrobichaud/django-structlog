@@ -339,6 +339,40 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_5.0:
+
+Upgrading to 5.0+
+^^^^^^^^^^^^^^^^^
+
+Changes you may need to do
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Make sure you use ``django_structlog.middlewares.RequestMiddleware``
+-----------------------------------------------------------------------
+
+If you used any of the experimental async or sync middlewares, you do not need to anymore.
+Make sure you use ``django_structlog.middlewares.RequestMiddleware`` instead of any of the other request middlewares commented below:
+
+.. code-block:: python
+
+    MIDDLEWARE += [
+        # "django_structlog.middlewares.request_middleware_router", # <- remove
+        # "django_structlog.middlewares.requests.SyncRequestMiddleware", # <- remove
+        # "django_structlog.middlewares.requests.AsyncRequestMiddleware", # <- remove
+        "django_structlog.middlewares.RequestMiddleware", # <- make sure you use this one
+        "django_structlog.middlewares.CeleryMiddleware",
+    ]
+
+They will be removed in another major version.
+
+2. ``django_structlog.signals.bind_extra_request_failed_metadata`` was removed
+------------------------------------------------------------------------------
+
+The signal ``bind_extra_request_failed_metadata`` was removed since it was never called.
+
+Remove your custom signal.
+
+
 .. _upgrade_4.0:
 
 Upgrading to 4.0+

@@ -1,6 +1,23 @@
 Change Log
 ==========
 
+5.0.0 (March 23th, 2023)
+------------------------
+
+See: :ref:`upgrade_5.0`
+
+*Changes:*
+   - ``RequestMiddleware`` and ``CeleryMiddleware`` now properly support async views
+
+*Removed:*
+    - ``django_structlog.signals.bind_extra_request_failed_metadata``
+
+*Deprecates:*
+    - :class:`django_structlog.middlewares.request_middleware_router`
+    - :class:`django_structlog.middlewares.requests.AsyncRequestMiddleware`
+    - :class:`django_structlog.middlewares.requests.SyncRequestMiddleware`
+
+
 4.1.1 (February 7th, 2023)
 --------------------------
 

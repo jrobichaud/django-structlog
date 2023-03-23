@@ -1,11 +1,10 @@
-import asyncio
 import uuid
 
 import structlog
-from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.utils.decorators import sync_and_async_middleware
 from asgiref import sync
+from django.utils.deprecation import warn_about_renamed_method
 
 from .. import signals
 
@@ -22,22 +21,20 @@ def get_request_header(request, header_key, meta_key):
 class BaseRequestMiddleWare:
     def __init__(self, get_response):
         self.get_response = get_response
-        self._raised_exception = False
 
     def handle_response(self, request, response):
-        if not self._raised_exception:
-            self.bind_user_id(request)
-            signals.bind_extra_request_finished_metadata.send(
-                sender=self.__class__,
-                request=request,
-                logger=logger,
-                response=response,
-            )
-            logger.info(
-                "request_finished",
-                code=response.status_code,
-                request=self.format_request(request),
-            )
+        self.bind_user_id(request)
+        signals.bind_extra_request_finished_metadata.send(
+            sender=self.__class__,
+            request=request,
+            logger=logger,
+            response=response,
+        )
+        logger.info(
+            "request_finished",
+            code=response.status_code,
+            request=self.format_request(request),
+        )
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request):
@@ -63,33 +60,10 @@ class BaseRequestMiddleWare:
             request=self.format_request(request),
             user_agent=request.META.get("HTTP_USER_AGENT"),
         )
-        self._raised_exception = False
 
     @staticmethod
     def format_request(request):
         return "%s %s" % (request.method, request.get_full_path())
-
-    def process_exception(self, request, exception):
-        if isinstance(exception, (Http404, PermissionDenied)):
-            # We don't log an exception here, and we don't set that we handled
-            # an error as we want the standard `request_finished` log message
-            # to be emitted.
-            return
-
-        self._raised_exception = True
-
-        self.bind_user_id(request)
-        signals.bind_extra_request_failed_metadata.send(
-            sender=self.__class__,
-            request=request,
-            logger=logger,
-            exception=exception,
-        )
-        logger.exception(
-            "request_failed",
-            code=500,
-            request=self.format_request(request),
-        )
 
     @staticmethod
     def bind_user_id(request):
@@ -102,51 +76,65 @@ class BaseRequestMiddleWare:
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
 
-class SyncRequestMiddleware(BaseRequestMiddleWare):
+class RequestMiddleware(BaseRequestMiddleWare):
+    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+
+    >>> MIDDLEWARE = [
+        ...     # ...
+        ...     'django_structlog.middlewares.RequestMiddleware',
+        ... ]
+
+    """
+
     sync_capable = True
-    async_capable = False
+    async_capable = True
+
+    def __init__(self, get_response):
+        super().__init__(get_response)
+        if iscoroutinefunction(self.get_response):
+            markcoroutinefunction(self)
 
     def __call__(self, request):
+        if iscoroutinefunction(self):
+            return self.__acall__(request)
         self.prepare(request)
         response = self.get_response(request)
         self.handle_response(request, response)
         return response
 
-
-class AsyncRequestMiddleware(BaseRequestMiddleWare):
-    sync_capable = False
-    async_capable = True
-
-    async def __call__(self, request):
+    async def __acall__(self, request):
         await sync.sync_to_async(self.prepare)(request)
         response = await self.get_response(request)
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
 
-class RequestMiddleware(SyncRequestMiddleware):
-    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="SyncRequestMiddleware",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
+class SyncRequestMiddleware(RequestMiddleware):
+    pass
 
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.RequestMiddleware',
-    ... ]
 
-    """
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="AsyncRequestMiddleware",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
+class AsyncRequestMiddleware(RequestMiddleware):
+    pass
 
 
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="request_middleware_router",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
 @sync_and_async_middleware
 def request_middleware_router(get_response):
-    """``request_middleware_router`` select automatically between async or sync middleware.
-
-    Use as a replacement for `django_structlog.middlewares.RequestMiddleware`
-
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.request_middleware_router',
-    ... ]
-
-    """
-    if asyncio.iscoroutinefunction(get_response):
-        return AsyncRequestMiddleware(get_response)
-    return SyncRequestMiddleware(get_response)
+    return RequestMiddleware(get_response)  # pragma: no cover
