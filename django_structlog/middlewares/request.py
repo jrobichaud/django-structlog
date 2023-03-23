@@ -155,14 +155,4 @@ class AsyncRequestMiddleware(RequestMiddleware):
 )
 @sync_and_async_middleware
 def request_middleware_router(get_response):
-    """``request_middleware_router`` select automatically between async or sync middleware.
-
-    Use as a replacement for `django_structlog.middlewares.RequestMiddleware`
-
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.request_middleware_router',
-    ... ]
-
-    """
-    return RequestMiddleware(get_response)
+    return RequestMiddleware(get_response)  # pragma: no cover
