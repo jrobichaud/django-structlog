@@ -1,11 +1,12 @@
-import asyncio
 import uuid
 
 import structlog
+from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.utils.decorators import sync_and_async_middleware
 from asgiref import sync
+from django.utils.deprecation import warn_about_renamed_method
 
 from .. import signals
 
@@ -102,39 +103,56 @@ class BaseRequestMiddleWare:
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
 
-class SyncRequestMiddleware(BaseRequestMiddleWare):
+class RequestMiddleware(BaseRequestMiddleWare):
     sync_capable = True
-    async_capable = False
+    async_capable = True
+
+    def __init__(self, get_response):
+        super().__init__(get_response)
+        if iscoroutinefunction(self.get_response):
+            markcoroutinefunction(self)
 
     def __call__(self, request):
+        if iscoroutinefunction(self):
+            return self.__acall__(request)
         self.prepare(request)
         response = self.get_response(request)
         self.handle_response(request, response)
         return response
 
-
-class AsyncRequestMiddleware(BaseRequestMiddleWare):
-    sync_capable = False
-    async_capable = True
-
-    async def __call__(self, request):
+    async def __acall__(self, request):
         await sync.sync_to_async(self.prepare)(request)
         response = await self.get_response(request)
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
 
-class RequestMiddleware(SyncRequestMiddleware):
-    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="SyncRequestMiddleware",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
+class SyncRequestMiddleware(RequestMiddleware):
+    pass
 
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.RequestMiddleware',
-    ... ]
 
-    """
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="AsyncRequestMiddleware",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
+class AsyncRequestMiddleware(RequestMiddleware):
+    pass
 
 
+@warn_about_renamed_method(
+    class_name="django-structlog.middlewares",
+    old_method_name="request_middleware_router",
+    new_method_name="RequestMiddleware",
+    deprecation_warning=DeprecationWarning,
+)
 @sync_and_async_middleware
 def request_middleware_router(get_response):
     """``request_middleware_router`` select automatically between async or sync middleware.
@@ -147,6 +165,4 @@ def request_middleware_router(get_response):
     ... ]
 
     """
-    if asyncio.iscoroutinefunction(get_response):
-        return AsyncRequestMiddleware(get_response)
-    return SyncRequestMiddleware(get_response)
+    return RequestMiddleware(get_response)

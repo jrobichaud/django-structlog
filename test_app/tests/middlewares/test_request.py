@@ -643,14 +643,13 @@ class TestRequestMiddlewareRouter(TestCase):
         async def async_get_response(request):
             return mock_response
 
-        middleware = middlewares.request_middleware_router(async_get_response)
-        self.assertIsInstance(middleware, middlewares.request.AsyncRequestMiddleware)
+        middleware = middlewares.RequestMiddleware(async_get_response)
 
         mock_request = Mock()
         with patch(
-            "django_structlog.middlewares.request.AsyncRequestMiddleware.prepare"
+            "django_structlog.middlewares.request.RequestMiddleware.prepare"
         ) as mock_prepare, patch(
-            "django_structlog.middlewares.request.AsyncRequestMiddleware.handle_response"
+            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
         ) as mock_handle_response:
             response = await middleware(mock_request)
         self.assertEqual(response, mock_response)
@@ -663,14 +662,13 @@ class TestRequestMiddlewareRouter(TestCase):
         def get_response(request):
             return mock_response
 
-        middleware = middlewares.request_middleware_router(get_response)
-        self.assertIsInstance(middleware, middlewares.request.SyncRequestMiddleware)
+        middleware = middlewares.RequestMiddleware(get_response)
 
         mock_request = Mock()
         with patch(
-            "django_structlog.middlewares.request.SyncRequestMiddleware.prepare"
+            "django_structlog.middlewares.request.RequestMiddleware.prepare"
         ) as mock_prepare, patch(
-            "django_structlog.middlewares.request.SyncRequestMiddleware.handle_response"
+            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
         ) as mock_handle_response:
             response = middleware(mock_request)
         self.assertEqual(response, mock_response)
