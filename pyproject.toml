@@ -85,7 +85,7 @@ build-backend = "setuptools.build_meta"
         py37-django32-celery51-redis{3,4}-kombu5-importlibmetadata4,
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
         py{38,39,310,311}-django4{0,1,2}-celery52-redis{3,4}-kombu5,
-        py312-django42-celery52-redis4-kombu5,
+        py312-django42-celery52-redis4-kombu5-cached_property,
     pip_pre = True
 
     [gh-actions]
@@ -113,6 +113,7 @@ build-backend = "setuptools.build_meta"
         django40: Django >=4.0, <4.1
         django41: Django >=4.1, <4.2
         django42: Django ==4.2rc1
+        cached_property: cached_property >=1.5.2, <2
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
