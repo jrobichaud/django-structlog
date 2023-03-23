@@ -77,6 +77,15 @@ class BaseRequestMiddleWare:
 
 
 class RequestMiddleware(BaseRequestMiddleWare):
+    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+
+    >>> MIDDLEWARE = [
+        ...     # ...
+        ...     'django_structlog.middlewares.RequestMiddleware',
+        ... ]
+
+    """
+
     sync_capable = True
     async_capable = True
 
