@@ -62,9 +62,3 @@ if settings.DEBUG:
         re_path(r"^500/", default_views.server_error),
         re_path(r"^uncaught_exception/", uncaught_exception_view),
     ]
-    if "debug_toolbar" in settings.INSTALLED_APPS:
-        import debug_toolbar
-
-        urlpatterns = [
-            re_path(r"^__debug__/", include(debug_toolbar.urls))
-        ] + urlpatterns
