@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-5.0.0 (March 23th, 2023)
-------------------------
+5.0.0 (March 23, 2023)
+----------------------
 
 See: :ref:`upgrade_5.0`
 
@@ -18,8 +18,8 @@ See: :ref:`upgrade_5.0`
     - :class:`django_structlog.middlewares.requests.SyncRequestMiddleware`
 
 
-4.1.1 (February 7th, 2023)
---------------------------
+4.1.1 (February 7, 2023)
+------------------------
 
 *New:*
     - Add :class:`django_structlog.middlewares.request_middleware_router` to choose automatically between Async or Sync middleware
@@ -32,8 +32,8 @@ See: :ref:`upgrade_5.0`
     - Add `asgi` server to demo project see :ref:`development`.
 
 
-4.1.0 (February 4th, 2023)
---------------------------
+4.1.0 (February 4, 2023)
+------------------------
 
 *New:*
     - Add `async view <https://docs.djangoproject.com/en/4.1/topics/async/#async-views>`_ support. See `#180 <https://github.com/jrobichaud/django-structlog/pull/180>`_. Special thanks to `@DamianMel <https://github.com/DamianMel>`_.
@@ -46,15 +46,15 @@ See: :ref:`upgrade_5.0`
     - Upgrade or remove various development packages
 
 
-4.0.1 (October 25nd, 2022)
---------------------------
+4.0.1 (October 25, 2022)
+------------------------
 
 *New:*
     - Add support to ``python`` 3.11. See `#142 <https://github.com/jrobichaud/django-structlog/pull/142>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
 
 
-4.0.0 (October 22nd, 2022)
---------------------------
+4.0.0 (October 22, 2022)
+------------------------
 
 See: :ref:`upgrade_4.0`
 
@@ -70,8 +70,8 @@ See: :ref:`upgrade_4.0`
     - Added a `gh-pages <https://jrobichaud.github.io/django-structlog/>`_
 
 
-3.0.1 (August 2nd, 2022)
-------------------------
+3.0.1 (August 2, 2022)
+----------------------
 
 *Fixes:*
     - ``AttributeError`` with custom User without ``pk``. See `#80 <https://github.com/jrobichaud/django-structlog/issues/80>`_. Special thanks to `@mlegner <https://github.com/mlegner>`_.
@@ -81,8 +81,8 @@ See: :ref:`upgrade_4.0`
     - Upgrade various development packages
 
 
-3.0.0 (August 1st, 2022)
-------------------------
+3.0.0 (August 1, 2022)
+----------------------
 
 See: :ref:`upgrade_3.0`
 
