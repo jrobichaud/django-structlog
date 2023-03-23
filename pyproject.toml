@@ -23,6 +23,7 @@ build-backend = "setuptools.build_meta"
     "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.0",
     "Framework :: Django :: 4.1",
+    "Framework :: Django :: 4.2",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
@@ -82,7 +83,8 @@ build-backend = "setuptools.build_meta"
     envlist =
         py37-django32-celery51-redis{3,4}-kombu5-importlibmetadata4,
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
-        py{38,39,310,311}-django4{0,1}-celery52-redis{3,4}-kombu5,
+        py{38,39,310,311}-django4{0,1,2}-celery52-redis{3,4}-kombu5,
+    pip_pre = True
 
     [gh-actions]
     python =
@@ -104,9 +106,10 @@ build-backend = "setuptools.build_meta"
         kombu5: kombu<6
         celery51: Celery >=5.1, <5.2
         celery52: Celery >=5.2, <5.3
-        django32: Django >=3.2, <3.3
+        django32: Django >=3.2, <4.0
         django40: Django >=4.0, <4.1
         django41: Django >=4.1, <4.2
+        django42: Django ==4.2rc1
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
