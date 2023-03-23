@@ -21,7 +21,6 @@ class TestRequestMiddleware(TestCase):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
         self.log_results = None
-        self.exception_traceback = None
 
     def tearDown(self):
         structlog.contextvars.clear_contextvars()
