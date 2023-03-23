@@ -14,8 +14,6 @@ Request Events
 +------------------+---------+------------------------------+
 | request_finished | INFO    | request completed normally   |
 +------------------+---------+------------------------------+
-| request_failed   | ERROR   | unhandled exception occurred |
-+------------------+---------+------------------------------+
 
 Request Bound Metadata
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -60,10 +58,6 @@ These metadata appear once along with their associated event
 +------------------+------------------+--------------------------------------------------------------+
 | request_finished | code             | request's status code                                        |
 +------------------+------------------+--------------------------------------------------------------+
-| request_failed   | exception        | exception traceback (requires format_exc_info_)              |
-+------------------+------------------+--------------------------------------------------------------+
-
-.. _format_exc_info: https://www.structlog.org/en/stable/api.html#structlog.processors.format_exc_info
 
 CeleryMiddleware
 ----------------
