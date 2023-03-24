@@ -344,6 +344,10 @@ Upgrade Guide
 Upgrading to 5.0+
 ^^^^^^^^^^^^^^^^^
 
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires asgiref 3.6+
+
 Changes you may need to do
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
