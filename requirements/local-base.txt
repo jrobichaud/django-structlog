@@ -15,7 +15,7 @@ asgiref==3.6.0 # https://github.com/django/asgiref
 djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
-structlog==22.3.0
+structlog==23.1.0
 colorama==0.4.6
 django-ipware==5.0.0
 
