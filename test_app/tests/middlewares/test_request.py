@@ -297,6 +297,7 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(self.exception_traceback.strip(), record.msg["exception"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+        self.assertFalse(hasattr(request, "_raised_exception"))
 
     def test_signal_bind_extra_request_metadata(self):
         @receiver(bind_extra_request_metadata)

@@ -23,10 +23,9 @@ def get_request_header(request, header_key, meta_key):
 class BaseRequestMiddleWare:
     def __init__(self, get_response):
         self.get_response = get_response
-        self._raised_exception = False
 
     def handle_response(self, request, response):
-        if not self._raised_exception:
+        if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
@@ -39,6 +38,8 @@ class BaseRequestMiddleWare:
                 code=response.status_code,
                 request=self.format_request(request),
             )
+        else:
+            delattr(request, "_raised_exception")
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request):
@@ -64,7 +65,6 @@ class BaseRequestMiddleWare:
             request=self.format_request(request),
             user_agent=request.META.get("HTTP_USER_AGENT"),
         )
-        self._raised_exception = False
 
     @staticmethod
     def format_request(request):
@@ -77,8 +77,7 @@ class BaseRequestMiddleWare:
             # to be emitted.
             return
 
-        self._raised_exception = True
-
+        setattr(request, "_raised_exception", True)
         self.bind_user_id(request)
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__,
