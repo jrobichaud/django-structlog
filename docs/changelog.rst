@@ -1,10 +1,23 @@
 Change Log
 ==========
 
+5.0.2 (April 16, 2023)
+----------------------
+
+See: :ref:`upgrade_5.0`
+
+*Fixes:*
+    - Fix regression in 5.0.0 and 5.0.1 where exceptions were not logged as ``error`` but as ``info``. See `#226 <https://github.com/jrobichaud/django-structlog/issues/226>`_. Special thanks to `@ntap-fge <https://github.com/ntap-fge>`_.
+
+*Rollbacks from 5.0.0:*
+    - Rollback removal of ``django_structlog.signals.bind_extra_request_failed_metadata``. Relates the above fix.
+
+
 5.0.1 (March 24, 2023)
 ----------------------
 
 See: :ref:`upgrade_5.0`
+
 *Changes:*
    - minimum requirements change for ``asgiref`` to 3.6.0. See `#209 <https://github.com/jrobichaud/django-structlog/pull/209>`_. Special thanks to `@adinsoon <https://github.com/adinsoon>`_.
 
@@ -18,7 +31,7 @@ See: :ref:`upgrade_5.0`
    - ``RequestMiddleware`` and ``CeleryMiddleware`` now properly support async views
 
 *Removed:*
-    - ``django_structlog.signals.bind_extra_request_failed_metadata``
+    -  *(Rolled back in 5.0.2)* ``django_structlog.signals.bind_extra_request_failed_metadata``
 
 *Deprecates:*
     - :class:`django_structlog.middlewares.request_middleware_router`
@@ -32,7 +45,7 @@ See: :ref:`upgrade_5.0`
 *New:*
     - Add :class:`django_structlog.middlewares.request_middleware_router` to choose automatically between Async or Sync middleware
 
-* Rollbacks from 4.1.0 :*
+*Rollbacks from 4.1.0:*
     - Rollback ``RequestMiddleware`` not being a class anymore, its an internal ``SyncRequestMiddleware``
 
 *Others:*
