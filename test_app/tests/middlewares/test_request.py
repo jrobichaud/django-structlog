@@ -297,7 +297,6 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(self.exception_traceback.strip(), record.msg["exception"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
-        self.assertFalse(hasattr(request, "_raised_exception"))
 
     def test_signal_bind_extra_request_metadata(self):
         @receiver(bind_extra_request_metadata)
@@ -488,6 +487,7 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+        self.assertFalse(hasattr(request, "_raised_exception"))
 
     def test_process_request_403_are_processed_as_regular_requests(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
@@ -537,6 +537,7 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+        self.assertFalse(hasattr(request, "_raised_exception"))
 
     def test_process_request_404_are_processed_as_regular_requests(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
@@ -586,6 +587,7 @@ class TestRequestMiddleware(TestCase):
         record = log_results.records[0]
         self.assertNotIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+        self.assertFalse(hasattr(request, "_raised_exception"))
 
     def test_should_log_request_id_from_request_x_request_id_header(self):
         mock_response = Mock()
