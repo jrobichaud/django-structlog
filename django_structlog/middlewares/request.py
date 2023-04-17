@@ -2,6 +2,8 @@ import uuid
 
 import structlog
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.utils.decorators import sync_and_async_middleware
 from asgiref import sync
 from django.utils.deprecation import warn_about_renamed_method
@@ -23,18 +25,21 @@ class BaseRequestMiddleWare:
         self.get_response = get_response
 
     def handle_response(self, request, response):
-        self.bind_user_id(request)
-        signals.bind_extra_request_finished_metadata.send(
-            sender=self.__class__,
-            request=request,
-            logger=logger,
-            response=response,
-        )
-        logger.info(
-            "request_finished",
-            code=response.status_code,
-            request=self.format_request(request),
-        )
+        if not hasattr(request, "_raised_exception"):
+            self.bind_user_id(request)
+            signals.bind_extra_request_finished_metadata.send(
+                sender=self.__class__,
+                request=request,
+                logger=logger,
+                response=response,
+            )
+            logger.info(
+                "request_finished",
+                code=response.status_code,
+                request=self.format_request(request),
+            )
+        else:
+            delattr(request, "_raised_exception")
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request):
@@ -64,6 +69,27 @@ class BaseRequestMiddleWare:
     @staticmethod
     def format_request(request):
         return "%s %s" % (request.method, request.get_full_path())
+
+    def process_exception(self, request, exception):
+        if isinstance(exception, (Http404, PermissionDenied)):
+            # We don't log an exception here, and we don't set that we handled
+            # an error as we want the standard `request_finished` log message
+            # to be emitted.
+            return
+
+        setattr(request, "_raised_exception", True)
+        self.bind_user_id(request)
+        signals.bind_extra_request_failed_metadata.send(
+            sender=self.__class__,
+            request=request,
+            logger=logger,
+            exception=exception,
+        )
+        logger.exception(
+            "request_failed",
+            code=500,
+            request=self.format_request(request),
+        )
 
     @staticmethod
     def bind_user_id(request):

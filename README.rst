@@ -348,11 +348,11 @@ Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
 - requires asgiref 3.6+
 
-Changes you may need to do
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Change you may need to do
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Make sure you use ``django_structlog.middlewares.RequestMiddleware``
------------------------------------------------------------------------
+Make sure you use ``django_structlog.middlewares.RequestMiddleware``
+--------------------------------------------------------------------
 
 If you used any of the experimental async or sync middlewares, you do not need to anymore.
 Make sure you use ``django_structlog.middlewares.RequestMiddleware`` instead of any of the other request middlewares commented below:
@@ -368,13 +368,6 @@ Make sure you use ``django_structlog.middlewares.RequestMiddleware`` instead of 
     ]
 
 They will be removed in another major version.
-
-2. ``django_structlog.signals.bind_extra_request_failed_metadata`` was removed
-------------------------------------------------------------------------------
-
-The signal ``bind_extra_request_failed_metadata`` was removed since it was never called.
-
-Remove your custom signal.
 
 
 .. _upgrade_4.0:
