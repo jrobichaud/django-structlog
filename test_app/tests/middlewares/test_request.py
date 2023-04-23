@@ -387,7 +387,7 @@ class TestRequestMiddleware(TestCase):
 
         @receiver(bind_extra_request_failed_metadata)
         def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, logger=None, exception=None
+            sender, signal, request=None, response=None, logger=None, exception=None
         ):
             self.assertEqual(exception, expected_exception)
             structlog.contextvars.bind_contextvars(
