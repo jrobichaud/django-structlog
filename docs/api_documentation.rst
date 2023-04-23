@@ -15,7 +15,7 @@ django_structlog
     :show-inheritance:
 
 .. automodule:: django_structlog.signals
-    :members: bind_extra_request_metadata, bind_extra_request_finished_metadata, bind_extra_request_failed_metadata
+    :members: bind_extra_request_metadata, bind_extra_request_finished_metadata, bind_extra_request_failed_metadata, update_failure_response
 
 
 django_structlog.celery

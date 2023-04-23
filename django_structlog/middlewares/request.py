@@ -39,7 +39,15 @@ class BaseRequestMiddleWare:
                 request=self.format_request(request),
             )
         else:
+            exception = getattr(request, "_raised_exception")
             delattr(request, "_raised_exception")
+            signals.update_failure_response.send(
+                sender=self.__class__,
+                request=request,
+                response=response,
+                logger=logger,
+                exception=exception,
+            )
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request):
@@ -77,7 +85,7 @@ class BaseRequestMiddleWare:
             # to be emitted.
             return
 
-        setattr(request, "_raised_exception", True)
+        setattr(request, "_raised_exception", exception)
         self.bind_user_id(request)
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__,
