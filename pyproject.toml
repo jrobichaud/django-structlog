@@ -109,7 +109,7 @@ build-backend = "setuptools.build_meta"
         django32: Django >=3.2, <4.0
         django40: Django >=4.0, <4.1
         django41: Django >=4.1, <4.2
-        django42: Django ==4.2rc1
+        django42: Django >=4.2, <5.0
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
