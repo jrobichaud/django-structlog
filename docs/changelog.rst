@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+
+5.1.0 (April 22, 2023)
+----------------------
+
+*New:*
+    - Add new signal :class:`django_structlog.signals.update_failure_response` allowing to modify the response in case of failure. See `#231 <https://github.com/jrobichaud/django-structlog/issues/231>`_. Special thanks to `@HMaker <https://github.com/HMaker>`_.
+
 5.0.2 (April 16, 2023)
 ----------------------
 
