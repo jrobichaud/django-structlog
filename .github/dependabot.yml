@@ -15,4 +15,5 @@ updates:
       interval: weekly
     ignore:
       - dependency-name: "sphinx"
-      - dependency-name: "jinja2"
+      - dependency-name: "sphinx_rtd_theme"
+      - dependency-name: "readthedocs-sphinx-search"
