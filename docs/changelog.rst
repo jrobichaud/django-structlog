@@ -1,8 +1,36 @@
 Change Log
 ==========
 
-5.0.0 (March 23th, 2023)
-------------------------
+
+5.1.0 (April 22, 2023)
+----------------------
+
+*New:*
+    - Add new signal :class:`django_structlog.signals.update_failure_response` allowing to modify the response in case of failure. See `#231 <https://github.com/jrobichaud/django-structlog/issues/231>`_. Special thanks to `@HMaker <https://github.com/HMaker>`_.
+
+5.0.2 (April 16, 2023)
+----------------------
+
+See: :ref:`upgrade_5.0`
+
+*Fixes:*
+    - Fix regression in 5.0.0 and 5.0.1 where exceptions were not logged as ``error`` but as ``info``. See `#226 <https://github.com/jrobichaud/django-structlog/issues/226>`_. Special thanks to `@ntap-fge <https://github.com/ntap-fge>`_.
+
+*Rollbacks from 5.0.0:*
+    - Rollback removal of ``django_structlog.signals.bind_extra_request_failed_metadata``. Relates the above fix.
+
+
+5.0.1 (March 24, 2023)
+----------------------
+
+See: :ref:`upgrade_5.0`
+
+*Changes:*
+   - minimum requirements change for ``asgiref`` to 3.6.0. See `#209 <https://github.com/jrobichaud/django-structlog/pull/209>`_. Special thanks to `@adinsoon <https://github.com/adinsoon>`_.
+
+
+5.0.0 (March 23, 2023)
+----------------------
 
 See: :ref:`upgrade_5.0`
 
@@ -10,7 +38,7 @@ See: :ref:`upgrade_5.0`
    - ``RequestMiddleware`` and ``CeleryMiddleware`` now properly support async views
 
 *Removed:*
-    - ``django_structlog.signals.bind_extra_request_failed_metadata``
+    -  *(Rolled back in 5.0.2)* ``django_structlog.signals.bind_extra_request_failed_metadata``
 
 *Deprecates:*
     - :class:`django_structlog.middlewares.request_middleware_router`
@@ -18,13 +46,13 @@ See: :ref:`upgrade_5.0`
     - :class:`django_structlog.middlewares.requests.SyncRequestMiddleware`
 
 
-4.1.1 (February 7th, 2023)
---------------------------
+4.1.1 (February 7, 2023)
+------------------------
 
 *New:*
     - Add :class:`django_structlog.middlewares.request_middleware_router` to choose automatically between Async or Sync middleware
 
-* Rollbacks from 4.1.0 :*
+*Rollbacks from 4.1.0:*
     - Rollback ``RequestMiddleware`` not being a class anymore, its an internal ``SyncRequestMiddleware``
 
 *Others:*
@@ -32,8 +60,8 @@ See: :ref:`upgrade_5.0`
     - Add `asgi` server to demo project see :ref:`development`.
 
 
-4.1.0 (February 4th, 2023)
---------------------------
+4.1.0 (February 4, 2023)
+------------------------
 
 *New:*
     - Add `async view <https://docs.djangoproject.com/en/4.1/topics/async/#async-views>`_ support. See `#180 <https://github.com/jrobichaud/django-structlog/pull/180>`_. Special thanks to `@DamianMel <https://github.com/DamianMel>`_.
@@ -46,15 +74,15 @@ See: :ref:`upgrade_5.0`
     - Upgrade or remove various development packages
 
 
-4.0.1 (October 25nd, 2022)
---------------------------
+4.0.1 (October 25, 2022)
+------------------------
 
 *New:*
     - Add support to ``python`` 3.11. See `#142 <https://github.com/jrobichaud/django-structlog/pull/142>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
 
 
-4.0.0 (October 22nd, 2022)
---------------------------
+4.0.0 (October 22, 2022)
+------------------------
 
 See: :ref:`upgrade_4.0`
 
@@ -70,8 +98,8 @@ See: :ref:`upgrade_4.0`
     - Added a `gh-pages <https://jrobichaud.github.io/django-structlog/>`_
 
 
-3.0.1 (August 2nd, 2022)
-------------------------
+3.0.1 (August 2, 2022)
+----------------------
 
 *Fixes:*
     - ``AttributeError`` with custom User without ``pk``. See `#80 <https://github.com/jrobichaud/django-structlog/issues/80>`_. Special thanks to `@mlegner <https://github.com/mlegner>`_.
@@ -81,8 +109,8 @@ See: :ref:`upgrade_4.0`
     - Upgrade various development packages
 
 
-3.0.0 (August 1st, 2022)
-------------------------
+3.0.0 (August 1, 2022)
+----------------------
 
 See: :ref:`upgrade_3.0`
 
