@@ -4,7 +4,8 @@ set -o errexit
 set -o nounset
 
 
-celery flower \
+celery \
     --app=django_structlog_demo_project.taskapp \
     --broker="${CELERY_BROKER_URL}" \
+    flower \
     --basic_auth="${CELERY_FLOWER_USER}:${CELERY_FLOWER_PASSWORD}"
