@@ -39,6 +39,7 @@ def receiver_task_pre_run(task_id, task, *args, **kwargs):
     signals.bind_extra_task_metadata.send(
         sender=receiver_task_pre_run, task=task, logger=logger
     )
+    logger.info("task_started", task=task.name)
 
 
 def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
