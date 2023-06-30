@@ -1,8 +1,15 @@
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+from django.utils.deprecation import warn_about_renamed_method
 
-from ..celery.receivers import receiver_before_task_publish, receiver_after_task_publish
+from .receivers import connect_celery_signals
 
 
+@warn_about_renamed_method(
+    class_name="django_structlog.middlewares",
+    old_method_name="CeleryMiddleware",
+    new_method_name="DJANGO_STRUCTLOG_CELERY_ENABLED = True",
+    deprecation_warning=DeprecationWarning,
+)
 class CeleryMiddleware:
     sync_capable = True
     async_capable = True
@@ -19,10 +26,8 @@ class CeleryMiddleware:
 
     def __init__(self, get_response=None):
         self.get_response = get_response
-        from celery.signals import before_task_publish, after_task_publish
 
-        before_task_publish.connect(receiver_before_task_publish)
-        after_task_publish.connect(receiver_after_task_publish)
+        connect_celery_signals()
         if iscoroutinefunction(self.get_response):
             markcoroutinefunction(self)
 

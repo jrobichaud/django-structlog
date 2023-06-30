@@ -65,8 +65,8 @@ These metadata appear once along with their associated event
 
 .. _format_exc_info: https://www.structlog.org/en/stable/api.html#structlog.processors.format_exc_info
 
-CeleryMiddleware
-----------------
+Celery
+------
 
 Task Events
 ^^^^^^^^^^^
