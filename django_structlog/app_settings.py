@@ -2,7 +2,7 @@ from django.conf import settings
 
 
 # noinspection PyPep8Naming
-class Settings:
+class AppSettings:
     PREFIX = "DJANGO_STRUCTLOG_"
 
     @property
@@ -10,4 +10,4 @@ class Settings:
         return getattr(settings, self.PREFIX + "CELERY_ENABLED", False)
 
 
-app_settings = Settings()
+app_settings = AppSettings()

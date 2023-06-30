@@ -339,14 +339,14 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
-.. _upgrade_5.0:
+.. _upgrade_6.0:
 
-Upgrading to 5.0+
-^^^^^^^^^^^^^^^^^
+Upgrading to 6.0+ (upcoming)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
-- requires asgiref 3.6+
+- requires python 3.8+
 
 Change you may need to do
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -364,11 +364,33 @@ Make sure you use ``django_structlog.middlewares.RequestMiddleware`` instead of 
         # "django_structlog.middlewares.requests.SyncRequestMiddleware", # <- remove
         # "django_structlog.middlewares.requests.AsyncRequestMiddleware", # <- remove
         "django_structlog.middlewares.RequestMiddleware", # <- make sure you use this one
-        "django_structlog.middlewares.CeleryMiddleware",
     ]
 
-They will be removed in another major version.
 
+Make sure you use ``DJANGO_STRUCTLOG_CELERY_ENABLED = True``
+------------------------------------------------------------
+
+It is only applicable if you use celery integration.
+
+``django_structlog.middlewares.CeleryMiddleware`` has been remove in favor of a django settings.
+
+.. code-block:: python
+
+    MIDDLEWARE += [
+        "django_structlog.middlewares.RequestMiddleware",
+        # "django_structlog.middlewares.CeleryMiddleware",  # <- remove this
+    ]
+
+    DJANGO_STRUCTLOG_CELERY_ENABLED = True # <-- add this
+
+.. _upgrade_5.0:
+
+Upgrading to 5.0+
+^^^^^^^^^^^^^^^^^
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires asgiref 3.6+
 
 .. _upgrade_4.0:
 
