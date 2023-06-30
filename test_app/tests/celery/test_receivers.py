@@ -220,12 +220,16 @@ class TestReceivers(TestCase):
             "request_id": expected_request_uuid,
             "user_id": expected_user_id,
         }
+        task.name = "task_name"
         structlog.contextvars.bind_contextvars(foo="bar")
 
         context = structlog.contextvars.get_merged_contextvars(self.logger)
         self.assertDictEqual({"foo": "bar"}, context)
 
-        receivers.receiver_task_pre_run(task_id, task)
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receivers.receiver_task_pre_run(task_id, task)
         context = structlog.contextvars.get_merged_contextvars(self.logger)
 
         self.assertDictEqual(
@@ -236,6 +240,13 @@ class TestReceivers(TestCase):
             },
             context,
         )
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_started", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("task", record.msg)
+        self.assertEqual("task_name", record.msg["task"])
 
     def test_signal_bind_extra_task_metadata(self):
         @receiver(signals.bind_extra_task_metadata)

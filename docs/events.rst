@@ -78,6 +78,8 @@ Task Events
 +--------------------+-------------+------------------------------------------------+
 | task_retrying      | WARNING     | Worker retry task                              |
 +--------------------+-------------+------------------------------------------------+
+| task_started       | INFO        | task just started executing                    |
++--------------------+-------------+------------------------------------------------+
 | task_succeeded     | INFO        | Task completed successfully                    |
 +--------------------+-------------+------------------------------------------------+
 | task_failed        | ERROR/INFO* | Task failed                                    |
@@ -121,6 +123,8 @@ These metadata appear once along with their associated event
 | task_enqueued    | child_task_name  | name of the task being enqueued        |
 +------------------+------------------+----------------------------------------+
 | task_retrying    | reason           | reason for retry                       |
++------------------+------------------+----------------------------------------+
+| task_started     | task             | name of the task                       |
 +------------------+------------------+----------------------------------------+
 | task_failed      | error            | exception as string                    |
 +------------------+------------------+----------------------------------------+
