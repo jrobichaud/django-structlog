@@ -2,6 +2,13 @@ Change Log
 ==========
 
 
+5.2.0 (June 29, 2023)
+---------------------
+
+*New:*
+    - Add new event ``task_started``. See `#260 <https://github.com/jrobichaud/django-structlog/issues/260>`_. Special thanks to `@adrenaline681 <https://github.com/adrenaline681>`_.
+
+
 5.1.0 (April 22, 2023)
 ----------------------
 
