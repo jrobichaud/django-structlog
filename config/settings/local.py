@@ -161,5 +161,6 @@ structlog.configure(
 
 MIDDLEWARE += [
     "django_structlog.middlewares.RequestMiddleware",
-    "django_structlog.middlewares.CeleryMiddleware",
 ]
+
+DJANGO_STRUCTLOG_USE_CELERY = True
