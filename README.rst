@@ -158,6 +158,16 @@ Install the library
 
    pip install django-structlog
 
+Add app
+
+.. code-block:: python
+
+   INSTALLED_APP = [
+       # ...
+       'django_structlog',
+       # ...
+   ]
+
 Add middleware
 
 .. code-block:: python
@@ -348,8 +358,19 @@ Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
 - requires python 3.8+
 
-Change you may need to do
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Changes to do
+~~~~~~~~~~~~~
+
+Add ``django_structlog`` to installed app
+-----------------------------------------
+.. code-block:: python
+
+   INSTALLED_APP = [
+       # ...
+       'django_structlog',
+       # ...
+   ]
+
 
 Make sure you use ``django_structlog.middlewares.RequestMiddleware``
 --------------------------------------------------------------------
@@ -367,8 +388,8 @@ Make sure you use ``django_structlog.middlewares.RequestMiddleware`` instead of 
     ]
 
 
-Make sure you use ``DJANGO_STRUCTLOG_CELERY_ENABLED = True``
-------------------------------------------------------------
+(If you use celery) Make sure you use ``DJANGO_STRUCTLOG_CELERY_ENABLED = True``
+--------------------------------------------------------------------------------
 
 It is only applicable if you use celery integration.
 
