@@ -163,4 +163,4 @@ MIDDLEWARE += [
     "django_structlog.middlewares.RequestMiddleware",
 ]
 
-DJANGO_STRUCTLOG_USE_CELERY = True
+DJANGO_STRUCTLOG_CELERY_ENABLED = True
