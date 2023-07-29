@@ -65,8 +65,8 @@ These metadata appear once along with their associated event
 
 .. _format_exc_info: https://www.structlog.org/en/stable/api.html#structlog.processors.format_exc_info
 
-CeleryMiddleware
-----------------
+Celery
+------
 
 Task Events
 ^^^^^^^^^^^
@@ -77,6 +77,8 @@ Task Events
 | task_enqueued      | INFO        | A task was enqueued by request or another task |
 +--------------------+-------------+------------------------------------------------+
 | task_retrying      | WARNING     | Worker retry task                              |
++--------------------+-------------+------------------------------------------------+
+| task_started       | INFO        | task just started executing                    |
 +--------------------+-------------+------------------------------------------------+
 | task_succeeded     | INFO        | Task completed successfully                    |
 +--------------------+-------------+------------------------------------------------+
@@ -121,6 +123,8 @@ These metadata appear once along with their associated event
 | task_enqueued    | child_task_name  | name of the task being enqueued        |
 +------------------+------------------+----------------------------------------+
 | task_retrying    | reason           | reason for retry                       |
++------------------+------------------+----------------------------------------+
+| task_started     | task             | name of the task                       |
 +------------------+------------------+----------------------------------------+
 | task_failed      | error            | exception as string                    |
 +------------------+------------------+----------------------------------------+

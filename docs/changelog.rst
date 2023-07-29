@@ -1,6 +1,38 @@
 Change Log
 ==========
 
+6.0 (tbd)
+---------
+
+See: :ref:`upgrade_6.0`
+
+*Changes:*
+    - Drop support of python 3.7
+    - Drop legacy code still supporting celery < 4
+    - Removal of deprecated:
+        - :class:`django_structlog.middlewares.CeleryMiddleware`
+        - :class:`django_structlog.middlewares.SyncRequestMiddleware`
+        - :class:`django_structlog.middlewares.AsyncRequestMiddleware`
+        - :class:`django_structlog.middlewares.request_middleware_router`
+
+
+5.3.0 (June 30, 2023)
+---------------------
+
+*New:*
+    - django setting ``DJANGO_STRUCTLOG_CELERY_ENABLED = True`` replacing :class:`django_structlog.middlewares.CeleryMiddleware`. See :ref:`upgrade_6.0` and `#265 <https://github.com/jrobichaud/django-structlog/pull/265>`_. Also introduce new internal `app_settings` that may come handy for future configurations.
+
+
+*Deprecations:*
+    - :class:`django_structlog.middlewares.CeleryMiddleware` (see above).
+
+
+5.2.0 (June 29, 2023)
+---------------------
+
+*New:*
+    - Add new event ``task_started``. See `#260 <https://github.com/jrobichaud/django-structlog/issues/260>`_. Special thanks to `@adrenaline681 <https://github.com/adrenaline681>`_.
+
 
 5.1.0 (April 22, 2023)
 ----------------------

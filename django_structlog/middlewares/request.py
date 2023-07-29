@@ -144,7 +144,7 @@ class RequestMiddleware(BaseRequestMiddleWare):
 
 
 @warn_about_renamed_method(
-    class_name="django-structlog.middlewares",
+    class_name="django_structlog.middlewares",
     old_method_name="SyncRequestMiddleware",
     new_method_name="RequestMiddleware",
     deprecation_warning=DeprecationWarning,
@@ -154,7 +154,7 @@ class SyncRequestMiddleware(RequestMiddleware):
 
 
 @warn_about_renamed_method(
-    class_name="django-structlog.middlewares",
+    class_name="django_structlog.middlewares",
     old_method_name="AsyncRequestMiddleware",
     new_method_name="RequestMiddleware",
     deprecation_warning=DeprecationWarning,
@@ -164,7 +164,7 @@ class AsyncRequestMiddleware(RequestMiddleware):
 
 
 @warn_about_renamed_method(
-    class_name="django-structlog.middlewares",
+    class_name="django_structlog.middlewares",
     old_method_name="request_middleware_router",
     new_method_name="RequestMiddleware",
     deprecation_warning=DeprecationWarning,

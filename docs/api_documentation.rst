@@ -26,11 +26,6 @@ django_structlog.celery
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: django_structlog.celery.middlewares
-    :members: CeleryMiddleware
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: django_structlog.celery.steps
     :members: DjangoStructLogInitStep
     :undoc-members:

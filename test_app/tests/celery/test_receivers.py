@@ -1,6 +1,6 @@
 import logging
 from unittest import mock
-from unittest.mock import Mock
+from unittest.mock import Mock, patch, call
 
 import structlog
 from celery import shared_task
@@ -220,12 +220,16 @@ class TestReceivers(TestCase):
             "request_id": expected_request_uuid,
             "user_id": expected_user_id,
         }
+        task.name = "task_name"
         structlog.contextvars.bind_contextvars(foo="bar")
 
         context = structlog.contextvars.get_merged_contextvars(self.logger)
         self.assertDictEqual({"foo": "bar"}, context)
 
-        receivers.receiver_task_pre_run(task_id, task)
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receivers.receiver_task_pre_run(task_id, task)
         context = structlog.contextvars.get_merged_contextvars(self.logger)
 
         self.assertDictEqual(
@@ -236,6 +240,13 @@ class TestReceivers(TestCase):
             },
             context,
         )
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_started", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("task", record.msg)
+        self.assertEqual("task_name", record.msg["task"])
 
     def test_signal_bind_extra_task_metadata(self):
         @receiver(signals.bind_extra_task_metadata)
@@ -381,3 +392,24 @@ class TestReceivers(TestCase):
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("message", record.msg)
         self.assertEqual(expected_message, record.msg["message"])
+
+
+class TestConnectCelerySignals(TestCase):
+    def test_call(self):
+        from celery.signals import before_task_publish, after_task_publish
+        from django_structlog.celery.receivers import (
+            receiver_before_task_publish,
+            receiver_after_task_publish,
+        )
+
+        with patch(
+            "celery.utils.dispatch.signal.Signal.connect", autospec=True
+        ) as mock_connect:
+            receivers.connect_celery_signals()
+
+        mock_connect.assert_has_calls(
+            [
+                call(before_task_publish, receiver_before_task_publish),
+                call(after_task_publish, receiver_after_task_publish),
+            ]
+        )

@@ -18,8 +18,8 @@ Replace ``django-structlog`` with ``django-structlog[celery]`` in your ``require
 
     django-structlog[celery]==X.Y.Z
 
-Add CeleryMiddleWare in your web app
-------------------------------------
+Enable celery integration in your web app
+-----------------------------------------
 
 In your settings.py
 
@@ -28,8 +28,9 @@ In your settings.py
     MIDDLEWARE = [
         # ...
         'django_structlog.middlewares.RequestMiddleware',
-        'django_structlog.middlewares.CeleryMiddleware',
     ]
+
+    DJANGO_STRUCTLOG_CELERY_ENABLED = True
 
 
 Initialize Celery Worker with DjangoStructLogInitStep

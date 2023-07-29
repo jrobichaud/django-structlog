@@ -39,6 +39,7 @@ def receiver_task_pre_run(task_id, task, *args, **kwargs):
     signals.bind_extra_task_metadata.send(
         sender=receiver_task_pre_run, task=task, logger=logger
     )
+    logger.info("task_started", task=task.name)
 
 
 def receiver_task_retry(request=None, reason=None, einfo=None, **kwargs):
@@ -89,3 +90,10 @@ def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):
     logger.error("task_rejected", message=message)
+
+
+def connect_celery_signals():
+    from celery.signals import before_task_publish, after_task_publish
+
+    before_task_publish.connect(receiver_before_task_publish)
+    after_task_publish.connect(receiver_after_task_publish)
