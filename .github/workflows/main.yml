@@ -26,7 +26,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
       - name: Start Redis
-        uses: supercharge/redis-github-action@1.5.0
+        uses: supercharge/redis-github-action@1.6.0
       - name: Test demo app
         env:
           CELERY_BROKER_URL: redis://0.0.0.0:6379
@@ -58,7 +58,7 @@ jobs:
           python -m pip install -U setuptools
           python -m pip install tox tox-gh-actions
       - name: Start Redis
-        uses: supercharge/redis-github-action@1.5.0
+        uses: supercharge/redis-github-action@1.6.0
       - name: Test with tox
         run: tox
       - uses: codecov/codecov-action@v3

@@ -6,6 +6,8 @@ Getting Started with Celery
 
 In order to be able to support celery you need to configure both your webapp and your workers
 
+.. warning::
+    If json is used to serialize your celery tasks, the log context in use when executing a task (through ``apply_async`` or ``delay``) should only contain JSON-serializable data. You can use modify_context_before_task_publish_ to ensure this is the case.
 
 Replace your requirements
 -------------------------
@@ -131,6 +133,9 @@ In the same file as before
 
 Signals
 ^^^^^^^
+
+.. _modify_context_before_task_publish:
+
 modify_context_before_task_publish
 ----------------------------------
 

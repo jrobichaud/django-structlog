@@ -1,1 +1,1 @@
-flake8==6.0.0  # https://github.com/PyCQA/flake8
+flake8==6.1.0  # https://github.com/PyCQA/flake8
