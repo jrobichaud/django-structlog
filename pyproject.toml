@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
   ]
   readme = "README.rst"
   dynamic = ["version"]
-  requires-python = ">=3.7"
+  requires-python = ">=3.8"
   license = { text = "MIT" }
   dependencies = [
     "django>=3.2",
@@ -25,7 +25,6 @@ build-backend = "setuptools.build_meta"
     "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -57,7 +56,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
   line-length = 88
-  target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+  target-version = ['py38', 'py39', 'py310', 'py311']
   include = '\.pyi?$'
   exclude = '''
   /(
@@ -82,14 +81,12 @@ build-backend = "setuptools.build_meta"
     #
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
-        py37-django32-celery51-redis{3,4}-kombu5-importlibmetadata4,
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
         py{38,39,310,311}-django4{0,1,2}-celery5{2,3}-redis{3,4}-kombu5,
         py312-django42-celery53-redis4-kombu5,
 
     [gh-actions]
     python =
-        3.7: py37
         3.8: py38
         3.9: py39
         3.10: py310
@@ -102,7 +99,6 @@ build-backend = "setuptools.build_meta"
         CELERY_BROKER_URL=redis://0.0.0.0:6379
         DJANGO_SETTINGS_MODULE=config.settings.test
     deps =
-        importlibmetadata4: importlib-metadata<5
         redis3: redis>=3, <4
         redis4: redis>=4, <5
         kombu5: kombu<6
