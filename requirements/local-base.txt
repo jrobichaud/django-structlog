@@ -4,7 +4,7 @@ python-slugify==8.0.1  # https://github.com/un33k/python-slugify
 # Django
 # ------------------------------------------------------------------------------
 django>=3,<5  # pyup: < 2.1  # https://www.djangoproject.com/
-django-environ==0.10.0  # https://github.com/joke2k/django-environ
+django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.55.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy-forms
