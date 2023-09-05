@@ -164,7 +164,7 @@ Add app
 
    INSTALLED_APP = [
        # ...
-       'django_structlog',
+       "django_structlog",
        # ...
    ]
 
@@ -174,7 +174,7 @@ Add middleware
 
    MIDDLEWARE = [
        # ...
-       'django_structlog.middlewares.RequestMiddleware',
+       "django_structlog.middlewares.RequestMiddleware",
    ]
 
 Add appropriate structlog configuration to your ``settings.py``
