@@ -376,7 +376,7 @@ Add ``django_structlog`` to installed app
 
    INSTALLED_APP = [
        # ...
-       'django_structlog',
+       "django_structlog",
        # ...
    ]
 
