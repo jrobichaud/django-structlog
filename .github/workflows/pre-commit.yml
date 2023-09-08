@@ -6,6 +6,8 @@ on:
     - cron: "0 0 * * *"
   # on demand
   workflow_dispatch:
+  # TO TEST
+  pull_request: {}
 
 jobs:
   auto-update:
@@ -14,13 +16,16 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-      - uses: browniebroke/pre-commit-autoupdate-action@v1
+      - uses: browniebroke/pre-commit-autoupdate-action@v1.0.0
 
-      - uses: peter-evans/create-pull-request@v5
+      - uses: peter-evans/create-pull-request@v5.0.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: update/pre-commit-hooks
           title: Update pre-commit hooks
           commit-message: "chore: update pre-commit hooks"
           body: Update versions of pre-commit hooks to latest version.
+          base: ${{ github.head_ref }}
