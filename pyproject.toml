@@ -29,6 +29,7 @@ build-backend = "setuptools.build_meta"
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: System :: Logging",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -55,7 +56,13 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
   line-length = 88
-  target-version = ['py38', 'py39', 'py310', 'py311']
+  target-version = [
+    'py38',
+    'py39',
+    'py310',
+    'py311',
+    'py312',
+  ]
   include = '\.pyi?$'
   exclude = '''
   /(
@@ -82,6 +89,7 @@ build-backend = "setuptools.build_meta"
     envlist =
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
         py{38,39,310,311}-django4{0,1,2}-celery5{2,3}-redis{3,4}-kombu5,
+        py312-django42-celery53-redis4-kombu5,
 
     [gh-actions]
     python =
@@ -89,6 +97,7 @@ build-backend = "setuptools.build_meta"
         3.9: py39
         3.10: py310
         3.11: py311
+        3.12: py312
 
     [testenv]
     setenv =
