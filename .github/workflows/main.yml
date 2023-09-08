@@ -101,7 +101,7 @@ jobs:
           pip install -r requirements/black.txt
       - name: run black
         run: black --check --verbose .
-  flake8:
+  ruff:
     needs:
       - test-demo-app
       - test
@@ -112,17 +112,12 @@ jobs:
           - '3.12.0-rc.2'
     steps:
       - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/flake8.txt
-      - name: run flake8
-        run: flake8
+      - uses: chartboost/ruff-action@v1
   pypi-deployment:
     needs:
       - test-docs
       - black
-      - flake8
+      - ruff
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

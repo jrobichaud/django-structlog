@@ -77,6 +77,13 @@ build-backend = "setuptools.build_meta"
   )/
   '''
 
+[tool.ruff]
+  line-length = 88
+  target-version = "py312"
+  ignore = [
+    'E501',
+  ]
+
 [tool.pytest.ini_options]
   DJANGO_SETTINGS_MODULE = "config.settings.test_demo_app"
 
