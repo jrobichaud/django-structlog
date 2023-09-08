@@ -4,9 +4,7 @@ import structlog
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.utils.decorators import sync_and_async_middleware
 from asgiref import sync
-from django.utils.deprecation import warn_about_renamed_method
 
 from .. import signals
 
@@ -141,34 +139,3 @@ class RequestMiddleware(BaseRequestMiddleWare):
         response = await self.get_response(request)
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
-
-
-@warn_about_renamed_method(
-    class_name="django_structlog.middlewares",
-    old_method_name="SyncRequestMiddleware",
-    new_method_name="RequestMiddleware",
-    deprecation_warning=DeprecationWarning,
-)
-class SyncRequestMiddleware(RequestMiddleware):
-    pass
-
-
-@warn_about_renamed_method(
-    class_name="django_structlog.middlewares",
-    old_method_name="AsyncRequestMiddleware",
-    new_method_name="RequestMiddleware",
-    deprecation_warning=DeprecationWarning,
-)
-class AsyncRequestMiddleware(RequestMiddleware):
-    pass
-
-
-@warn_about_renamed_method(
-    class_name="django_structlog.middlewares",
-    old_method_name="request_middleware_router",
-    new_method_name="RequestMiddleware",
-    deprecation_warning=DeprecationWarning,
-)
-@sync_and_async_middleware
-def request_middleware_router(get_response):
-    return RequestMiddleware(get_response)  # pragma: no cover
