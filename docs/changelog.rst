@@ -6,6 +6,9 @@ Change Log
 
 See: :ref:`upgrade_6.0`
 
+*New:*
+    - Python 3.12 support
+
 *Changes:*
     - Drop support of python 3.7
     - Drop legacy code still supporting celery < 4
