@@ -3,7 +3,7 @@ name: pre-commit auto-update
 on:
   # every monday at midnight
   schedule:
-    - cron: "0 0 * * 1"
+    - cron: "0 11 * * 1"
   # on demand
   workflow_dispatch:
 
