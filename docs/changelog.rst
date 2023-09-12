@@ -17,6 +17,7 @@ See: :ref:`upgrade_6.0`
         - :class:`django_structlog.middlewares.SyncRequestMiddleware`
         - :class:`django_structlog.middlewares.AsyncRequestMiddleware`
         - :class:`django_structlog.middlewares.request_middleware_router`
+    - ``4XX`` status codes now log by default as ``WARNING`` and ``5XX`` as ``ERROR``. The behaviour of ``4XX`` can be customized with :ref:`configuration`. See `#308 <https://github.com/jrobichaud/django-structlog/issues/308>`_. Special thanks to `@adinhodovic <https://github.com/adinhodovic>`_.
 
 
 5.3.0 (June 30, 2023)

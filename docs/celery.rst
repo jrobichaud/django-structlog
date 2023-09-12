@@ -1,3 +1,5 @@
+.. _celery_integration:
+
 Celery Integration
 ==================
 
