@@ -1,3 +1,4 @@
+import logging
 import uuid
 
 import structlog
@@ -7,6 +8,7 @@ from django.http import Http404
 from asgiref import sync
 
 from .. import signals
+from ..app_settings import app_settings
 
 logger = structlog.getLogger(__name__)
 
@@ -31,7 +33,14 @@ class BaseRequestMiddleWare:
                 logger=logger,
                 response=response,
             )
-            logger.info(
+            if response.status_code >= 500:
+                level = logging.ERROR
+            elif response.status_code >= 400:
+                level = app_settings.STATUS_4XX_LOG_LEVEL
+            else:
+                level = logging.INFO
+            logger.log(
+                level,
                 "request_finished",
                 code=response.status_code,
                 request=self.format_request(request),
@@ -112,9 +121,9 @@ class RequestMiddleware(BaseRequestMiddleWare):
     """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
 
     >>> MIDDLEWARE = [
-        ...     # ...
-        ...     'django_structlog.middlewares.RequestMiddleware',
-        ... ]
+    ...     # ...
+    ...     'django_structlog.middlewares.RequestMiddleware',
+    ... ]
 
     """
 

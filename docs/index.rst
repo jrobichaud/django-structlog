@@ -11,6 +11,7 @@ Contents, indices and tables
 
   getting_started
   celery
+  configuration
   api_documentation
   events
   example_outputs

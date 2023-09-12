@@ -7,8 +7,13 @@ from unittest.mock import patch, Mock
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
-from django.http import Http404, HttpResponseNotFound, HttpResponseForbidden
-from django.test import TestCase, RequestFactory
+from django.http import (
+    Http404,
+    HttpResponseNotFound,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+)
+from django.test import TestCase, RequestFactory, override_settings
 import structlog
 
 from django_structlog import middlewares
@@ -31,7 +36,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_without_user(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         def get_response(_response):
@@ -61,7 +66,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_with_null_user(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         def get_response(_response):
@@ -92,7 +97,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_anonymous(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         def get_response(_response):
@@ -125,7 +130,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_user(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         def get_response(_response):
@@ -161,7 +166,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_user_uuid(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         def get_response(_response):
@@ -189,7 +194,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_process_request_user_without_id(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -215,7 +220,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_log_user_in_request_finished(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         mock_user = User.objects.create()
@@ -252,7 +257,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_log_user_in_request_finished_with_exception(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         mock_user = User.objects.create()
@@ -308,7 +313,7 @@ class TestRequestMiddleware(TestCase):
             )
 
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
 
         def get_response(_response):
             with self.assertLogs(__name__, logging.INFO) as log_results:
@@ -335,7 +340,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_signal_bind_extra_request_finished_metadata(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
 
         @receiver(bind_extra_request_finished_metadata)
         def receiver_bind_extra_request_metadata(
@@ -520,7 +525,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIsNone(record.msg["user_id"])
 
         record = log_results.records[1]
-        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("WARNING", record.levelname)
         self.assertIn("request_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
         self.assertIn("user_id", record.msg)
@@ -570,6 +575,57 @@ class TestRequestMiddleware(TestCase):
         self.assertIsNone(record.msg["user_id"])
 
         record = log_results.records[1]
+        self.assertEqual("WARNING", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        self.assertIn("code", record.msg)
+        self.assertEqual(record.msg["code"], 404)
+        self.assertNotIn("exception", record.msg)
+        self.assertIn("request", record.msg)
+
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertFalse(hasattr(request, "_raised_exception"))
+
+    @override_settings(DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL=logging.INFO)
+    def test_process_request_4XX_can_be_personalized(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        request = self.factory.get("/foo")
+        request.user = AnonymousUser()
+
+        middleware = middlewares.RequestMiddleware(None)
+
+        exception = Http404()
+
+        def get_response(_response):
+            """Simulate an exception"""
+            middleware.process_exception(request, exception)
+            return HttpResponseNotFound()
+
+        middleware.get_response = get_response
+
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            logging.getLogger("django_structlog"), logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        record = log_results.records[1]
         self.assertEqual("INFO", record.levelname)
         self.assertIn("request_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
@@ -589,9 +645,55 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertFalse(hasattr(request, "_raised_exception"))
 
+    def test_process_request_500_are_processed_as_errors(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        request = self.factory.get("/foo")
+        request.user = AnonymousUser()
+
+        middleware = middlewares.RequestMiddleware(None)
+
+        def get_response(_response):
+            return HttpResponseServerError()
+
+        middleware.get_response = get_response
+
+        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
+            logging.getLogger("django_structlog"), logging.INFO
+        ) as log_results:
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        record = log_results.records[1]
+        self.assertEqual("ERROR", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+        self.assertIn("code", record.msg)
+        self.assertEqual(record.msg["code"], 500)
+        self.assertNotIn("exception", record.msg)
+        self.assertIn("request", record.msg)
+
+        with self.assertLogs(__name__, logging.INFO) as log_results:
+            self.logger.info("hello")
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertNotIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertFalse(hasattr(request, "_raised_exception"))
+
     def test_should_log_request_id_from_request_x_request_id_header(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         x_request_id = "my-fake-request-id"
 
         def get_response(_response):
@@ -615,7 +717,7 @@ class TestRequestMiddleware(TestCase):
 
     def test_should_log_correlation_id_from_request_x_correlation_id_header(self):
         mock_response = Mock()
-        mock_response.status_code.return_value = 200
+        mock_response.status_code = 200
         x_correlation_id = "my-fake-correlation-id"
 
         def get_response(_response):
