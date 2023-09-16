@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 
 from .app_settings import app_settings
-from .commands import init_command_signals
 
 
 class DjangoStructLogConfig(AppConfig):
@@ -14,4 +13,6 @@ class DjangoStructLogConfig(AppConfig):
             connect_celery_signals()
 
         if app_settings.COMMAND_LOGGING_ENABLED:
+            from .commands import init_command_signals
+
             init_command_signals()
