@@ -44,6 +44,9 @@ build-backend = "setuptools.build_meta"
   celery = [
     "celery>=5.1"
   ]
+  commands = [
+    "django-extensions>=1.4.9"
+  ]
 
 [tool.setuptools.dynamic]
   version = { attr = "django_structlog.__version__" }

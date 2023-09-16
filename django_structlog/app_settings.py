@@ -15,5 +15,9 @@ class AppSettings:
     def STATUS_4XX_LOG_LEVEL(self):
         return getattr(settings, self.PREFIX + "STATUS_4XX_LOG_LEVEL", logging.WARNING)
 
+    @property
+    def COMMAND_LOGGING_ENABLED(self):
+        return getattr(settings, self.PREFIX + "COMMAND_LOGGING_ENABLED", False)
+
 
 app_settings = AppSettings()

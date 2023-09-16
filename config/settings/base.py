@@ -62,7 +62,9 @@ THIRD_PARTY_APPS = [
     "rest_framework",
 ]
 LOCAL_APPS = [
-    "django_structlog_demo_project.users.apps.UsersAppConfig",
+    "django_structlog_demo_project.command_examples",
+    "django_structlog_demo_project.users",
+    "django_structlog_demo_project.home",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
