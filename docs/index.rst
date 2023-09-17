@@ -10,8 +10,9 @@ Contents, indices and tables
   :maxdepth: 2
 
   getting_started
-  celery
   configuration
+  celery
+  commands
   api_documentation
   events
   example_outputs

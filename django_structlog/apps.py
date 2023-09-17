@@ -11,3 +11,8 @@ class DjangoStructLogConfig(AppConfig):
             from .celery.receivers import connect_celery_signals
 
             connect_celery_signals()
+
+        if app_settings.COMMAND_LOGGING_ENABLED:
+            from .commands import init_command_signals
+
+            init_command_signals()

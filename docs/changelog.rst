@@ -8,6 +8,7 @@ See: :ref:`upgrade_6.0`
 
 *New:*
     - Python 3.12 support
+    - Add support of logging :ref:`commands`
 
 *Changes:*
     - Drop support of python 3.7
