@@ -12,13 +12,22 @@ Install ``django-structlog`` with command support (it will install `django-exten
 
    pip install django-structlog[commands]
 
-Enable ``django-structlog`` command logging:
+Alternatively install `django-extensions <https://django-extensions.readthedocs.io/en/latest/>`_ directly:
+
+.. code-block:: bash
+
+   pip install django-extensions
+
+Configuration
+^^^^^^^^^^^^^
+
+Enable ``django-structlog``'s command logging:
 
 .. code-block:: python
 
    DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 
-Add `@signalcommand` to your commands
+Add ``django-extensions``'s `@signalcommand <https://django-extensions.readthedocs.io/en/latest/command_signals.html#using-pre-post-signals-on-your-own-commands>`_ to your commands
 
 .. code-block:: python
 
@@ -38,6 +47,9 @@ Add `@signalcommand` to your commands
             logger.info("my log", foo=foo)
             return 0
 
+Results
+^^^^^^^
+
 Log will add ``command_name`` and ``command_id`` to the logs:
 
 .. code-block:: bash
@@ -53,8 +65,8 @@ It also supports nested commands which will keep track of parent commands throug
 .. code-block:: bash
 
     $ python manage.py example_command bar
-    2023-09-15T00:10:10.466616Z [info     ] command_started                [django_structlog.commands] command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed command_name=django_structlog_demo_project.users.example_command foo=bar
-    2023-09-15T00:10:10.467250Z [info     ] my log                         [django_structlog_demo_project.users.management.commands.example_command] command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed
+    2023-09-15T00:10:10.466616Z [info     ] command_started                [django_structlog.commands] command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed command_name=django_structlog_demo_project.users.example_command
+    2023-09-15T00:10:10.467250Z [info     ] my log                         [django_structlog_demo_project.users.management.commands.example_command] command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed foo=bar
     2023-09-15T00:10:10.468176Z [info     ] command_started                [django_structlog.commands] baz=2 command_id=57524ccb-a8eb-4d30-a989-4e83ffdca9c0 command_name=django_structlog_demo_project.users.example_nested_command parent_command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed
     2023-09-15T00:10:10.468871Z [info     ] my nested log                  [django_structlog_demo_project.users.management.commands.example_nested_command] command_id=57524ccb-a8eb-4d30-a989-4e83ffdca9c0 parent_command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed
     2023-09-15T00:10:10.469418Z [info     ] command_finished               [django_structlog.commands] command_id=57524ccb-a8eb-4d30-a989-4e83ffdca9c0 parent_command_id=f2a8c9a8-5aa3-4e22-b11c-f387449a34ed
