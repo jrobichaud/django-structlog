@@ -79,8 +79,16 @@ def receiver_task_failure(
 def receiver_task_revoked(
     request=None, terminated=None, signum=None, expired=None, **kwargs
 ):
+    metadata = getattr(request, "__django_structlog__", {}).copy()
+    metadata["task_id"] = request.id
+    metadata["task"] = request.task
+
     logger.warning(
-        "task_revoked", terminated=terminated, signum=signum, expired=expired
+        "task_revoked",
+        terminated=terminated,
+        signum=signum,
+        expired=expired,
+        **metadata,
     )
 
 

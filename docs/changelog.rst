@@ -10,6 +10,9 @@ See: :ref:`upgrade_6.0`
     - Python 3.12 support
     - Add support of logging :ref:`commands`
 
+*Fixes:*
+    - Add missing metadata when a task is revoked. See `#317 <https://github.com/jrobichaud/django-structlog/issues/317>`_. Special thanks to `@badziyoussef <https://github.com/badziyoussef>`_.
+
 *Changes:*
     - Drop support of python 3.7
     - Drop legacy code still supporting celery < 4

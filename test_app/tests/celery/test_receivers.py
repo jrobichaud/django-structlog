@@ -347,10 +347,23 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_exception, record.msg["error"])
 
     def test_receiver_task_revoked(self):
+        expected_request_uuid = "00000000-0000-0000-0000-000000000000"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        expected_user_id = "1234"
+        expected_task_name = "task_name"
+        request = Mock()
+        request.__django_structlog__ = {
+            "request_id": expected_request_uuid,
+            "user_id": expected_user_id,
+        }
+        request.task = expected_task_name
+        request.id = task_id
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.WARNING
         ) as log_results:
-            receivers.receiver_task_revoked(terminated=True, signum=1, expired=False)
+            receivers.receiver_task_revoked(
+                request=request, terminated=True, signum=1, expired=False
+            )
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
@@ -362,6 +375,14 @@ class TestReceivers(TestCase):
         self.assertEqual(1, record.msg["signum"])
         self.assertIn("expired", record.msg)
         self.assertFalse(record.msg["expired"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
+        self.assertIn("task", record.msg)
+        self.assertEqual(expected_task_name, record.msg["task"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_request_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(expected_user_id, record.msg["user_id"])
 
     def test_receiver_task_unknown(self):
         expected_message = "foo"

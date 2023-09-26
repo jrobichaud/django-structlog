@@ -88,7 +88,7 @@ Task Events
 +--------------------+-------------+------------------------------------------------+
 | task_not_found     | ERROR       | Celery app did not discover the requested task |
 +--------------------+-------------+------------------------------------------------+
-| task_task_rejected | ERROR       | Task could not be enqueued                     |
+| task_rejected      | ERROR       | Task could not be enqueued                     |
 +--------------------+-------------+------------------------------------------------+
 
 \* if task threw an expected exception, it will logged as ``INFO``. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_
@@ -135,6 +135,10 @@ These metadata appear once along with their associated event
 | task_revoked     | signum           | see Celery's documentation             |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | expired          | see Celery's documentation             |
++------------------+------------------+----------------------------------------+
+| task_revoked     | task_id          | id of the task being revoked           |
++------------------+------------------+----------------------------------------+
+| task_revoked     | task             | name of the task being revoked         |
 +------------------+------------------+----------------------------------------+
 
 \* if task threw an expected exception, ``exception`` will be omitted. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_

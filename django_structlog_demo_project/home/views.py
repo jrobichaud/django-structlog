@@ -35,6 +35,12 @@ def log_with_standard_logger(request):
     return HttpResponse(status=200)
 
 
+def revoke_task(request):
+    async_result = successful_task.apply_async(countdown=1)
+    async_result.revoke()
+    return HttpResponse(status=201)
+
+
 async def async_view(request):
     for num in range(1, 2):
         await asyncio.sleep(1)
