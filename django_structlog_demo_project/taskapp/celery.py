@@ -1,3 +1,5 @@
+import asyncio
+import functools
 import logging
 import logging.config
 import os
@@ -63,6 +65,22 @@ def successful_task(foo=None):
 
     logger = structlog.getLogger(__name__)
     logger.info("This is a successful task")
+
+
+def async_to_sync(func):
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        return asyncio.run(func(*args, **kwargs))
+
+    return wrapped
+
+
+@shared_task
+@async_to_sync
+async def revocable_task():
+    logger = structlog.getLogger(__name__)
+    logger.info("This is a revocable task")
+    await asyncio.sleep(1000)
 
 
 @shared_task

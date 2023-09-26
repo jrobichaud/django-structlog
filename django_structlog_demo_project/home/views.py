@@ -7,6 +7,7 @@ from django_structlog_demo_project.taskapp.celery import (
     successful_task,
     failing_task,
     nesting_task,
+    revocable_task,
 )
 
 logger = structlog.get_logger(__name__)
@@ -33,6 +34,12 @@ def enqueue_nesting_task(request):
 def log_with_standard_logger(request):
     logging.getLogger("foreign_logger").info("This is a standard logger")
     return HttpResponse(status=200)
+
+
+def revoke_task(request):
+    async_result = revocable_task.delay()
+    async_result.revoke(terminate=True)
+    return HttpResponse(status=201)
 
 
 async def async_view(request):
