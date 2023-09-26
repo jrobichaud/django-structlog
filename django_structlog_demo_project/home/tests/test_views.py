@@ -44,7 +44,7 @@ class TestAsyncView:
         assert response.status_code == 200
 
 
-class TestRevocableTask:
+class TestRevokeTask:
     def test(self):
         response = views.revoke_task(None)
         assert response.status_code == 201
