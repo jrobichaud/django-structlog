@@ -7,7 +7,6 @@ from django_structlog_demo_project.taskapp.celery import (
     successful_task,
     failing_task,
     nesting_task,
-    revocable_task,
 )
 
 logger = structlog.get_logger(__name__)
@@ -37,8 +36,8 @@ def log_with_standard_logger(request):
 
 
 def revoke_task(request):
-    async_result = revocable_task.delay()
-    async_result.revoke(terminate=True)
+    async_result = successful_task.apply_async(countdown=1)
+    async_result.revoke()
     return HttpResponse(status=201)
 
 
