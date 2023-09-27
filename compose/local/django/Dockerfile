@@ -1,10 +1,11 @@
 ARG PYTHON_VERSION
 
-FROM python:${PYTHON_VERSION}-alpine
+FROM python:${PYTHON_VERSION}-alpine as python
+
+FROM python AS python-build-stage
 
 ARG REQUIREMENTS_FILE=local.txt
 
-ENV PYTHONUNBUFFERED 1
 
 RUN apk update \
   # psycopg2 dependencies
@@ -12,14 +13,29 @@ RUN apk update \
   && apk add postgresql-dev \
   # CFFI dependencies
   && apk add libffi-dev py-cffi \
-  # Translations dependencies
-  && apk add gettext \
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
   && apk add postgresql-client
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
-RUN pip install -r /requirements/${REQUIREMENTS_FILE}
+
+RUN pip wheel --wheel-dir /usr/src/app/wheels \
+  -r /requirements/${REQUIREMENTS_FILE}
+
+FROM python as python-run-stage
+
+ENV PYTHONUNBUFFERED 1
+
+RUN apk update \
+  # Translations dependencies
+  && apk add gettext \
+  # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
+  && apk add postgresql-client
+
+COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
+
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+	&& rm -rf /wheels/
 
 COPY ./compose/local/django/entrypoint /entrypoint
 RUN sed -i 's/\r//' /entrypoint
@@ -46,5 +62,10 @@ RUN sed -i 's/\r//' /start-flower
 RUN chmod +x /start-flower
 
 WORKDIR /app
+
+RUN addgroup --system django \
+    && adduser --system --ingroup django django
+
+RUN chown django:django /app
 
 ENTRYPOINT ["/entrypoint"]
