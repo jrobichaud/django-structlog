@@ -20,6 +20,7 @@ urlpatterns = [
     ),
     re_path(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
     re_path(r"^nesting_task$", views.enqueue_nesting_task, name="enqueue_nesting_task"),
+    re_path(r"^unknown_task$", views.enqueue_unknown_task, name="enqueue_unknown_task"),
     re_path(r"^raise_exception", views.raise_exception, name="raise_exception"),
     re_path(
         r"^standard_logger", views.log_with_standard_logger, name="standard_logger"

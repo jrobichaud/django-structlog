@@ -94,7 +94,11 @@ def receiver_task_revoked(
 
 
 def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
-    logger.error("task_not_found", message=message)
+    logger.error(
+        "task_not_found",
+        task=name,
+        task_id=id,
+    )
 
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):

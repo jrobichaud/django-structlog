@@ -41,6 +41,16 @@ def revoke_task(request):
     return HttpResponse(status=201)
 
 
+def enqueue_unknown_task(request):
+    from django_structlog_demo_project.taskapp.celery import (
+        unknown_task,
+    )
+
+    logger.info("Enqueuing unknown task")
+    unknown_task.delay()
+    return HttpResponse(status=201)
+
+
 async def async_view(request):
     for num in range(1, 2):
         await asyncio.sleep(1)

@@ -85,7 +85,15 @@ def nested_task():
     logger.info("This is a nested task")
 
 
-@shared_task()
+@shared_task
 def scheduled_task():
     logger = structlog.getLogger(__name__)
     logger.info("This is a scheduled task")
+
+
+if not settings.IS_WORKER:
+
+    @shared_task
+    def unknown_task():
+        """Simulate a task unavailable in the worker for demonstration purpose"""
+        pass

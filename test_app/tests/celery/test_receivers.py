@@ -428,19 +428,22 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_user_id, record.msg["user_id"])
 
     def test_receiver_task_unknown(self):
-        expected_message = "foo"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        expected_task_name = "task_name"
 
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.ERROR
         ) as log_results:
-            receivers.receiver_task_unknown(message=expected_message)
+            receivers.receiver_task_unknown(id=task_id, name=expected_task_name)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
         self.assertEqual("task_not_found", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
-        self.assertIn("message", record.msg)
-        self.assertEqual(expected_message, record.msg["message"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
+        self.assertIn("task", record.msg)
+        self.assertEqual(expected_task_name, record.msg["task"])
 
     def test_receiver_task_rejected(self):
         expected_message = "foo"
