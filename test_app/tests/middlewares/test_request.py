@@ -5,6 +5,8 @@ from unittest import mock
 from unittest.mock import patch, Mock
 
 from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.http import (
@@ -30,6 +32,10 @@ class TestRequestMiddleware(TestCase):
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
         self.log_results = None
+        Site.objects.update_or_create(
+            id=1,
+            defaults={"domain": "testserver", "name": "django_structlog_demo_project"},
+        )
 
     def tearDown(self):
         structlog.contextvars.clear_contextvars()
@@ -308,9 +314,8 @@ class TestRequestMiddleware(TestCase):
         def receiver_bind_extra_request_metadata(
             sender, signal, request=None, logger=None
         ):
-            structlog.contextvars.bind_contextvars(
-                user_email=getattr(request.user, "email", "")
-            )
+            current_site = get_current_site(request)
+            structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         mock_response = Mock()
         mock_response.status_code = 200
@@ -334,7 +339,7 @@ class TestRequestMiddleware(TestCase):
 
         self.assertEqual("INFO", record.levelname)
         self.assertIn("request_id", record.msg)
-        self.assertEqual(mock_user.email, record.msg["user_email"])
+        self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
@@ -347,9 +352,8 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, logger=None, response=None
         ):
             self.assertEqual(response, mock_response)
-            structlog.contextvars.bind_contextvars(
-                user_email=getattr(request.user, "email", "")
-            )
+            current_site = get_current_site(request)
+            structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         def get_response(_response):
             return mock_response
@@ -373,7 +377,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("event", record.msg)
         self.assertEqual("request_started", record.msg["event"])
         self.assertIn("request_id", record.msg)
-        self.assertNotIn("user_email", record.msg)
+        self.assertNotIn("domain", record.msg)
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
         record = log_results.records[1]
@@ -382,8 +386,8 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("event", record.msg)
         self.assertEqual("request_finished", record.msg["event"])
         self.assertIn("request_id", record.msg)
-        self.assertIn("user_email", record.msg)
-        self.assertEqual(mock_user.email, record.msg["user_email"])
+        self.assertIn("domain", record.msg)
+        self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
@@ -395,9 +399,8 @@ class TestRequestMiddleware(TestCase):
             sender, signal, request=None, response=None, logger=None, exception=None
         ):
             self.assertEqual(exception, expected_exception)
-            structlog.contextvars.bind_contextvars(
-                user_email=getattr(request.user, "email", "")
-            )
+            current_site = get_current_site(request)
+            structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         request = self.factory.get("/foo")
 
@@ -426,7 +429,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("event", record.msg)
         self.assertEqual("request_started", record.msg["event"])
         self.assertIn("request_id", record.msg)
-        self.assertNotIn("user_email", record.msg)
+        self.assertNotIn("domain", record.msg)
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
         record = log_results.records[1]
@@ -435,8 +438,8 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("event", record.msg)
         self.assertEqual("request_failed", record.msg["event"])
         self.assertIn("request_id", record.msg)
-        self.assertIn("user_email", record.msg)
-        self.assertEqual(mock_user.email, record.msg["user_email"])
+        self.assertIn("domain", record.msg)
+        self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 

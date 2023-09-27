@@ -6,13 +6,15 @@ bind_extra_request_metadata = django.dispatch.Signal()
 
 :param logger: the logger to bind more metadata or override existing bound metadata
 
+>>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
 >>> from django_structlog import signals
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_metadata)
-... def bind_user_email(request, logger, **kwargs):
-...     structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+... def bind_domain(request, logger, **kwargs):
+...     current_site = get_current_site(request)
+...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
 """
 
@@ -22,13 +24,15 @@ bind_extra_request_finished_metadata = django.dispatch.Signal()
 :param logger: the logger to bind more metadata or override existing bound metadata
 :param response: the response resulting of the request
 
+>>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
 >>> from django_structlog import signals
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_finished_metadata)
-... def bind_user_email(request, logger, response, **kwargs):
-...     structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+... def bind_domain(request, logger, response, **kwargs):
+...     current_site = get_current_site(request)
+...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
 """
 
@@ -38,13 +42,15 @@ bind_extra_request_failed_metadata = django.dispatch.Signal()
 :param logger: the logger to bind more metadata or override existing bound metadata
 :param exception: the exception resulting of the request
 
+>>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
 >>> from django_structlog import signals
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_failed_metadata)
-... def bind_user_email(request, logger, exception, **kwargs):
-...     structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+... def bind_domain(request, logger, exception, **kwargs):
+...     current_site = get_current_site(request)
+...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
 """
 

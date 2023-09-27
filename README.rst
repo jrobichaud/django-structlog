@@ -276,15 +276,16 @@ If you need to add more metadata from the request you can implement a convenient
 
 .. code-block:: python
 
-   from django.dispatch import receiver
+    from django.contrib.sites.shortcuts import get_current_site
+    from django.dispatch import receiver
+    from django_structlog import signals
+    import structlog
 
-   from django_structlog.signals import bind_extra_request_metadata
-   import structlog
 
-
-   @receiver(bind_extra_request_metadata)
-   def bind_user_email(request, logger, **kwargs):
-       structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+    @receiver(signals.bind_extra_request_metadata)
+    def bind_domain(request, logger, **kwargs):
+        current_site = get_current_site(request)
+        structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
 
 Standard Loggers
@@ -524,10 +525,11 @@ Changes you need to do
 
 .. code-block:: python
 
-   @receiver(bind_extra_request_metadata)
-   def bind_user_email(request, logger, **kwargs):
-      # logger.bind(user_email=getattr(request.user, 'email', ''))
-      structlog.contextvars.bind_contextvars(user_email=getattr(request.user, 'email', ''))
+    @receiver(bind_extra_request_metadata)
+    def bind_domain(request, logger, **kwargs):
+        current_site = get_current_site(request)
+        # logger.bind(domain=current_site.domain)
+        structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
 .. _upgrade_2.0:
 
