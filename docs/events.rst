@@ -132,7 +132,9 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_revoked     | terminated       | Set to True if the task was terminated |
 +------------------+------------------+----------------------------------------+
-| task_revoked     | signum           | see Celery's documentation             |
+| task_revoked     | signum           | python termination signal's number     |
++------------------+------------------+----------------------------------------+
+| task_revoked     | signame          | python termination signal's name       |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | expired          | see Celery's documentation             |
 +------------------+------------------+----------------------------------------+

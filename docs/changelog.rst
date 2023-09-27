@@ -9,6 +9,7 @@ See: :ref:`upgrade_6.0`
 *New:*
     - Python 3.12 support
     - Add support of logging :ref:`commands`
+    - ``task_revoked`` has now a ``signame`` metadata. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
 
 *Fixes:*
     - Add missing metadata when a task is revoked. See `#317 <https://github.com/jrobichaud/django-structlog/issues/317>`_. Special thanks to `@badziyoussef <https://github.com/badziyoussef>`_.
@@ -22,6 +23,7 @@ See: :ref:`upgrade_6.0`
         - :class:`django_structlog.middlewares.AsyncRequestMiddleware`
         - :class:`django_structlog.middlewares.request_middleware_router`
     - ``4XX`` status codes now log by default as ``WARNING`` and ``5XX`` as ``ERROR``. The behaviour of ``4XX`` can be customized with :ref:`configuration`. See `#308 <https://github.com/jrobichaud/django-structlog/issues/308>`_. Special thanks to `@adinhodovic <https://github.com/adinhodovic>`_.
+    - ``task_revoked``'s ``signum`` is now an integer instead of an object. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
 
 
 5.3.0 (June 30, 2023)

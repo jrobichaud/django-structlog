@@ -86,7 +86,8 @@ def receiver_task_revoked(
     logger.warning(
         "task_revoked",
         terminated=terminated,
-        signum=signum,
+        signum=signum.value if signum is not None else None,
+        signame=signum.name if signum is not None else None,
         expired=expired,
         **metadata,
     )
