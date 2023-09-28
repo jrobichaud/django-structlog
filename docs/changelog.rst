@@ -26,6 +26,7 @@ See: :ref:`upgrade_6.0`
     - ``4XX`` status codes now log by default as ``WARNING`` and ``5XX`` as ``ERROR``. The behaviour of ``4XX`` can be customized with :ref:`configuration`. See `#308 <https://github.com/jrobichaud/django-structlog/issues/308>`_. Special thanks to `@adinhodovic <https://github.com/adinhodovic>`_.
     - ``task_revoked``'s ``signum`` is now an integer instead of an object. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
     - ``task_not_found``'s ``message`` was removed and replaced by ``task_id`` and ``task``. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
+    - ``task_rejected``'s ``message`` was removed and replaced by ``task_id``. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
 
 
 5.3.0 (June 30, 2023)

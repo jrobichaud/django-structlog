@@ -102,7 +102,7 @@ def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
 
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):
-    logger.error("task_rejected", message=message)
+    logger.exception("task_rejected", task_id=message.properties.get("correlation_id"))
 
 
 def connect_celery_signals():

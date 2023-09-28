@@ -446,19 +446,21 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_task_name, record.msg["task"])
 
     def test_receiver_task_rejected(self):
-        expected_message = "foo"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        message = Mock(name="message")
+        message.properties = dict(correlation_id=task_id)
 
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.ERROR
         ) as log_results:
-            receivers.receiver_task_rejected(message=expected_message)
+            receivers.receiver_task_rejected(message=message)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
         self.assertEqual("task_rejected", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
-        self.assertIn("message", record.msg)
-        self.assertEqual(expected_message, record.msg["message"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
 
 
 class TestConnectCelerySignals(TestCase):

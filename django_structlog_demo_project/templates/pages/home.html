@@ -3,30 +3,6 @@
 
 {% block content %}
     <div>
-        <form action="{% url 'enqueue_successful_task' %}" method="post" id="form_enqueue_successful_task" target="dummyframe">
-            {% csrf_token %}
-        </form>
-        <button type="submit" form="form_enqueue_successful_task">Enqueue successful task</button>
-    </div>
-    <div>
-        <form action="{% url 'enqueue_failing_task' %}" method="post" id="form_enqueue_failing_task" target="dummyframe">
-        {% csrf_token %}
-        </form>
-        <button type="submit" form="form_enqueue_failing_task">Enqueue failing task</button>
-    </div>
-    <div>
-        <form action="{% url 'enqueue_nesting_task' %}" method="post" id="form_enqueue_nesting_task" target="dummyframe">
-            {% csrf_token %}
-        </form>
-        <button type="submit" form="form_enqueue_nesting_task">Enqueue nesting task</button>
-    </div>
-    <div>
-        <form action="{% url 'enqueue_unknown_task' %}" method="post" id="form_enqueue_unknown_task" target="dummyframe">
-            {% csrf_token %}
-        </form>
-        <button type="submit" form="form_enqueue_unknown_task">Enqueue unknown task</button>
-    </div>
-    <div>
         <form action="{% url 'raise_exception' %}" method="post" id="form_raise_exception">
             {% csrf_token %}
         </form>
@@ -41,13 +17,6 @@
     </div>
 
     <div>
-        <form action="{% url 'revoke_task' %}" method="post" id="form_revoke_task" target="dummyframe">
-            {% csrf_token %}
-        </form>
-        <button type="submit" form="form_revoke_task">Revoke task</button>
-    </div>
-
-    <div>
         <form action="{% url 'async_view' %}" method="post" id="form_async_view" target="dummyframe">
             {% csrf_token %}
         </form>
@@ -56,6 +25,47 @@
 
     <div>
         <a href="{% url 'api_view' %}">rest-framework API View</a>
+    </div>
+
+    <div>
+        <form action="{% url 'enqueue_successful_task' %}" method="post" id="form_enqueue_successful_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_successful_task">Celery: Enqueue successful task</button>
+    </div>
+    <div>
+        <form action="{% url 'enqueue_failing_task' %}" method="post" id="form_enqueue_failing_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_failing_task">Celery: Enqueue failing task</button>
+    </div>
+
+    <div>
+        <form action="{% url 'enqueue_nesting_task' %}" method="post" id="form_enqueue_nesting_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_nesting_task">Celery: Enqueue nesting task</button>
+    </div>
+
+    <div>
+        <form action="{% url 'enqueue_unknown_task' %}" method="post" id="form_enqueue_unknown_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_unknown_task">Celery: Enqueue unknown task</button>
+    </div>
+
+    <div>
+        <form action="{% url 'enqueue_rejected_task' %}" method="post" id="form_enqueue_rejected_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_rejected_task">Celery: Enqueue rejected task</button>
+    </div>
+
+    <div>
+        <form action="{% url 'revoke_task' %}" method="post" id="form_revoke_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_revoke_task">Celery: Revoke task</button>
     </div>
 
     <span><iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" style="visibility: hidden;"></iframe></span>
