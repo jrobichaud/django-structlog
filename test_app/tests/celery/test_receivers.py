@@ -1,4 +1,5 @@
 import logging
+from signal import SIGTERM
 from unittest import mock
 from unittest.mock import Mock, patch, call
 
@@ -362,7 +363,47 @@ class TestReceivers(TestCase):
             logging.getLogger("django_structlog.celery.receivers"), logging.WARNING
         ) as log_results:
             receivers.receiver_task_revoked(
-                request=request, terminated=True, signum=1, expired=False
+                request=request, terminated=False, signum=None, expired=False
+            )
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_revoked", record.msg["event"])
+        self.assertEqual("WARNING", record.levelname)
+        self.assertIn("terminated", record.msg)
+        self.assertFalse(record.msg["terminated"])
+        self.assertIn("signum", record.msg)
+        self.assertIsNone(record.msg["signum"])
+        self.assertIn("signame", record.msg)
+        self.assertIsNone(record.msg["signame"])
+        self.assertIn("expired", record.msg)
+        self.assertFalse(record.msg["expired"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
+        self.assertIn("task", record.msg)
+        self.assertEqual(expected_task_name, record.msg["task"])
+        self.assertIn("request_id", record.msg)
+        self.assertEqual(expected_request_uuid, record.msg["request_id"])
+        self.assertIn("user_id", record.msg)
+        self.assertEqual(expected_user_id, record.msg["user_id"])
+
+    def test_receiver_task_revoked_terminated(self):
+        expected_request_uuid = "00000000-0000-0000-0000-000000000000"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        expected_user_id = "1234"
+        expected_task_name = "task_name"
+        request = Mock()
+        request.__django_structlog__ = {
+            "request_id": expected_request_uuid,
+            "user_id": expected_user_id,
+        }
+        request.task = expected_task_name
+        request.id = task_id
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.WARNING
+        ) as log_results:
+            receivers.receiver_task_revoked(
+                request=request, terminated=True, signum=SIGTERM, expired=False
             )
 
         self.assertEqual(1, len(log_results.records))
@@ -372,7 +413,9 @@ class TestReceivers(TestCase):
         self.assertIn("terminated", record.msg)
         self.assertTrue(record.msg["terminated"])
         self.assertIn("signum", record.msg)
-        self.assertEqual(1, record.msg["signum"])
+        self.assertEqual(15, record.msg["signum"])
+        self.assertIn("signame", record.msg)
+        self.assertEqual("SIGTERM", record.msg["signame"])
         self.assertIn("expired", record.msg)
         self.assertFalse(record.msg["expired"])
         self.assertIn("task_id", record.msg)
@@ -385,34 +428,39 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_user_id, record.msg["user_id"])
 
     def test_receiver_task_unknown(self):
-        expected_message = "foo"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        expected_task_name = "task_name"
 
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.ERROR
         ) as log_results:
-            receivers.receiver_task_unknown(message=expected_message)
+            receivers.receiver_task_unknown(id=task_id, name=expected_task_name)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
         self.assertEqual("task_not_found", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
-        self.assertIn("message", record.msg)
-        self.assertEqual(expected_message, record.msg["message"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
+        self.assertIn("task", record.msg)
+        self.assertEqual(expected_task_name, record.msg["task"])
 
     def test_receiver_task_rejected(self):
-        expected_message = "foo"
+        task_id = "11111111-1111-1111-1111-111111111111"
+        message = Mock(name="message")
+        message.properties = dict(correlation_id=task_id)
 
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.ERROR
         ) as log_results:
-            receivers.receiver_task_rejected(message=expected_message)
+            receivers.receiver_task_rejected(message=message)
 
         self.assertEqual(1, len(log_results.records))
         record = log_results.records[0]
         self.assertEqual("task_rejected", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
-        self.assertIn("message", record.msg)
-        self.assertEqual(expected_message, record.msg["message"])
+        self.assertIn("task_id", record.msg)
+        self.assertEqual(task_id, record.msg["task_id"])
 
 
 class TestConnectCelerySignals(TestCase):

@@ -7,6 +7,7 @@ from django_structlog_demo_project.taskapp.celery import (
     successful_task,
     failing_task,
     nesting_task,
+    rejected_task,
 )
 
 logger = structlog.get_logger(__name__)
@@ -38,6 +39,21 @@ def log_with_standard_logger(request):
 def revoke_task(request):
     async_result = successful_task.apply_async(countdown=1)
     async_result.revoke()
+    return HttpResponse(status=201)
+
+
+def enqueue_unknown_task(request):
+    from django_structlog_demo_project.taskapp.celery import (
+        unknown_task,
+    )
+
+    logger.info("Enqueuing unknown task")
+    unknown_task.delay()
+    return HttpResponse(status=201)
+
+
+def enqueue_rejected_task(request):
+    rejected_task.delay()
     return HttpResponse(status=201)
 
 

@@ -85,7 +85,31 @@ def nested_task():
     logger.info("This is a nested task")
 
 
-@shared_task()
+@shared_task
 def scheduled_task():
     logger = structlog.getLogger(__name__)
     logger.info("This is a scheduled task")
+
+
+@shared_task
+def rejected_task():
+    pass
+
+
+if not settings.IS_WORKER:
+
+    @shared_task
+    def unknown_task():
+        """Simulate a task unavailable in the worker for demonstration purpose"""
+
+
+@signals.before_task_publish.connect
+def corrupt_rejected_task(sender=None, headers=None, body=None, **kwargs):
+    """Simulate celery's task rejection mechanism by breaking up the message"""
+    logger = structlog.getLogger(__name__)
+    if headers.get("task") == f"{rejected_task.__module__}.{rejected_task.__name__}":
+        logger.warn(
+            f"corrupting {rejected_task.__name__}",
+            task_id=headers.get("id"),
+        )
+        del headers["task"]

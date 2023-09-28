@@ -48,3 +48,15 @@ class TestRevokeTask:
     def test(self):
         response = views.revoke_task(None)
         assert response.status_code == 201
+
+
+class TestEnqueueUnknownTask:
+    def test(self):
+        response = views.enqueue_unknown_task(None)
+        assert response.status_code == 201
+
+
+class TestEnqueueRejectedTask:
+    def test(self):
+        response = views.enqueue_rejected_task(None)
+        assert response.status_code == 201

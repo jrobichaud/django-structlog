@@ -86,18 +86,23 @@ def receiver_task_revoked(
     logger.warning(
         "task_revoked",
         terminated=terminated,
-        signum=signum,
+        signum=signum.value if signum is not None else None,
+        signame=signum.name if signum is not None else None,
         expired=expired,
         **metadata,
     )
 
 
 def receiver_task_unknown(message=None, exc=None, name=None, id=None, **kwargs):
-    logger.error("task_not_found", message=message)
+    logger.error(
+        "task_not_found",
+        task=name,
+        task_id=id,
+    )
 
 
 def receiver_task_rejected(message=None, exc=None, **kwargs):
-    logger.error("task_rejected", message=message)
+    logger.exception("task_rejected", task_id=message.properties.get("correlation_id"))
 
 
 def connect_celery_signals():

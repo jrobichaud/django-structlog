@@ -4,4 +4,4 @@ set -o errexit
 set -o nounset
 
 
-celery -A django_structlog_demo_project.taskapp worker -l INFO
+IS_WORKER=1 celery -A django_structlog_demo_project.taskapp worker -l INFO

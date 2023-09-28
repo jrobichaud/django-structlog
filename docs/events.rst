@@ -132,13 +132,21 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_revoked     | terminated       | Set to True if the task was terminated |
 +------------------+------------------+----------------------------------------+
-| task_revoked     | signum           | see Celery's documentation             |
+| task_revoked     | signum           | python termination signal's number     |
++------------------+------------------+----------------------------------------+
+| task_revoked     | signame          | python termination signal's name       |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | expired          | see Celery's documentation             |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | task_id          | id of the task being revoked           |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | task             | name of the task being revoked         |
++------------------+------------------+----------------------------------------+
+| task_not_found   | task_id          | id of the task not found               |
++------------------+------------------+----------------------------------------+
+| task_not_found   | task             | name of the task not found             |
++------------------+------------------+----------------------------------------+
+| task_rejected    | task_id          | id of the task being rejected          |
 +------------------+------------------+----------------------------------------+
 
 \* if task threw an expected exception, ``exception`` will be omitted. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_
