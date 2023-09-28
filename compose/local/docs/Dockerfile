@@ -24,13 +24,14 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
 	&& rm -rf /wheels/
 
-RUN addgroup --system django \
-    && adduser --system --ingroup django django
-
-RUN chown django:django /app
-
-USER django
-
 COPY ./compose/local/docs/start /start
 RUN sed -i 's/\r//' /start
 RUN chmod +x /start
+
+RUN addgroup --system django \
+    && adduser --system --ingroup django django
+RUN mkdir /docs
+RUN chown django:django /app
+RUN chown django:django /docs
+
+USER django
