@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
       args:
-        PYTHON_VERSION: 3.12-rc
+        PYTHON_VERSION: 3.12
     image: django_structlog_demo_project_local_django
     depends_on:
       - postgres
