@@ -604,4 +604,4 @@ Acknowledgments
 License
 =======
 
-This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst>`_ file for details
+This project is licensed under the MIT License - see the `LICENSE <https://github.com/jrobichaud/django-structlog/blob/main/LICENSE.rst>`_ file for details
