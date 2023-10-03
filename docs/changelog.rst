@@ -27,7 +27,10 @@ See: :ref:`upgrade_6.0`
     - ``task_revoked``'s ``signum`` is now an integer instead of an object. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
     - ``task_not_found``'s ``message`` was removed and replaced by ``task_id`` and ``task``. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
     - ``task_rejected``'s ``message`` was removed and replaced by ``task_id``. See `#323 <https://github.com/jrobichaud/django-structlog/issues/323>`_.
+    - Switched from ``git``'s ``master`` to ``main`` branch
 
+*Other:*
+    - Add new :ref:`how_tos` section in the documentation.
 
 5.3.0 (June 30, 2023)
 ---------------------
