@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - master
+      - main
       - release/**
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'

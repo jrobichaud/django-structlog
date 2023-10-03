@@ -2,7 +2,7 @@ name: gh-pages
 on:
   workflow_run:
     workflows: ["ci"]
-    branches: [master]
+    branches: [main]
     types:
       - completed
 jobs:

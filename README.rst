@@ -7,7 +7,7 @@ django-structlog
 | |django| |python| |license| |black| |ruff|
 | |watchers| |stars| |forks|
 
-.. |build-status| image:: https://github.com/jrobichaud/django-structlog/actions/workflows/main.yml/badge.svg?branch=master
+.. |build-status| image:: https://github.com/jrobichaud/django-structlog/actions/workflows/main.yml/badge.svg?branch=main
    :target: https://github.com/jrobichaud/django-structlog/actions
    :alt: Build Status
 
@@ -28,7 +28,7 @@ django-structlog
     :alt: Supported Python versions
 
 .. |license| image:: https://img.shields.io/pypi/l/django-structlog.svg
-    :target: https://github.com/jrobichaud/django-structlog/blob/master/LICENSE.rst
+    :target: https://github.com/jrobichaud/django-structlog/blob/main/LICENSE.rst
     :alt: License
 
 .. |open_issues| image:: https://img.shields.io/github/issues/jrobichaud/django-structlog.svg
