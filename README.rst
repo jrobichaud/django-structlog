@@ -364,8 +364,8 @@ Upgrade Guide
 
 .. _upgrade_6.0:
 
-Upgrading to 6.0+ (upcoming)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Upgrading to 6.0+
+^^^^^^^^^^^^^^^^^
 
 Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
