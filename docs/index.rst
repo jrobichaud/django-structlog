@@ -16,6 +16,7 @@ Contents, indices and tables
   api_documentation
   events
   example_outputs
+  how_tos
   running_tests
   development
   demo
