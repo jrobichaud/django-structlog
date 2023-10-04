@@ -83,7 +83,7 @@ class BaseRequestMiddleWare:
 
     @staticmethod
     def format_request(request):
-        return "%s %s" % (request.method, request.get_full_path())
+        return f"{request.method} {request.get_full_path()}"
 
     def process_exception(self, request, exception):
         if isinstance(exception, (Http404, PermissionDenied)):
