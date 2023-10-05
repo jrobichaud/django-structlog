@@ -30,6 +30,7 @@ urlpatterns = [
     ),
     re_path(r"^async_view", views.async_view, name="async_view"),
     re_path(r"^api_view$", api_views.home_api_view, name="api_view"),
+    re_path(r"^huey_task$", views.enqueue_huey_task, name="enqueue_huey_task"),
     re_path(
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),

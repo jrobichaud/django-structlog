@@ -60,6 +60,19 @@ services:
     command: /start-celeryworker
     tty: true # needed for colors to show in console logs
 
+  hueyworker:
+    image: django_structlog_demo_project_local_django
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - .:/app:cached
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+
+    command: ./manage.py run_huey
+    tty: true # needed for colors to show in console logs
   celerybeat:
     image: django_structlog_demo_project_local_django
     depends_on:

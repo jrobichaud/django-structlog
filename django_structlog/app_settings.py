@@ -12,6 +12,10 @@ class AppSettings:
         return getattr(settings, self.PREFIX + "CELERY_ENABLED", False)
 
     @property
+    def HUEY_ENABLED(self):
+        return getattr(settings, self.PREFIX + "HUEY_ENABLED", False)
+
+    @property
     def STATUS_4XX_LOG_LEVEL(self):
         return getattr(settings, self.PREFIX + "STATUS_4XX_LOG_LEVEL", logging.WARNING)
 

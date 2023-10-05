@@ -16,3 +16,8 @@ class DjangoStructLogConfig(AppConfig):
             from .commands import init_command_signals
 
             init_command_signals()
+
+        if app_settings.HUEY_ENABLED:
+            from .huey.receivers import connect_huey_signals
+
+            connect_huey_signals()

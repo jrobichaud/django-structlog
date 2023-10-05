@@ -68,6 +68,13 @@
         <button type="submit" form="form_revoke_task">Celery: Revoke task</button>
     </div>
 
+    <div>
+        <form action="{% url 'enqueue_huey_task' %}" method="post" id="form_enqueue_huey_task" target="dummyframe">
+            {% csrf_token %}
+        </form>
+        <button type="submit" form="form_enqueue_huey_task">Huey: Enqueue task</button>
+    </div>
+
     <span><iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" style="visibility: hidden;"></iframe></span>
 
 {% endblock %}

@@ -5,3 +5,4 @@ celery==5.3.4  # pyup: < 5.0  # https://github.com/celery/celery
 kombu==5.3.2
 flower==2.0.1  # https://github.com/mher/flower
 uvicorn==0.23.2 # https://github.com/encode/uvicorn
+huey==2.5.0 # https://github.com/coleifer/huey

@@ -1,5 +1,8 @@
 import structlog
 
+from django_structlog.huey import RedisHuey
+from redis import ConnectionPool
+
 from .base import *  # noqa: F403
 from .base import env, MIDDLEWARE
 
@@ -129,6 +132,14 @@ LOGGING = {
         },
     },
     "loggers": {
+        "huey": {
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
+            "level": "INFO",
+        },
+        "huey.consumer": {
+            "handlers": ["colored_stream", "flat_line_file", "json_file"],
+            "level": "INFO",
+        },
         "django_structlog": {
             "handlers": ["colored_stream", "flat_line_file", "json_file"],
             "level": "INFO",
@@ -167,3 +178,7 @@ MIDDLEWARE += [
 
 DJANGO_STRUCTLOG_CELERY_ENABLED = True
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
+DJANGO_STRUCTLOG_HUEY_ENABLED = True
+
+pool = ConnectionPool(host="redis", port=6379, max_connections=20)
+HUEY = RedisHuey("my-app", connection_pool=pool)

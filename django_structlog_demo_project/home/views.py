@@ -10,6 +10,10 @@ from django_structlog_demo_project.taskapp.celery import (
     rejected_task,
 )
 
+from django_structlog_demo_project.taskapp.huey import (
+    huey_task,
+)
+
 logger = structlog.get_logger(__name__)
 
 
@@ -66,3 +70,9 @@ async def async_view(request):
 
 def raise_exception(request):
     raise Exception("This is a view raising an exception.")
+
+
+def enqueue_huey_task(request):
+    task = huey_task()
+    logger.info("enqueue_huey_task", task_id=task.id)
+    return HttpResponse(status=201)
