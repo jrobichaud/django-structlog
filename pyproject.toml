@@ -129,3 +129,20 @@ build-backend = "setuptools.build_meta"
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
     """
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+precision = 2
+skip_covered = true
+show_missing = true
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError"
+]
+include = [
+  "./django_structlog/*",
+  "./django_structlog_demo_project/*",
+  "./test_app/*",
+]
