@@ -22,7 +22,6 @@ build-backend = "setuptools.build_meta"
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
     "Framework :: Django :: 3.2",
-    "Framework :: Django :: 4.0",
     "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Programming Language :: Python :: 3",
@@ -100,7 +99,7 @@ build-backend = "setuptools.build_meta"
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
-        py{38,39,310,311}-django4{0,1,2}-celery5{2,3}-redis{3,4}-kombu5,
+        py{38,39,310,311}-django4{1,2}-celery5{2,3}-redis{3,4}-kombu5,
         py312-django42-celery53-redis4-kombu5,
 
     [gh-actions]
@@ -124,7 +123,6 @@ build-backend = "setuptools.build_meta"
         celery52: Celery >=5.2, <5.3
         celery53: Celery >=5.3, <5.4
         django32: Django >=3.2, <4.0
-        django40: Django >=4.0, <4.1
         django41: Django >=4.1, <4.2
         django42: Django >=4.2, <5.0
         -r{toxinidir}/requirements/ci.txt
