@@ -7,6 +7,11 @@ logger = structlog.getLogger(__name__)
 
 
 def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
+    import celery
+
+    if celery.current_app.conf.task_protocol < 2:
+        return
+
     context = structlog.contextvars.get_merged_contextvars(logger)
     if "task_id" in context:
         context["parent_task_id"] = context.pop("task_id")
@@ -15,12 +20,7 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
         sender=receiver_before_task_publish, context=context
     )
 
-    import celery
-
-    if celery.VERSION > (4,):
-        headers["__django_structlog__"] = context
-    else:
-        body["__django_structlog__"] = context
+    headers["__django_structlog__"] = context
 
 
 def receiver_after_task_publish(sender=None, headers=None, body=None, **kwargs):
