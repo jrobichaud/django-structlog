@@ -230,14 +230,14 @@ if USE_TZ:
 
 try:
     CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+    CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")
 # This breaks when running tests locally.
 except ImproperlyConfigured:
     CELERY_BROKER_URL = "redis://0.0.0.0:6379/0"
+    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 BROKER_URL = CELERY_BROKER_URL
 
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
 CELERY_ACCEPT_CONTENT = ["json"]
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer

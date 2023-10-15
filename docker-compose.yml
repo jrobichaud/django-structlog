@@ -18,6 +18,7 @@ services:
       - .:/app:cached
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.redis
       - ./.envs/.local/.postgres
     tty: true # needed for colors to show in console logs
     ports:
@@ -55,6 +56,7 @@ services:
       - .:/app:cached
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.redis
       - ./.envs/.local/.postgres
 
     command: /start-celeryworker
@@ -69,6 +71,7 @@ services:
       - .:/app:cached
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.redis
       - ./.envs/.local/.postgres
 
     command: /start-celerybeat
@@ -82,5 +85,6 @@ services:
       - .:/app:cached
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.redis
       - ./.envs/.local/.postgres
     command: /start-flower
