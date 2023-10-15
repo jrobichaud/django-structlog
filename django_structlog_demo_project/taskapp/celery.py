@@ -102,6 +102,9 @@ if not settings.IS_WORKER:
     def unknown_task():
         """Simulate a task unavailable in the worker for demonstration purpose"""
 
+else:  # pragma: no cover
+    pass
+
 
 @signals.before_task_publish.connect
 def corrupt_rejected_task(sender=None, headers=None, body=None, **kwargs):
