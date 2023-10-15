@@ -1,7 +1,6 @@
 import logging
 from signal import SIGTERM
-from unittest import mock
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch, call, MagicMock
 
 import structlog
 from celery import shared_task
@@ -51,8 +50,7 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
 
-    @mock.patch("celery.VERSION", new=(4, 0, 0))
-    def test_receiver_before_task_publish_celery_4(self):
+    def test_receiver_before_task_publish_celery_protocol_v2(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
@@ -76,33 +74,31 @@ class TestReceivers(TestCase):
             headers,
         )
 
-    @mock.patch("celery.VERSION", new=(3, 0, 0))
-    def test_receiver_before_task_publish_celery_3(self):
+    def test_receiver_before_task_publish_celery_protocol_v1(self):
+        """Protocol v1 does not allow to store metadata"""
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
 
-        body = {}
+        headers = {}
         structlog.contextvars.bind_contextvars(
             request_id=expected_uuid,
             user_id=expected_user_id,
             task_id=expected_parent_task_uuid,
         )
-        receivers.receiver_before_task_publish(body=body)
+        mock_current_app = MagicMock()
+        mock_conf = MagicMock()
+        mock_current_app.conf = mock_conf
+        mock_conf.task_protocol = 1
+        with patch("celery.current_app", mock_current_app):
+            receivers.receiver_before_task_publish(headers=headers)
 
         self.assertDictEqual(
-            {
-                "__django_structlog__": {
-                    "request_id": expected_uuid,
-                    "user_id": expected_user_id,
-                    "parent_task_id": expected_parent_task_uuid,
-                }
-            },
-            body,
+            {},
+            headers,
         )
 
-    @mock.patch("celery.VERSION", new=(4, 0, 0))
-    def test_signal_modify_context_before_task_publish_celery_4(self):
+    def test_signal_modify_context_before_task_publish_celery_protocol_v2(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
@@ -134,42 +130,6 @@ class TestReceivers(TestCase):
                 }
             },
             headers,
-            "Only `request_id` and `parent_task_id` are preserved",
-        )
-
-    @mock.patch("celery.VERSION", new=(3, 0, 0))
-    def test_signal_modify_context_before_task_publish_celery_3(self):
-        expected_uuid = "00000000-0000-0000-0000-000000000000"
-        expected_user_id = "1234"
-        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
-
-        @receiver(signals.modify_context_before_task_publish)
-        def receiver_modify_context_before_task_publish(sender, signal, context):
-            keys_to_keep = {"request_id", "parent_task_id"}
-            new_dict = {
-                key_to_keep: context[key_to_keep]
-                for key_to_keep in keys_to_keep
-                if key_to_keep in context
-            }
-            context.clear()
-            context.update(new_dict)
-
-        body = {}
-        structlog.contextvars.bind_contextvars(
-            request_id=expected_uuid,
-            user_id=expected_user_id,
-            task_id=expected_parent_task_uuid,
-        )
-        receivers.receiver_before_task_publish(body=body)
-
-        self.assertDictEqual(
-            {
-                "__django_structlog__": {
-                    "request_id": expected_uuid,
-                    "parent_task_id": expected_parent_task_uuid,
-                }
-            },
-            body,
             "Only `request_id` and `parent_task_id` are preserved",
         )
 

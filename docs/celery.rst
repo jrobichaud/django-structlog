@@ -57,6 +57,15 @@ In your celery AppConfig's module.
     app.steps['worker'].add(DjangoStructLogInitStep)
 
 
+.. warning::
+    If you use ``celery``'s `task_protocol v1 <https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-protocol>`_, ``django-structlog`` will not be able to transfer metadata to child task.
+
+    Ex:
+
+    .. code-block:: python
+
+        app = Celery("your_celery_project", task_protocol=1)
+
 Configure celery's logger
 -------------------------
 

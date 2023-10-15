@@ -96,14 +96,11 @@ def rejected_task():
     pass
 
 
-if not settings.IS_WORKER:
+if not settings.IS_WORKER:  # pragma: no branch
 
     @shared_task
     def unknown_task():
         """Simulate a task unavailable in the worker for demonstration purpose"""
-
-else:  # pragma: no cover
-    pass
 
 
 @signals.before_task_publish.connect
