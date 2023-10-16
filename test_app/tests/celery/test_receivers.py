@@ -102,9 +102,16 @@ class TestReceivers(TestCase):
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+        routing_key = "foo"
+        properties = {"correlation_id": "22222222-2222-2222-2222-222222222222"}
+
+        received_properties = None
+        received_routing_key = None
 
         @receiver(signals.modify_context_before_task_publish)
-        def receiver_modify_context_before_task_publish(sender, signal, context):
+        def receiver_modify_context_before_task_publish(
+            sender, signal, context, task_properties, task_routing_key, **kwargs
+        ):
             keys_to_keep = {"request_id", "parent_task_id"}
             new_dict = {
                 key_to_keep: context[key_to_keep]
@@ -113,6 +120,10 @@ class TestReceivers(TestCase):
             }
             context.clear()
             context.update(new_dict)
+            nonlocal received_properties
+            received_properties = task_properties
+            nonlocal received_routing_key
+            received_routing_key = task_routing_key
 
         headers = {}
         structlog.contextvars.bind_contextvars(
@@ -120,7 +131,11 @@ class TestReceivers(TestCase):
             user_id=user_id,
             task_id=expected_parent_task_uuid,
         )
-        receivers.receiver_before_task_publish(headers=headers)
+        receivers.receiver_before_task_publish(
+            headers=headers,
+            routing_key=routing_key,
+            properties=properties,
+        )
 
         self.assertDictEqual(
             {
@@ -132,6 +147,11 @@ class TestReceivers(TestCase):
             headers,
             "Only `request_id` and `parent_task_id` are preserved",
         )
+        self.assertDictEqual(
+            {"correlation_id": "22222222-2222-2222-2222-222222222222"},
+            received_properties,
+        )
+        self.assertEqual("foo", received_routing_key)
 
     def test_receiver_after_task_publish(self):
         expected_task_id = "00000000-0000-0000-0000-000000000000"

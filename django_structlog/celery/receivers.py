@@ -6,7 +6,14 @@ from . import signals
 logger = structlog.getLogger(__name__)
 
 
-def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs):
+def receiver_before_task_publish(
+    sender=None,
+    headers=None,
+    body=None,
+    properties=None,
+    routing_key=None,
+    **kwargs,
+):
     import celery
 
     if celery.current_app.conf.task_protocol < 2:
@@ -17,7 +24,10 @@ def receiver_before_task_publish(sender=None, headers=None, body=None, **kwargs)
         context["parent_task_id"] = context.pop("task_id")
 
     signals.modify_context_before_task_publish.send(
-        sender=receiver_before_task_publish, context=context
+        sender=receiver_before_task_publish,
+        context=context,
+        task_routing_key=routing_key,
+        task_properties=properties,
     )
 
     headers["__django_structlog__"] = context
