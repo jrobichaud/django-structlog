@@ -168,7 +168,7 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_name", record.msg)
         self.assertEqual(expected_task_name, record.msg["child_task_name"])
 
-    def test_receiver_after_task_publish_celery_3(self):
+    def test_receiver_after_task_publish_protocol_v1(self):
         expected_task_id = "00000000-0000-0000-0000-000000000000"
         expected_task_name = "Foo"
         body = {"id": expected_task_id, "task": expected_task_name}
