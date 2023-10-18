@@ -447,6 +447,65 @@ class TestReceivers(TestCase):
         self.assertIn("task_id", record.msg)
         self.assertEqual(task_id, record.msg["task_id"])
 
+    def test_priority(self):
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+        user_id = "1234"
+        expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
+        expected_routing_key = "foo"
+        expected_priority = 6
+        properties = {"priority": expected_priority}
+
+        headers = {}
+        structlog.contextvars.bind_contextvars(
+            request_id=expected_uuid,
+            user_id=user_id,
+            task_id=expected_parent_task_uuid,
+        )
+        receiver = receivers.CeleryReceiver()
+        receiver.receiver_before_task_publish(
+            headers=headers,
+            routing_key=expected_routing_key,
+            properties=properties,
+        )
+
+        self.assertDictEqual(
+            {
+                "__django_structlog__": {
+                    "user_id": user_id,
+                    "request_id": expected_uuid,
+                    "parent_task_id": expected_parent_task_uuid,
+                }
+            },
+            headers,
+            "Only `request_id` and `parent_task_id` are preserved",
+        )
+
+        expected_task_id = "00000000-0000-0000-0000-000000000000"
+        expected_task_name = "Foo"
+        headers = {"id": expected_task_id, "task": expected_task_name}
+
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receiver.receiver_after_task_publish(
+                headers=headers, routing_key=expected_routing_key
+            )
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("task_enqueued", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("child_task_id", record.msg)
+        self.assertEqual(expected_task_id, record.msg["child_task_id"])
+        self.assertIn("child_task_name", record.msg)
+        self.assertEqual(expected_task_name, record.msg["child_task_name"])
+
+        self.assertIn("priority", record.msg)
+        self.assertEqual(expected_priority, record.msg["priority"])
+
+        self.assertIn("routing_key", record.msg)
+        self.assertEqual(expected_routing_key, record.msg["routing_key"])
+
 
 class TestConnectCeleryTaskSignals(TestCase):
     def test_call(self):

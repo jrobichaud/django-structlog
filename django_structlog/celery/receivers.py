@@ -7,6 +7,9 @@ logger = structlog.getLogger(__name__)
 
 
 class CeleryReceiver:
+    def __init__(self):
+        self._priority = None
+
     def receiver_before_task_publish(
         self,
         sender=None,
@@ -31,16 +34,25 @@ class CeleryReceiver:
             task_routing_key=routing_key,
             task_properties=properties,
         )
+        if properties:
+            self._priority = properties.get("priority", None)
 
         headers["__django_structlog__"] = context
 
     def receiver_after_task_publish(
-        self, sender=None, headers=None, body=None, **kwargs
+        self, sender=None, headers=None, body=None, routing_key=None, **kwargs
     ):
+        properties = {}
+        if self._priority is not None:
+            properties["priority"] = self._priority
+            self._priority = None
+
         logger.info(
             "task_enqueued",
             child_task_id=headers.get("id") if headers else body.get("id"),
             child_task_name=headers.get("task") if headers else body.get("task"),
+            routing_key=routing_key,
+            **properties,
         )
 
     def receiver_task_prerun(self, task_id, task, *args, **kwargs):

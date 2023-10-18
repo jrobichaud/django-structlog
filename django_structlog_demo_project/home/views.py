@@ -15,7 +15,7 @@ logger = structlog.get_logger(__name__)
 
 def enqueue_successful_task(request):
     logger.info("Enqueuing successful task")
-    successful_task.delay(foo="bar")
+    successful_task.apply_async(foo="bar", priority=5)
     return HttpResponse(status=201)
 
 
