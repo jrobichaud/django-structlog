@@ -7,7 +7,7 @@ django>=3,<5  # pyup: < 2.1  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.57.0  # https://github.com/pennersr/django-allauth
-django-crispy-forms==2.0  # https://github.com/django-crispy-forms/django-crispy-forms
+django-crispy-forms==2.1  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
 asgiref==3.7.2 # https://github.com/django/asgiref
 
@@ -15,7 +15,7 @@ asgiref==3.7.2 # https://github.com/django/asgiref
 djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
-structlog==23.1.0
+structlog==23.2.0
 colorama==0.4.6
 django-ipware==5.0.1
 
@@ -48,4 +48,4 @@ pytest-django==4.5.2  # https://github.com/pytest-dev/pytest-django
 
 # pre-commit
 # ------------------------------------------------------------------------------
-pre-commit==3.4.0  # https://github.com/pre-commit/pre-commit
+pre-commit==3.5.0  # https://github.com/pre-commit/pre-commit
