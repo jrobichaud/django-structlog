@@ -100,7 +100,8 @@ build-backend = "setuptools.build_meta"
     envlist =
         py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
         py{38,39,310,311}-django4{1,2}-celery5{2,3}-redis{3,4}-kombu5,
-        py312-django42-celery53-redis4-kombu5,
+        py31{0,1}-django50-celery53-redis4-kombu5,
+        py312-django{42,50}-celery53-redis4-kombu5,
 
     [gh-actions]
     python =
@@ -116,6 +117,7 @@ build-backend = "setuptools.build_meta"
         CELERY_BROKER_URL=redis://0.0.0.0:6379
         CELERY_RESULT_BACKEND=redis://0.0.0.0:6379
         DJANGO_SETTINGS_MODULE=config.settings.test
+    pip_pre = True
     deps =
         redis3: redis>=3, <4
         redis4: redis>=4, <5
@@ -126,6 +128,7 @@ build-backend = "setuptools.build_meta"
         django32: Django >=3.2, <4.0
         django41: Django >=4.1, <4.2
         django42: Django >=4.2, <5.0
+        django50: Django ==5.0a1
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
