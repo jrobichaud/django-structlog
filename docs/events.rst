@@ -122,6 +122,10 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_enqueued    | child_task_name  | name of the task being enqueued        |
 +------------------+------------------+----------------------------------------+
+| task_enqueued    | routing_key      | task's routing key                     |
++------------------+------------------+----------------------------------------+
+| task_enqueued    | priority         | priority of task (if any)              |
++------------------+------------------+----------------------------------------+
 | task_retrying    | reason           | reason for retry                       |
 +------------------+------------------+----------------------------------------+
 | task_started     | task             | name of the task                       |

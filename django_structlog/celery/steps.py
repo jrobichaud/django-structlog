@@ -1,6 +1,6 @@
 from celery import bootsteps
 
-from . import receivers
+from .receivers import CeleryReceiver
 
 
 class DjangoStructLogInitStep(bootsteps.Step):
@@ -16,26 +16,5 @@ class DjangoStructLogInitStep(bootsteps.Step):
 
     def __init__(self, parent, **kwargs):
         super().__init__(parent, **kwargs)
-        import celery
-        from celery.signals import (
-            before_task_publish,
-            after_task_publish,
-            task_prerun,
-            task_retry,
-            task_success,
-            task_failure,
-            task_revoked,
-        )
-
-        before_task_publish.connect(receivers.receiver_before_task_publish)
-        after_task_publish.connect(receivers.receiver_after_task_publish)
-        task_prerun.connect(receivers.receiver_task_pre_run)
-        task_retry.connect(receivers.receiver_task_retry)
-        task_success.connect(receivers.receiver_task_success)
-        task_failure.connect(receivers.receiver_task_failure)
-        task_revoked.connect(receivers.receiver_task_revoked)
-        if celery.VERSION > (4,):
-            from celery.signals import task_unknown, task_rejected
-
-            task_unknown.connect(receivers.receiver_task_unknown)
-            task_rejected.connect(receivers.receiver_task_rejected)
+        self.receiver = CeleryReceiver()
+        self.receiver.connect_worker_signals()

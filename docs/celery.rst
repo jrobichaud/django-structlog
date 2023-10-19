@@ -157,7 +157,7 @@ By example you can strip down the ``context`` to keep only some of the keys:
 .. code-block:: python
 
     @receiver(signals.modify_context_before_task_publish)
-    def receiver_modify_context_before_task_publish(sender, signal, context, **kwargs):
+    def receiver_modify_context_before_task_publish(sender, signal, context, task_routing_key=None, task_properties=None, **kwargs):
         keys_to_keep = {"request_id", "parent_task_id"}
         new_dict = {key_to_keep: context[key_to_keep] for key_to_keep in keys_to_keep if key_to_keep in context}
         context.clear()
