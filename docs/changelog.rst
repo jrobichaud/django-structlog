@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+6.1 (TBD)
+---------
+
+*New:*
+    - (celery) add ``priority`` (if available) and ``routing_key`` to ``task_enqueued``. See `#345 <https://github.com/jrobichaud/django-structlog/pull/345>`_ and `#341 <https://github.com/jrobichaud/django-structlog/issues/341>`_. Special thanks to `badziyoussef <https://github.com/badziyoussef>`_.
+    - Python 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_.
+        - Async request cancellation does not work yet. See `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
+
+*Changes:*
+    - Drop support of django 4.0. See `#338 <https://github.com/jrobichaud/django-structlog/pull/338>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
+
 6.0 (October 3, 2023)
 ---------------------
 
