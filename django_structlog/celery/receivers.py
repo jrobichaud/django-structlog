@@ -1,4 +1,16 @@
 import structlog
+from celery import current_app
+from celery.signals import (
+    before_task_publish,
+    after_task_publish,
+    task_prerun,
+    task_retry,
+    task_success,
+    task_failure,
+    task_revoked,
+    task_unknown,
+    task_rejected,
+)
 
 from . import signals
 
@@ -19,9 +31,7 @@ class CeleryReceiver:
         routing_key=None,
         **kwargs,
     ):
-        import celery
-
-        if celery.current_app.conf.task_protocol < 2:
+        if current_app.conf.task_protocol < 2:
             return
 
         context = structlog.contextvars.get_merged_contextvars(logger)
@@ -128,27 +138,10 @@ class CeleryReceiver:
         )
 
     def connect_signals(self):
-        from celery.signals import (
-            before_task_publish,
-            after_task_publish,
-        )
-
         before_task_publish.connect(self.receiver_before_task_publish)
         after_task_publish.connect(self.receiver_after_task_publish)
 
     def connect_worker_signals(self):
-        from celery.signals import (
-            before_task_publish,
-            after_task_publish,
-            task_prerun,
-            task_retry,
-            task_success,
-            task_failure,
-            task_revoked,
-            task_unknown,
-            task_rejected,
-        )
-
         before_task_publish.connect(self.receiver_before_task_publish)
         after_task_publish.connect(self.receiver_after_task_publish)
         task_prerun.connect(self.receiver_task_prerun)

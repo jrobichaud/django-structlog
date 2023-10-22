@@ -85,7 +85,7 @@ class TestReceivers(TestCase):
         mock_current_app.conf = mock_conf
         mock_conf.task_protocol = 1
         receiver = receivers.CeleryReceiver()
-        with patch("celery.current_app", mock_current_app):
+        with patch("django_structlog.celery.receivers.current_app", mock_current_app):
             receiver.receiver_before_task_publish(headers=headers)
 
         self.assertDictEqual(

@@ -1,6 +1,8 @@
 import structlog
 import uuid
 
+from django_extensions.management.signals import pre_command, post_command
+
 logger = structlog.getLogger(__name__)
 
 
@@ -32,10 +34,5 @@ class DjangoCommandReceiver:
             structlog.contextvars.reset_contextvars(**tokens)
 
     def connect_signals(self):
-        try:
-            from django_extensions.management.signals import pre_command, post_command
-        except ModuleNotFoundError:  # pragma: no cover
-            return
-
         pre_command.connect(self.pre_receiver)
         post_command.connect(self.post_receiver)
