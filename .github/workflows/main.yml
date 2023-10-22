@@ -66,6 +66,7 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
   test-docs:
     needs:
       - test-demo-app
@@ -87,6 +88,7 @@ jobs:
       - name: make doctest
         working-directory: docs
         run: make doctest
+
   black:
     needs:
       - test-demo-app
@@ -104,6 +106,7 @@ jobs:
           pip install -r requirements/black.txt
       - name: run black
         run: black --check --verbose .
+
   ruff:
     needs:
       - test-demo-app
@@ -121,9 +124,100 @@ jobs:
           pip install -r requirements/ruff.txt
       - name: run ruff
         run: ruff check .
+
+
+  test-install-base:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.12'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -U setuptools
+          python -m pip install .
+      - name: Import django_structlog modules
+        run: |
+          python -c "import django_structlog"
+          python -c "import django_structlog.apps"
+          python -c "import django_structlog.signals"
+          python -c "import django_structlog.app_settings"
+          python -c "import django_structlog.middlewares.request"
+
+  test-install-celery:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.12'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -U setuptools
+          python -m pip install .[celery]
+      - name: Import django_structlog modules
+        run: |
+          python -c "import django_structlog"
+          python -c "import django_structlog.apps"
+          python -c "import django_structlog.signals"
+          python -c "import django_structlog.app_settings"
+          python -c "import django_structlog.middlewares.request"
+      - name: Import django_structlog celery modules
+        run: |
+          python -c "import django_structlog.celery.receivers"
+          python -c "import django_structlog.celery.steps"
+          python -c "import django_structlog.celery.signals"
+
+  test-install-commands:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.12'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -U setuptools
+          python -m pip install .[commands]
+      - name: Import django_structlog modules
+        run: |
+          python -c "import django_structlog"
+          python -c "import django_structlog.apps"
+          python -c "import django_structlog.signals"
+          python -c "import django_structlog.app_settings"
+          python -c "import django_structlog.middlewares.request"
+      - name: Import django_structlog commands modules
+        run: |
+          python -c "import django_structlog.commands"
+
   pypi-deployment:
     needs:
       - test-docs
+      - test-install-base
+      - test-install-celery
+      - test-install-commands
       - black
       - ruff
     runs-on: ubuntu-latest
