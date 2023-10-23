@@ -31,6 +31,12 @@ services:
       - "8001:8000"
     command: /start_asgi
 
+  django_wsgi:
+    <<: *django
+    ports:
+      - "8002:8000"
+    command: /start_wsgi
+
   postgres:
     build:
       context: .
