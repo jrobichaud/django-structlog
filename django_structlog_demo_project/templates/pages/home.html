@@ -35,6 +35,12 @@
 
           <button
             class="btn btn-outline-success"
+            onclick="fetchStreamingUrl('{% url 'streaming_view' %}')">
+            Streaming view
+          </button>
+
+          <button
+            class="btn btn-outline-success"
             onclick="fetchUrl('{% url 'standard_logger' %}')">
             Standard logger
           </button>
@@ -43,6 +49,12 @@
             class="btn btn-outline-success"
             onclick="fetchUrl('{% url 'async_view' %}')">
             Async View
+          </button>
+
+          <button
+            class="btn btn-outline-danger"
+            onclick="cancelAsync()">
+            Cancel Async
           </button>
         </div>
       </div>

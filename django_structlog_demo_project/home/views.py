@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 import structlog
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django_structlog_demo_project.taskapp.celery import (
     successful_task,
     failing_task,
@@ -62,6 +62,21 @@ async def async_view(request):
         await asyncio.sleep(1)
         logger.info(f"This this is an async view {num}")
     return HttpResponse(status=200)
+
+
+async def streaming_response():
+    try:
+        for chunk in range(0, 5):
+            await asyncio.sleep(0.5)
+            logger.info("streaming_chunk", chunk=chunk)
+            yield chunk
+    except asyncio.CancelledError:
+        raise
+
+
+async def streaming_view(request):
+    logger.info("This this is an streaming view")
+    return StreamingHttpResponse(streaming_response())
 
 
 def raise_exception(request):

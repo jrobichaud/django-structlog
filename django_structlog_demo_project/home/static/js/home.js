@@ -1,6 +1,7 @@
 
 const toastContainer = document.getElementById('toast-container')
 const toastTemplate = document.getElementById('toastTemplate');
+let abortController = null;
 
 function showToast(title, body, isError, duration) {
   const newToast = toastTemplate.cloneNode(true)
@@ -33,6 +34,7 @@ function showToast(title, body, isError, duration) {
 
 
 function fetchUrl(url) {
+  abortController = new AbortController();
   showToast(`request_started ${url}`);
   const start = new Date();
 
@@ -51,7 +53,11 @@ function fetchUrl(url) {
     showToast(`request_failed ${url}`, text.slice(0, 400), true, duration);
   }
 
-  fetch(url, {headers: {"Content-Type": "application/json"},})
+  fetch(url, {
+      method: 'get',
+      headers: {"Content-Type": "application/json"},
+      signal: abortController.signal,
+  })
     .then(
       async (response) => {
         if (response.ok) {
@@ -65,4 +71,31 @@ function fetchUrl(url) {
     .catch(
       onError
     )
+}
+
+
+async function fetchStreamingUrl(url) {
+  abortController = new AbortController();
+  showToast(`streaming_request_started ${url}`);
+  const start = new Date();
+  const response = await fetch(url, {
+    method: 'get',
+    signal: abortController.signal,
+  });
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+
+  while (true) {
+    const {value, done} = await reader.read();
+    if (done) break;
+    const duration = new Date() - start;
+    console.log("received", url, value)
+    showToast(`received ${url}`, value, false, duration);
+  }
+
+  showToast(`streaming_request_finished ${url}`, undefined, false, new Date() - start);
+}
+
+function cancelAsync() {
+  if (abortController)
+    abortController.abort();
 }

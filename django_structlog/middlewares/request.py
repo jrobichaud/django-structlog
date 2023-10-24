@@ -1,10 +1,11 @@
+import asyncio
 import logging
 import uuid
 
 import structlog
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, StreamingHttpResponse
 from asgiref import sync
 
 from .. import signals
@@ -20,6 +21,16 @@ def get_request_header(request, header_key, meta_key):
     return request.META.get(meta_key)
 
 
+async def streaming_response_wrapper(streaming_content, context):
+    with structlog.contextvars.bound_contextvars(**context):
+        try:
+            async for chunk in streaming_content:
+                yield chunk
+        except asyncio.CancelledError:
+            logger.warning("response_cancelled")
+            raise
+
+
 class BaseRequestMiddleWare:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -27,6 +38,7 @@ class BaseRequestMiddleWare:
     def handle_response(self, request, response):
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
+            context = structlog.contextvars.get_merged_contextvars(logger)
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
                 request=request,
@@ -45,6 +57,11 @@ class BaseRequestMiddleWare:
                 code=response.status_code,
                 request=self.format_request(request),
             )
+            if isinstance(response, StreamingHttpResponse):
+                streaming_content = response.streaming_content
+                response.streaming_content = streaming_response_wrapper(
+                    streaming_content, context
+                )
         else:
             exception = getattr(request, "_raised_exception")
             delattr(request, "_raised_exception")
