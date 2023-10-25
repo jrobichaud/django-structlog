@@ -16,7 +16,7 @@ build-backend = "setuptools.build_meta"
     "django>=3.2",
     "structlog>=21.4.0",
     "asgiref>=3.6.0",
-    "django-ipware",
+    "python-ipware",
   ]
   classifiers = [
     "Development Status :: 5 - Production/Stable",

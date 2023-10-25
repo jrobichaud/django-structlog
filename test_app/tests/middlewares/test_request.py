@@ -742,6 +742,30 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
+    def test_should_log_remote_ip(self):
+        mock_response = Mock()
+        mock_response.status_code = 200
+        x_forwarded_for = "123.123.123.1"
+
+        def get_response(_response):
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = RequestFactory(HTTP_X_FORWARDED_FOR=x_forwarded_for).get("/foo")
+
+        middleware = middlewares.RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertEqual(x_forwarded_for, record.msg["ip"])
+
 
 class TestRequestMiddlewareRouter(TestCase):
     async def test_async(self):

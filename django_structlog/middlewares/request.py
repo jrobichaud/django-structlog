@@ -19,6 +19,25 @@ def get_request_header(request, header_key, meta_key):
 
     return request.META.get(meta_key)
 
+def get_client_ip(request):
+    from ipware import IpWare
+
+    # Instantiate IpWare with default values
+    ipw = IpWare()
+
+    # Get the request headers for Django 4.0
+    if hasattr(request, "headers"):
+        meta = request.headers
+
+    # Get the request headers for Django < 4
+    else:
+        meta = request.META
+
+    # Get the client IP
+    ip, _ = ipw.get_client_ip(meta)
+
+    # Cast IP to string
+    return str(ip), _
 
 class BaseRequestMiddleWare:
     def __init__(self, get_response):
@@ -57,9 +76,8 @@ class BaseRequestMiddleWare:
             )
         structlog.contextvars.clear_contextvars()
 
-    def prepare(self, request):
-        from ipware import get_client_ip
 
+    def prepare(self, request):
         request_id = get_request_header(
             request, "x-request-id", "HTTP_X_REQUEST_ID"
         ) or str(uuid.uuid4())
