@@ -865,8 +865,20 @@ class TestSyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = sync_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+        with self.assertLogs(
+            __name__, logging.INFO
+        ) as streaming_content_log_results, self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
             self.assertEqual(result, next(wrapped_streaming_content))
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("streaming_started", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
@@ -881,7 +893,7 @@ class TestSyncStreamingContentWrapper(TestCase):
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = log_results.records[0]
         self.assertEqual("INFO", record.levelname)
-        self.assertEqual("response_finished", record.msg["event"])
+        self.assertEqual("streaming_finished", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
@@ -898,8 +910,20 @@ class TestSyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = sync_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+        with self.assertLogs(
+            __name__, logging.INFO
+        ) as streaming_content_log_results, self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
             self.assertEqual(result, next(wrapped_streaming_content))
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("streaming_started", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
@@ -914,7 +938,7 @@ class TestSyncStreamingContentWrapper(TestCase):
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = log_results.records[0]
         self.assertEqual("ERROR", record.levelname)
-        self.assertEqual("response_failed", record.msg["event"])
+        self.assertEqual("streaming_failed", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
@@ -933,8 +957,20 @@ class TestASyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = async_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+        with self.assertLogs(
+            __name__, logging.INFO
+        ) as streaming_content_log_results, self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
             self.assertEqual(result, await wrapped_streaming_content.__anext__())
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("streaming_started", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
@@ -950,7 +986,7 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = log_results.records[0]
         self.assertEqual("INFO", record.levelname)
-        self.assertEqual("response_finished", record.msg["event"])
+        self.assertEqual("streaming_finished", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
@@ -967,8 +1003,20 @@ class TestASyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = async_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+        with self.assertLogs(
+            __name__, logging.INFO
+        ) as streaming_content_log_results, self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
             self.assertEqual(result, await wrapped_streaming_content.__anext__())
+
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("streaming_started", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
@@ -984,7 +1032,7 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = log_results.records[0]
         self.assertEqual("ERROR", record.levelname)
-        self.assertEqual("response_failed", record.msg["event"])
+        self.assertEqual("streaming_failed", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
@@ -1018,6 +1066,6 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = log_results.records[0]
         self.assertEqual("WARNING", record.levelname)
-        self.assertEqual("response_cancelled", record.msg["event"])
+        self.assertEqual("streaming_cancelled", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])

@@ -23,29 +23,29 @@ def get_request_header(request, header_key, meta_key):
 
 def sync_streaming_content_wrapper(streaming_content, context):
     with structlog.contextvars.bound_contextvars(**context):
-        logger.info("response_started")
+        logger.info("streaming_started")
         try:
             for chunk in streaming_content:
                 yield chunk
         except Exception:
-            logger.exception("response_failed")
+            logger.exception("streaming_failed")
         else:
-            logger.info("response_finished")
+            logger.info("streaming_finished")
 
 
 async def async_streaming_content_wrapper(streaming_content, context):
     with structlog.contextvars.bound_contextvars(**context):
-        logger.info("response_started")
+        logger.info("streaming_started")
         try:
             async for chunk in streaming_content:
                 yield chunk
         except asyncio.CancelledError:
-            logger.warning("response_cancelled")
+            logger.warning("streaming_cancelled")
             raise
         except Exception:
-            logger.exception("response_failed")
+            logger.exception("streaming_failed")
         else:
-            logger.info("response_finished")
+            logger.info("streaming_finished")
 
 
 class RequestMiddleware:
