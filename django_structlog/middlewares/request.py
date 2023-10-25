@@ -23,6 +23,7 @@ def get_request_header(request, header_key, meta_key):
 
 def sync_streaming_content_wrapper(streaming_content, context):
     with structlog.contextvars.bound_contextvars(**context):
+        logger.info("response_started")
         try:
             for chunk in streaming_content:
                 yield chunk
@@ -34,6 +35,7 @@ def sync_streaming_content_wrapper(streaming_content, context):
 
 async def async_streaming_content_wrapper(streaming_content, context):
     with structlog.contextvars.bound_contextvars(**context):
+        logger.info("response_started")
         try:
             async for chunk in streaming_content:
                 yield chunk
