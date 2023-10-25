@@ -76,6 +76,9 @@ class TestAsyncStreamingViewView:
         assert b"3" == await anext(response.streaming_content)
         assert b"4" == await anext(response.streaming_content)
 
+        with pytest.raises(StopAsyncIteration):
+            await anext(response.streaming_content)
+
 
 class TestSyncStreamingViewView:
     def test(self, mocker):
@@ -88,3 +91,5 @@ class TestSyncStreamingViewView:
         assert b"2" == next(response.streaming_content)
         assert b"3" == next(response.streaming_content)
         assert b"4" == next(response.streaming_content)
+        with pytest.raises(StopIteration):
+            next(response.streaming_content)
