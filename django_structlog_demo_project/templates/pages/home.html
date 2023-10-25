@@ -21,103 +21,117 @@
       </div>
     </div>
   </div>
+  <div class="col-md-6 offset-md-3">
+    <div class="vstack gap-1">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Base</h5>
+          <div class="vstack gap-1">
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'raise_exception' %}')">
+              Raise exception
+            </button>
 
-  <div class="vstack gap-1">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Base</h5>
-        <div class="vstack gap-1">
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'raise_exception' %}')">
-            Raise exception
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchStreamingUrl('{% url 'sync_streaming_view' %}')">
+              Streaming view
+            </button>
 
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchStreamingUrl('{% url 'streaming_view' %}')">
-            Streaming view
-          </button>
-
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'standard_logger' %}')">
-            Standard logger
-          </button>
-
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'async_view' %}')">
-            Async View
-          </button>
-
-          <button
-            class="btn btn-outline-danger"
-            onclick="cancelAsync()">
-            Cancel Async
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'standard_logger' %}')">
+              Standard logger
+            </button>
+          </div>
         </div>
+
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Async</h5>
+          <div class="vstack gap-1">
+
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchStreamingUrl('{% url 'async_streaming_view' %}')">
+              Async streaming view
+            </button>
+
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'async_view' %}')">
+              Async View
+            </button>
+
+            <button
+              class="btn btn-outline-danger"
+              onclick="cancelAsync()">
+              Cancel
+            </button>
+          </div>
+        </div>
+
       </div>
 
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">rest-framework</h5>
-        <div class="vstack gap-1">
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'api_view' %}')">
-            API View
-          </button>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">rest-framework</h5>
+          <div class="vstack gap-1">
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'api_view' %}')">
+              API View
+            </button>
+          </div>
         </div>
+
       </div>
 
-    </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Celery</h5>
+          <div class="vstack gap-1">
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_successful_task' %}')">
+              Successful task
+            </button>
 
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Celery</h5>
-        <div class="vstack gap-1">
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'enqueue_successful_task' %}')">
-            Successful task
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_failing_task' %}')">
+              Failing task
+            </button>
 
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'enqueue_failing_task' %}')">
-            Failing task
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_nesting_task' %}')">
+              Nesting task
+            </button>
 
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'enqueue_nesting_task' %}')">
-            Nesting task
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_unknown_task' %}')">
+              Unknown task
+            </button>
 
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'enqueue_unknown_task' %}')">
-            Unknown task
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_rejected_task' %}')">
+              Rejected task
+            </button>
 
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'enqueue_rejected_task' %}')">
-            Rejected task
-          </button>
-
-          <button
-            class="btn btn-outline-success"
-            onclick="fetchUrl('{% url 'revoke_task' %}')">
-            Revoke task
-          </button>
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'revoke_task' %}')">
+              Revoke task
+            </button>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
-
 {% endblock %}

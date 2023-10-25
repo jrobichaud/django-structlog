@@ -1,8 +1,9 @@
+import asyncio
 import logging
 import traceback
 import uuid
 from unittest import mock
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, AsyncMock
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.sites.models import Site
@@ -14,12 +15,17 @@ from django.http import (
     HttpResponseNotFound,
     HttpResponseForbidden,
     HttpResponseServerError,
+    StreamingHttpResponse,
 )
 from django.test import TestCase, RequestFactory, override_settings
 import structlog
 
 from django_structlog import middlewares
-from django_structlog.middlewares.request import get_request_header
+from django_structlog.middlewares.request import (
+    get_request_header,
+    sync_streaming_content_wrapper,
+    async_streaming_content_wrapper,
+)
 from django_structlog.signals import (
     bind_extra_request_metadata,
     bind_extra_request_finished_metadata,
@@ -742,6 +748,56 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
+    def test_sync_streaming_response(self):
+        def streaming_content():
+            yield
+
+        mock_response = mock.create_autospec(StreamingHttpResponse)
+        mock_response.streaming_content = streaming_content()
+        mock_response.status_code = 200
+
+        def get_response(_response):
+            return mock_response
+
+        request = RequestFactory().get("/foo")
+
+        middleware = middlewares.RequestMiddleware(get_response)
+
+        mock_wrapper = AsyncMock()
+        with patch(
+            "django_structlog.middlewares.request.sync_streaming_content_wrapper",
+            return_value=mock_wrapper,
+        ) as mock_sync_streaming_response_wrapper:
+            response = middleware(request)
+
+        mock_sync_streaming_response_wrapper.assert_called_once()
+        self.assertEqual(response.streaming_content, mock_wrapper)
+
+    def test_async_streaming_response(self):
+        async def streaming_content():
+            yield
+
+        mock_response = mock.create_autospec(StreamingHttpResponse)
+        mock_response.streaming_content = streaming_content()
+        mock_response.status_code = 200
+
+        def get_response(_response):
+            return mock_response
+
+        request = RequestFactory().get("/foo")
+
+        middleware = middlewares.RequestMiddleware(get_response)
+
+        mock_wrapper = AsyncMock()
+        with patch(
+            "django_structlog.middlewares.request.async_streaming_content_wrapper",
+            return_value=mock_wrapper,
+        ) as mock_sync_streaming_response_wrapper:
+            response = middleware(request)
+
+        mock_sync_streaming_response_wrapper.assert_called_once()
+        self.assertEqual(response.streaming_content, mock_wrapper)
+
 
 class TestRequestMiddlewareRouter(TestCase):
     async def test_async(self):
@@ -793,3 +849,175 @@ class TestGetRequestHeader(TestCase):
         mock_request = mock.MagicMock(spec=["META"])
         get_request_header(mock_request, "x-foo-bar", "HTTP_X_FOO_BAR")
         mock_request.META.get.assert_called_once_with("HTTP_X_FOO_BAR")
+
+
+class TestSyncStreamingContentWrapper(TestCase):
+    def setUp(self):
+        self.logger = structlog.getLogger(__name__)
+
+    def test_success(self):
+        result = Mock()
+
+        def streaming_content():
+            self.logger.info("streaming_content")
+            yield result
+
+        wrapped_streaming_content = sync_streaming_content_wrapper(
+            streaming_content(), {"foo": "bar"}
+        )
+        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+            self.assertEqual(result, next(wrapped_streaming_content))
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            self.assertRaises(StopIteration, next, wrapped_streaming_content)
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = streaming_content_log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("response_finished", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+    def test_failure(self):
+        result = Mock()
+
+        exception = Exception()
+
+        def streaming_content():
+            self.logger.info("streaming_content")
+            yield result
+            raise exception
+
+        wrapped_streaming_content = sync_streaming_content_wrapper(
+            streaming_content(), {"foo": "bar"}
+        )
+        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+            self.assertEqual(result, next(wrapped_streaming_content))
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            self.assertRaises(Exception, next, wrapped_streaming_content)
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = streaming_content_log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("ERROR", record.levelname)
+        self.assertEqual("response_failed", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+
+class TestASyncStreamingContentWrapper(TestCase):
+    def setUp(self):
+        self.logger = structlog.getLogger(__name__)
+
+    async def test_success(self):
+        result = Mock()
+
+        async def streaming_content():
+            self.logger.info("streaming_content")
+            yield result
+
+        wrapped_streaming_content = async_streaming_content_wrapper(
+            streaming_content(), {"foo": "bar"}
+        )
+        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+            self.assertEqual(result, await wrapped_streaming_content.__anext__())
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            with self.assertRaises(StopAsyncIteration):
+                await wrapped_streaming_content.__anext__()
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = streaming_content_log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual("response_finished", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+    async def test_failure(self):
+        result = Mock()
+
+        exception = Exception()
+
+        async def streaming_content():
+            self.logger.info("streaming_content")
+            yield result
+            raise exception
+
+        wrapped_streaming_content = async_streaming_content_wrapper(
+            streaming_content(), {"foo": "bar"}
+        )
+        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+            self.assertEqual(result, await wrapped_streaming_content.__anext__())
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            with self.assertRaises(StopAsyncIteration):
+                await wrapped_streaming_content.__anext__()
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = streaming_content_log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("ERROR", record.levelname)
+        self.assertEqual("response_failed", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+    async def test_cancel(self):
+        result = Mock()
+
+        exception = asyncio.CancelledError()
+
+        async def streaming_content():
+            self.logger.info("streaming_content")
+            yield result
+            raise exception
+
+        wrapped_streaming_content = async_streaming_content_wrapper(
+            streaming_content(), {"foo": "bar"}
+        )
+        with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
+            self.assertEqual(result, await wrapped_streaming_content.__anext__())
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as log_results:
+            with self.assertRaises(asyncio.CancelledError):
+                await wrapped_streaming_content.__anext__()
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = streaming_content_log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])
+
+        self.assertEqual(1, len(streaming_content_log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("WARNING", record.levelname)
+        self.assertEqual("response_cancelled", record.msg["event"])
+        self.assertIn("foo", record.msg)
+        self.assertEqual("bar", record.msg["foo"])

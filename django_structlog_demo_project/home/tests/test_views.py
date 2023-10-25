@@ -39,7 +39,8 @@ class TestLogWithStandardLogger:
 
 @pytest.mark.asyncio
 class TestAsyncView:
-    async def test(self):
+    async def test(self, mocker):
+        mocker.patch("asyncio.sleep")
         response = await views.async_view(None)
         assert response.status_code == 200
 
@@ -60,3 +61,30 @@ class TestEnqueueRejectedTask:
     def test(self):
         response = views.enqueue_rejected_task(None)
         assert response.status_code == 201
+
+
+@pytest.mark.asyncio
+class TestAsyncStreamingViewView:
+    async def test(self, mocker):
+        response = await views.async_streaming_view(None)
+        assert response.status_code == 200
+
+        mocker.patch("asyncio.sleep")
+        assert b"0" == await anext(response.streaming_content)
+        assert b"1" == await anext(response.streaming_content)
+        assert b"2" == await anext(response.streaming_content)
+        assert b"3" == await anext(response.streaming_content)
+        assert b"4" == await anext(response.streaming_content)
+
+
+class TestSyncStreamingViewView:
+    def test(self, mocker):
+        response = views.sync_streaming_view(None)
+        assert response.status_code == 200
+
+        mocker.patch("time.sleep")
+        assert b"0" == next(response.streaming_content)
+        assert b"1" == next(response.streaming_content)
+        assert b"2" == next(response.streaming_content)
+        assert b"3" == next(response.streaming_content)
+        assert b"4" == next(response.streaming_content)
