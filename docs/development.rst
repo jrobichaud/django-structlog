@@ -27,9 +27,9 @@ Start Demo App
 
    $ docker compose up --build
 
-
-- WSGI server: Open ``http://127.0.0.1:8000/`` in your browser.
-- ASGI server: Open ``http://127.0.0.1:8001/`` in your browser.
+- ``runserver_plus`` server: http://127.0.0.1:8000/
+- ``WSGI`` server: http://127.0.0.1:8001/
+- ``ASGI`` server: http://127.0.0.1:8002/
 
 Use ``RabbitMQ`` broker instead of ``redis``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

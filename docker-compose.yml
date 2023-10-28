@@ -25,21 +25,21 @@ services:
       - "8000:8000"
     command: /start
 
-  django_asgi:
-    <<: *django
-    environment:
-      DJANGO_DEBUG: False
-    ports:
-      - "8001:8000"
-    command: /start_asgi
-
   django_wsgi:
     <<: *django
     environment:
       DJANGO_DEBUG: False
     ports:
-      - "8002:8000"
+      - "8001:8000"
     command: /start_wsgi
+
+  django_asgi:
+    <<: *django
+    environment:
+      DJANGO_DEBUG: False
+    ports:
+      - "8002:8000"
+    command: /start_asgi
 
   postgres:
     build:
