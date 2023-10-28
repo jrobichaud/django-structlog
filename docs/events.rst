@@ -17,6 +17,8 @@ Request Events
 | request_failed   | ERROR              | unhandled exception occurred                       |
 +------------------+--------------------+----------------------------------------------------+
 
+.. _streaming_response_events:
+
 StreamingHttpResponse Events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
