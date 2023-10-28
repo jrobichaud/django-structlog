@@ -1,10 +1,11 @@
+import asyncio
 import logging
 import uuid
 
 import structlog
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, StreamingHttpResponse
 from asgiref import sync
 
 from .. import signals
@@ -20,13 +21,69 @@ def get_request_header(request, header_key, meta_key):
     return request.META.get(meta_key)
 
 
-class BaseRequestMiddleWare:
+def sync_streaming_content_wrapper(streaming_content, context):
+    with structlog.contextvars.bound_contextvars(**context):
+        logger.info("streaming_started")
+        try:
+            for chunk in streaming_content:
+                yield chunk
+        except Exception:
+            logger.exception("streaming_failed")
+        else:
+            logger.info("streaming_finished")
+
+
+async def async_streaming_content_wrapper(streaming_content, context):
+    with structlog.contextvars.bound_contextvars(**context):
+        logger.info("streaming_started")
+        try:
+            async for chunk in streaming_content:
+                yield chunk
+        except asyncio.CancelledError:
+            logger.warning("streaming_cancelled")
+            raise
+        except Exception:
+            logger.exception("streaming_failed")
+        else:
+            logger.info("streaming_finished")
+
+
+class RequestMiddleware:
+    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
+
+    >>> MIDDLEWARE = [
+    ...     # ...
+    ...     'django_structlog.middlewares.RequestMiddleware',
+    ... ]
+
+    """
+
+    sync_capable = True
+    async_capable = True
+
     def __init__(self, get_response):
         self.get_response = get_response
+        if iscoroutinefunction(self.get_response):
+            markcoroutinefunction(self)
+
+    def __call__(self, request):
+        if iscoroutinefunction(self):
+            return self.__acall__(request)
+        self.prepare(request)
+        response = self.get_response(request)
+        self.handle_response(request, response)
+        return response
+
+    async def __acall__(self, request):
+        await sync.sync_to_async(self.prepare)(request)
+        response = await self.get_response(request)
+        await sync.sync_to_async(self.handle_response)(request, response)
+        return response
 
     def handle_response(self, request, response):
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
+            context = structlog.contextvars.get_merged_contextvars(logger)
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
                 request=request,
@@ -45,6 +102,19 @@ class BaseRequestMiddleWare:
                 code=response.status_code,
                 request=self.format_request(request),
             )
+            if isinstance(response, StreamingHttpResponse):
+                streaming_content = response.streaming_content
+                try:
+                    iter(streaming_content)
+                except TypeError:
+                    response.streaming_content = async_streaming_content_wrapper(
+                        streaming_content, context
+                    )
+                else:
+                    response.streaming_content = sync_streaming_content_wrapper(
+                        streaming_content, context
+                    )
+
         else:
             exception = getattr(request, "_raised_exception")
             delattr(request, "_raised_exception")
@@ -85,6 +155,16 @@ class BaseRequestMiddleWare:
     def format_request(request):
         return f"{request.method} {request.get_full_path()}"
 
+    @staticmethod
+    def bind_user_id(request):
+        if hasattr(request, "user") and request.user is not None:
+            user_id = None
+            if hasattr(request.user, "pk"):
+                user_id = request.user.pk
+                if isinstance(user_id, uuid.UUID):
+                    user_id = str(user_id)
+            structlog.contextvars.bind_contextvars(user_id=user_id)
+
     def process_exception(self, request, exception):
         if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
@@ -105,46 +185,3 @@ class BaseRequestMiddleWare:
             code=500,
             request=self.format_request(request),
         )
-
-    @staticmethod
-    def bind_user_id(request):
-        if hasattr(request, "user") and request.user is not None:
-            user_id = None
-            if hasattr(request.user, "pk"):
-                user_id = request.user.pk
-                if isinstance(user_id, uuid.UUID):
-                    user_id = str(user_id)
-            structlog.contextvars.bind_contextvars(user_id=user_id)
-
-
-class RequestMiddleware(BaseRequestMiddleWare):
-    """``RequestMiddleware`` adds request metadata to ``structlog``'s logger context automatically.
-
-    >>> MIDDLEWARE = [
-    ...     # ...
-    ...     'django_structlog.middlewares.RequestMiddleware',
-    ... ]
-
-    """
-
-    sync_capable = True
-    async_capable = True
-
-    def __init__(self, get_response):
-        super().__init__(get_response)
-        if iscoroutinefunction(self.get_response):
-            markcoroutinefunction(self)
-
-    def __call__(self, request):
-        if iscoroutinefunction(self):
-            return self.__acall__(request)
-        self.prepare(request)
-        response = self.get_response(request)
-        self.handle_response(request, response)
-        return response
-
-    async def __acall__(self, request):
-        await sync.sync_to_async(self.prepare)(request)
-        response = await self.get_response(request)
-        await sync.sync_to_async(self.handle_response)(request, response)
-        return response

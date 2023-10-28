@@ -17,6 +17,26 @@ Request Events
 | request_failed   | ERROR              | unhandled exception occurred                       |
 +------------------+--------------------+----------------------------------------------------+
 
+.. _streaming_response_events:
+
+StreamingHttpResponse Events
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Specific to `StreamingHttpResponse <https://docs.djangoproject.com/en/dev/ref/request-response/#streaminghttpresponse-objects>`_
+
++---------------------+--------------------+-------------------------------------+
+| Event               | Type               | Description                         |
++=====================+====================+=====================================+
+| streaming_started   | INFO               | Streaming of response started       |
++---------------------+--------------------+-------------------------------------+
+| streaming_finished  | INFO               | Streaming of response finished      |
++---------------------+--------------------+-------------------------------------+
+| streaming_cancelled | WARNING            | Streaming of response was cancelled |
++---------------------+--------------------+-------------------------------------+
+| streaming_failed    | ERROR              | Streaming of response failed        |
++---------------------+--------------------+-------------------------------------+
+
+
 Request Bound Metadata
 ^^^^^^^^^^^^^^^^^^^^^^
 

@@ -3,11 +3,12 @@ python-slugify==8.0.1  # https://github.com/un33k/python-slugify
 
 # Django
 # ------------------------------------------------------------------------------
-django==5.0a1  # https://www.djangoproject.com/
+django==5.0b1  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.3.1  # https://github.com/jazzband/django-model-utils
 django-allauth==0.57.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.1  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5==0.7 # https://github.com/django-crispy-forms/crispy-bootstrap5
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
 asgiref==3.7.2 # https://github.com/django/asgiref
 
@@ -29,6 +30,7 @@ pytest==7.4.2   # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.7  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==4.1.0
 pytest-asyncio==0.21.1 # https://github.com/pytest-dev/pytest-asyncio
+pytest-mock==3.12.0 # https://github.com/pytest-dev/pytest-mock
 
 # Code quality
 # ------------------------------------------------------------------------------

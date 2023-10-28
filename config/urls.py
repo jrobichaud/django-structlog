@@ -34,6 +34,14 @@ urlpatterns = [
         r"^about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
     re_path(r"^revoke_task", views.revoke_task, name="revoke_task"),
+    re_path(
+        r"^async_streaming_view",
+        views.async_streaming_view,
+        name="async_streaming_view",
+    ),
+    re_path(
+        r"^sync_streaming_view", views.sync_streaming_view, name="sync_streaming_view"
+    ),
     # Django Admin, use {% url 'admin:index' %}
     re_path(settings.ADMIN_URL, admin.site.urls),
     # User management
