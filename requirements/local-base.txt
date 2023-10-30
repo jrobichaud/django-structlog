@@ -20,7 +20,7 @@ structlog==23.2.0
 colorama==0.4.6
 django-ipware==5.0.2
 
-Werkzeug==3.0.0  # https://github.com/pallets/werkzeug
+Werkzeug==3.0.1  # https://github.com/pallets/werkzeug
 ipdb==0.13.13  # https://github.com/gotcha/ipdb
 psycopg2-binary==2.9.9 # https://github.com/psycopg/psycopg2
 
