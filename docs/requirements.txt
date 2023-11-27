@@ -1,6 +1,6 @@
 sphinx<5
 sphinx_rtd_theme<2
-celery==5.3.5
+celery==5.3.6
 django>=3.2,<5
 structlog
 sphinx-autobuild==2021.3.14
