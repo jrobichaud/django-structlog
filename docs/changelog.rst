@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+6.0.1 (November 29, 2023)
+-------------------------
+*Fixes:*
+    - freeze ``django-ipware<6`` for now due to breaking changes. See `#388 <https://github.com/jrobichaud/django-structlog/issues/388>`_
+
+
 6.0 (October 3, 2023)
 ---------------------
 
