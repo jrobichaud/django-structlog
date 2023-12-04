@@ -6,7 +6,7 @@ Change Log
 
 *New:*
     - (celery) add ``priority`` (if available) and ``routing_key`` to ``task_enqueued``. See `#345 <https://github.com/jrobichaud/django-structlog/pull/345>`_ and `#341 <https://github.com/jrobichaud/django-structlog/issues/341>`_. Special thanks to `badziyoussef <https://github.com/badziyoussef>`_.
-    - Python 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_. Take note async view cancellation does not work yet, see `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
+    - Django 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_. Take note async view cancellation does not work yet, see `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
     - Add streaming response support (for both sync and async) and Django 5's async cancellation. See `#353 <https://github.com/jrobichaud/django-structlog/pull/353>`_ and :ref:`streaming_response_events`.
 
 *Changes:*
