@@ -18,6 +18,13 @@ Change Log
         - Easy switch between ``runserver_plus``, ``wsgi`` an ``asgi``
         - Front-end request feedbacks using ``toasts``
 
+
+6.0.1 (November 29, 2023)
+-------------------------
+*Fixes:*
+    - freeze ``django-ipware<6`` for now due to breaking changes. See `#388 <https://github.com/jrobichaud/django-structlog/issues/388>`_
+
+
 6.0 (October 3, 2023)
 ---------------------
 
@@ -48,6 +55,7 @@ See: :ref:`upgrade_6.0`
 
 *Other:*
     - Add new :ref:`how_tos` section in the documentation.
+
 
 5.3.0 (June 30, 2023)
 ---------------------
