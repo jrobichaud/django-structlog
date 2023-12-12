@@ -56,6 +56,7 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
+    "crispy_bootstrap5",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -120,7 +121,7 @@ MIDDLEWARE = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-if env.bool("ASGI", default=False):
+if env.bool("ASGI", default=False) or env.bool("WSGI", default=False):
     # asgi will use static files from the runserver_plus
     STATIC_URL = "http://127.0.0.1:8000/static/"
 else:
@@ -186,7 +187,7 @@ TEMPLATES = [
     }
 ]
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # FIXTURES
 # ------------------------------------------------------------------------------
@@ -230,14 +231,14 @@ if USE_TZ:
 
 try:
     CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+    CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND")
 # This breaks when running tests locally.
 except ImproperlyConfigured:
     CELERY_BROKER_URL = "redis://0.0.0.0:6379/0"
+    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 BROKER_URL = CELERY_BROKER_URL
 
-# http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
 CELERY_ACCEPT_CONTENT = ["json"]
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer

@@ -1,6 +1,24 @@
 Change Log
 ==========
 
+6.1 (TBD)
+---------
+
+*New:*
+    - (celery) add ``priority`` (if available) and ``routing_key`` to ``task_enqueued``. See `#345 <https://github.com/jrobichaud/django-structlog/pull/345>`_ and `#341 <https://github.com/jrobichaud/django-structlog/issues/341>`_. Special thanks to `badziyoussef <https://github.com/badziyoussef>`_.
+    - Django 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_. Take note async view cancellation does not work yet, see `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
+    - Add streaming response support (for both sync and async) and Django 5's async cancellation. See `#353 <https://github.com/jrobichaud/django-structlog/pull/353>`_ and :ref:`streaming_response_events`.
+
+*Changes:*
+    - Drop support of django 4.0. See `#338 <https://github.com/jrobichaud/django-structlog/pull/338>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
+
+*Other:*
+    - Improved demo project
+        - Better UI
+        - Easy switch between ``runserver_plus``, ``wsgi`` an ``asgi``
+        - Front-end request feedbacks using ``toasts``
+
+
 6.0.1 (November 29, 2023)
 -------------------------
 *Fixes:*
@@ -37,6 +55,7 @@ See: :ref:`upgrade_6.0`
 
 *Other:*
     - Add new :ref:`how_tos` section in the documentation.
+
 
 5.3.0 (June 30, 2023)
 ---------------------

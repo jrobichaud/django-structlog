@@ -1,0 +1,55 @@
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  django:
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.amqp
+      - ./.envs/.local/.postgres
+
+  django_asgi:
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.amqp
+      - ./.envs/.local/.postgres
+
+  rabbitmq:
+    hostname: rabbit
+    image: rabbitmq:3.12-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=unsecure-password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  celeryworker:
+
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.amqp
+      - ./.envs/.local/.postgres
+
+  celerybeat:
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.amqp
+      - ./.envs/.local/.postgres
+
+  flower:
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.amqp
+      - ./.envs/.local/.postgres

@@ -11,14 +11,14 @@ psycopg2-binary==2.9.9  # https://github.com/psycopg/psycopg2
 
 # Testing
 # ------------------------------------------------------------------------------
-pytest==7.4.2   # https://github.com/pytest-dev/pytest
+pytest==7.4.3   # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.7  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==4.1.0
 
 # Code quality
 # ------------------------------------------------------------------------------
 coverage==7.3.2  # https://github.com/nedbat/coveragepy
-pylint-django==2.0.6  # https://github.com/PyCQA/pylint-django
+pylint-django==2.5.5  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 
 # Django
@@ -26,7 +26,7 @@ pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 factory-boy==3.3.0  # https://github.com/FactoryBoy/factory_boy
 
 django-coverage-plugin==3.1.0  # https://github.com/nedbat/django_coverage_plugin
-pytest-django==4.5.2  # https://github.com/pytest-dev/pytest-django
+pytest-django==4.7.0  # https://github.com/pytest-dev/pytest-django
 
 # Setup tools
 # ------------------------------------------------------------------------------

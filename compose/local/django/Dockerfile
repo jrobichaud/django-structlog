@@ -49,6 +49,10 @@ COPY ./compose/local/django/start_asgi /start_asgi
 RUN sed -i 's/\r//' /start_asgi
 RUN chmod +x /start_asgi
 
+COPY ./compose/local/django/start_wsgi /start_wsgi
+RUN sed -i 's/\r//' /start_wsgi
+RUN chmod +x /start_wsgi
+
 COPY ./compose/local/django/celery/worker/start /start-celeryworker
 RUN sed -i 's/\r//' /start-celeryworker
 RUN chmod +x /start-celeryworker

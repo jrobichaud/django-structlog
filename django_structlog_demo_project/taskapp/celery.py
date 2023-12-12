@@ -96,7 +96,7 @@ def rejected_task():
     pass
 
 
-if not settings.IS_WORKER:
+if not settings.IS_WORKER:  # pragma: no branch
 
     @shared_task
     def unknown_task():

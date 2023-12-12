@@ -8,11 +8,13 @@ class DjangoStructLogConfig(AppConfig):
 
     def ready(self):
         if app_settings.CELERY_ENABLED:
-            from .celery.receivers import connect_celery_signals
+            from .celery.receivers import CeleryReceiver
 
-            connect_celery_signals()
+            self._celery_receiver = CeleryReceiver()
+            self._celery_receiver.connect_signals()
 
         if app_settings.COMMAND_LOGGING_ENABLED:
-            from .commands import init_command_signals
+            from .commands import DjangoCommandReceiver
 
-            init_command_signals()
+            self._django_command_receiver = DjangoCommandReceiver()
+            self._django_command_receiver.connect_signals()

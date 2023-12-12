@@ -22,12 +22,14 @@ modify_context_before_task_publish = django.dispatch.Signal()
 """ Signal to modify context passed over to ``celery`` task's context. You must modify the ``context`` dict.
 
 :param context: the context dict that will be passed over to the task runner's logger
+:param task_routing_key: routing key of the task
+:param task_properties: task's message properties
 
 >>> from django.dispatch import receiver
 >>> from django_structlog.celery import signals
 >>>
 >>> @receiver(signals.modify_context_before_task_publish)
-... def receiver_modify_context_before_task_publish(sender, signal, context, **kwargs):
+... def receiver_modify_context_before_task_publish(sender, signal, context, task_routing_key=None, task_properties=None, **kwargs):
 ...     keys_to_keep = {"request_id", "parent_task_id"}
 ...     new_dict = {
 ...         key_to_keep: context[key_to_keep]

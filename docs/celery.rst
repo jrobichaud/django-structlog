@@ -57,6 +57,15 @@ In your celery AppConfig's module.
     app.steps['worker'].add(DjangoStructLogInitStep)
 
 
+.. warning::
+    If you use ``celery``'s `task_protocol v1 <https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-protocol>`_, ``django-structlog`` will not be able to transfer metadata to child task.
+
+    Ex:
+
+    .. code-block:: python
+
+        app = Celery("your_celery_project", task_protocol=1)
+
 Configure celery's logger
 -------------------------
 
@@ -148,7 +157,7 @@ By example you can strip down the ``context`` to keep only some of the keys:
 .. code-block:: python
 
     @receiver(signals.modify_context_before_task_publish)
-    def receiver_modify_context_before_task_publish(sender, signal, context, **kwargs):
+    def receiver_modify_context_before_task_publish(sender, signal, context, task_routing_key=None, task_properties=None, **kwargs):
         keys_to_keep = {"request_id", "parent_task_id"}
         new_dict = {key_to_keep: context[key_to_keep] for key_to_keep in keys_to_keep if key_to_keep in context}
         context.clear()

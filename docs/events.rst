@@ -17,6 +17,26 @@ Request Events
 | request_failed   | ERROR              | unhandled exception occurred                       |
 +------------------+--------------------+----------------------------------------------------+
 
+.. _streaming_response_events:
+
+StreamingHttpResponse Events
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Specific to `StreamingHttpResponse <https://docs.djangoproject.com/en/dev/ref/request-response/#streaminghttpresponse-objects>`_
+
++---------------------+--------------------+-------------------------------------+
+| Event               | Type               | Description                         |
++=====================+====================+=====================================+
+| streaming_started   | INFO               | Streaming of response started       |
++---------------------+--------------------+-------------------------------------+
+| streaming_finished  | INFO               | Streaming of response finished      |
++---------------------+--------------------+-------------------------------------+
+| streaming_cancelled | WARNING            | Streaming of response was cancelled |
++---------------------+--------------------+-------------------------------------+
+| streaming_failed    | ERROR              | Streaming of response failed        |
++---------------------+--------------------+-------------------------------------+
+
+
 Request Bound Metadata
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -121,6 +141,10 @@ These metadata appear once along with their associated event
 | task_enqueued    | child_task_id    | id of the task being enqueued          |
 +------------------+------------------+----------------------------------------+
 | task_enqueued    | child_task_name  | name of the task being enqueued        |
++------------------+------------------+----------------------------------------+
+| task_enqueued    | routing_key      | task's routing key                     |
++------------------+------------------+----------------------------------------+
+| task_enqueued    | priority         | priority of task (if any)              |
 +------------------+------------------+----------------------------------------+
 | task_retrying    | reason           | reason for retry                       |
 +------------------+------------------+----------------------------------------+
