@@ -1,15 +1,18 @@
 Change Log
 ==========
 
-6.1 (TBD)
+7.0.0
 ---------
+
+See: :ref:`upgrade_7.0`
 
 *New:*
     - (celery) add ``priority`` (if available) and ``routing_key`` to ``task_enqueued``. See `#345 <https://github.com/jrobichaud/django-structlog/pull/345>`_ and `#341 <https://github.com/jrobichaud/django-structlog/issues/341>`_. Special thanks to `badziyoussef <https://github.com/badziyoussef>`_.
-    - Django 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_. Take note async view cancellation does not work yet, see `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
+    - Django 5.0 support. See `#350 <https://github.com/jrobichaud/django-structlog/pull/350>`_. Take note async view cancellation when using ``asgi`` does not work yet, see `#351 <https://github.com/jrobichaud/django-structlog/issues/351>`_.
     - Add streaming response support (for both sync and async) and Django 5's async cancellation. See `#353 <https://github.com/jrobichaud/django-structlog/pull/353>`_ and :ref:`streaming_response_events`.
 
 *Changes:*
+    - Supports django-ipware 6+ only. See `#403 <https://github.com/jrobichaud/django-structlog/pull/403>`_. Special thanks to the maintainer `@un33k <https://github.com/un33k>`_.
     - Drop support of django 4.0. See `#338 <https://github.com/jrobichaud/django-structlog/pull/338>`_. Special thanks to `@jairhenrique <https://github.com/jairhenrique>`_.
 
 *Other:*

@@ -16,7 +16,7 @@ build-backend = "setuptools.build_meta"
     "django>=3.2",
     "structlog>=21.4.0",
     "asgiref>=3.6.0",
-    "django-ipware<6",
+    "django-ipware>=6.0.2",
   ]
   classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -129,7 +129,7 @@ build-backend = "setuptools.build_meta"
         django32: Django >=3.2, <4.0
         django41: Django >=4.1, <4.2
         django42: Django >=4.2, <5.0
-        django50: Django ==5.0rc1
+        django50: Django >=5.0, <5.1
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
