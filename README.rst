@@ -362,6 +362,17 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_7.0:
+
+Upgrading to 7.0+
+^^^^^^^^^^^^^^^^^
+
+The dependency `django-ipware <https://github.com/un33k/django-ipware>`_ was upgraded to version 6. This library is used to retrieve the request's ip address.
+
+Version 6 may have some `breaking changes <https://github.com/un33k/django-ipware/compare/v5.0.2...v6.0.2#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5R97>`_ if you did customizations.
+
+It should not affect most of the users but if you did some customizations, you might need to update your configurations.
+
 .. _upgrade_6.0:
 
 Upgrading to 6.0+
