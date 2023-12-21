@@ -41,6 +41,8 @@ build-backend = "setuptools.build_meta"
   homepage = "https://github.com/jrobichaud/django-structlog"
   repository = "https://github.com/jrobichaud/django-structlog"
   documentation = "https://django-structlog.readthedocs.io"
+  tracker = "https://github.com/jrobichaud/django-structlog/issues"
+  changelog = "https://django-structlog.readthedocs.io/en/latest/changelog.html"
 
 [project.optional-dependencies]
   celery = [
