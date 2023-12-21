@@ -798,6 +798,28 @@ class TestRequestMiddleware(TestCase):
         mock_sync_streaming_response_wrapper.assert_called_once()
         self.assertEqual(response.streaming_content, mock_wrapper)
 
+    async def test_async_cancel(self):
+        async def async_get_response(request):
+            raise asyncio.CancelledError
+
+        middleware = middlewares.RequestMiddleware(async_get_response)
+
+        mock_request = Mock()
+        with patch(
+            "django_structlog.middlewares.request.RequestMiddleware.prepare"
+        ) as mock_prepare, patch(
+            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+        ) as mock_handle_response, self.assertLogs(
+            "django_structlog.middlewares.request", logging.WARNING
+        ) as log_results:
+            with self.assertRaises(asyncio.CancelledError):
+                await middleware(mock_request)
+        mock_prepare.assert_called_once_with(mock_request)
+        mock_handle_response.assert_not_called()
+        self.assertEqual(1, len(log_results.records))
+        record = log_results.records[0]
+        self.assertEqual("request_cancelled", record.msg["event"])
+
 
 class TestRequestMiddlewareRouter(TestCase):
     async def test_async(self):

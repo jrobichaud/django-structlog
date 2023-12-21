@@ -76,7 +76,11 @@ class RequestMiddleware:
 
     async def __acall__(self, request):
         await sync.sync_to_async(self.prepare)(request)
-        response = await self.get_response(request)
+        try:
+            response = await self.get_response(request)
+        except asyncio.CancelledError:
+            logger.warning("request_cancelled")
+            raise
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
