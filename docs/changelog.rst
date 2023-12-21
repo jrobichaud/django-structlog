@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+7.1.0 (December 20, 2023)
+-------------------------
+
+*New:*
+    - add ``asgi``'s async view cancellation event ``request_cancelled``. See `#345 <https://github.com/jrobichaud/django-structlog/pull/413>`_ and  and :ref:`request_events`.
+
+
 7.0.0 (December 13, 2023)
 -------------------------
 
