@@ -56,7 +56,6 @@ It prevents access of the user in middlewares, therefore ``django-structlog`` ca
         except Exception:
             pass
 
-
 Bind AWS's ``X-Amzn-Trace-Id``
 ------------------------------
 
@@ -78,3 +77,51 @@ Origin: `#324 <https://github.com/jrobichaud/django-structlog/issues/324>`_
         )
         if trace_id:
             structlog.contextvars.bind_contextvars(trace_id=trace_id)
+
+Filter logs from being recorded
+----------------------------------------
+
+You can add a custom filter to prevent some specific logs from being recorded, based on your criteria
+
+See `Django logging documentation <https://docs.djangoproject.com/en/dev/topics/logging/#topic-logging-parts-filters>`_
+
+
+Origin: `#412 <https://github.com/jrobichaud/django-structlog/issues/412>`_
+
+.. code-block:: python
+
+    # your_project/logging/filters.py
+
+    import logging
+
+    class ExcludeSomeMessagesFilter(logging.Filter):
+        def filter(self, record):
+            # Customize this logic based on your requirements
+            if 'string_to_exclude' in record.msg:
+                return False  # Exclude the log message
+            return True  # Include the log message
+
+
+    # in your settings.py
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'filters': {
+            'exclude_some_messages': {
+                '()': 'your_project.logging.filters.ExcludeSomeMessagesFilter',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+                'filters': ['exclude_some_messages'],
+            },
+        },
+    }
