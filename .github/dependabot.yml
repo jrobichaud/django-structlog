@@ -13,6 +13,3 @@ updates:
     directory: "/docs"
     schedule:
       interval: weekly
-    ignore:
-      - dependency-name: "sphinx"
-      - dependency-name: "jinja2"
