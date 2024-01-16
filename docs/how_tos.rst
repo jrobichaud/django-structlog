@@ -94,10 +94,16 @@ Origin: `#412 <https://github.com/jrobichaud/django-structlog/issues/412>`_
 
     import logging
 
-    class ExcludeSomeMessagesFilter(logging.Filter):
+    class ExcludeEventsFilter(logging.Filter):
+        def __init__(self, excluded_event_type=None):
+            super().__init__()
+            self.excluded_event_type = excluded_event_type
+
         def filter(self, record):
-            # Customize this logic based on your requirements
-            if 'string_to_exclude' in record.msg:
+            if not isinstance(msg, dict) or self.excluded_event_type is None:
+                return True  # Include the log message if msg is not a dictionary or excluded_event_type is not provided
+
+            if record.msg.get('event') in self.excluded_event_type:
                 return False  # Exclude the log message
             return True  # Include the log message
 
@@ -110,18 +116,19 @@ Origin: `#412 <https://github.com/jrobichaud/django-structlog/issues/412>`_
         'handlers': {
             'console': {
                 'class': 'logging.StreamHandler',
+                'filters': ['exclude_request_started']
             },
         },
         'filters': {
-            'exclude_some_messages': {
-                '()': 'your_project.logging.filters.ExcludeSomeMessagesFilter',
+            'exclude_request_started': {
+                '()': 'your_project.logging.filters.ExcludeEventsFilter',
+                'excluded_event_type': ['request_started']  # Example excluding request_started event
             },
         },
         'loggers': {
             'django': {
                 'handlers': ['console'],
                 'level': 'DEBUG',
-                'filters': ['exclude_some_messages'],
             },
         },
     }
