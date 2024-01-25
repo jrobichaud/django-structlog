@@ -79,7 +79,7 @@ Origin: `#324 <https://github.com/jrobichaud/django-structlog/issues/324>`_
             structlog.contextvars.bind_contextvars(trace_id=trace_id)
 
 Filter logs from being recorded
-----------------------------------------
+-------------------------------
 
 You can add a custom filter to prevent some specific logs from being recorded, based on your criteria
 
