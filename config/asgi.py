@@ -1,6 +1,7 @@
 """
 ASGI config for django_structlog_demo_project project.
 """
+
 import os
 import sys
 
