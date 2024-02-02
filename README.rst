@@ -606,6 +606,7 @@ See also the list of `contributors <https://github.com/jrobichaud/django-structl
 Acknowledgments
 ===============
 
+* Very huge thanks to my awesome 🦄 and generous employer `TLM 🩵💜❤️🧡💚🐈‍⬛ <https://tlmgo.com/en/>`_ for letting me maintain this project on my work hours because it believes in open source.
 * Big thanks to `@ferd <https://github.com/ferd>`_ for his `bad opinions <https://ferd.ca/erlang-otp-21-s-new-logger.html>`_ that inspired the author enough to spend time on this library.
 * `This issue <https://github.com/hynek/structlog/issues/175>`_ helped the author to figure out how to integrate ``structlog`` in Django.
 * `This stack overflow question <https://stackoverflow.com/questions/43855507/configuring-and-using-structlog-with-django>`_ was also helpful.
