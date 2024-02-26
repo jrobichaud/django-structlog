@@ -50,4 +50,4 @@ pytest-django==4.8.0  # https://github.com/pytest-dev/pytest-django
 
 # pre-commit
 # ------------------------------------------------------------------------------
-pre-commit==3.6.1  # https://github.com/pre-commit/pre-commit
+pre-commit==3.6.2  # https://github.com/pre-commit/pre-commit
