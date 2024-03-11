@@ -3,7 +3,7 @@ python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 
 # Django
 # ------------------------------------------------------------------------------
-django==5.0.2  # https://www.djangoproject.com/
+django==5.0.3  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==4.4.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.61.1  # https://github.com/pennersr/django-allauth
