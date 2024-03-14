@@ -146,14 +146,14 @@ class RequestMiddleware:
             structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
         ip, _ = get_client_ip(request)
         structlog.contextvars.bind_contextvars(ip=ip)
+        log_kwargs = {
+            "request": self.format_request(request),
+            "user_agent": request.META.get("HTTP_USER_AGENT"),
+        }
         signals.bind_extra_request_metadata.send(
-            sender=self.__class__, request=request, logger=logger
+            sender=self.__class__, request=request, logger=logger, log_kwargs=log_kwargs
         )
-        logger.info(
-            "request_started",
-            request=self.format_request(request),
-            user_agent=request.META.get("HTTP_USER_AGENT"),
-        )
+        logger.info("request_started", **log_kwargs)
 
     @staticmethod
     def format_request(request):

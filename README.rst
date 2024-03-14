@@ -362,6 +362,30 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_8.0:
+
+Upgrading to 8.0+
+^^^^^^^^^^^^^^^^^
+
+The optional :class:`django_structlog.signals.bind_extra_request_metadata` signal has now a new keyword argument ``log_kwargs``.
+
+It should not affect you if you have a ``**kwargs`` in the signature of your receiver.
+
+``log_kwargs`` is a dictionary containing the log metadata that will be added to the log ``"request_started"``.
+
+If you use ``bind_extra_request_metadata`` signal, you will need to update your receiver to accept this new argument.
+
+.. code-block:: python
+
+    from django.contrib.sites.shortcuts import get_current_site
+    from django.dispatch import receiver
+    from django_structlog import signals
+    import structlog
+
+    @receiver(signals.bind_extra_request_metadata)
+    def my_receiver(request, logger, log_kwargs, **kwargs): # <- add `log_kwargs` if needed
+        ...
+
 .. _upgrade_7.0:
 
 Upgrading to 7.0+

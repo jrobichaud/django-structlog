@@ -318,9 +318,15 @@ class TestRequestMiddleware(TestCase):
     def test_signal_bind_extra_request_metadata(self):
         @receiver(bind_extra_request_metadata)
         def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, logger=None
+            sender,
+            signal,
+            request=None,
+            logger=None,
+            log_kwargs=None,
+            **kwargs,
         ):
             current_site = get_current_site(request)
+            log_kwargs["request_started_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         mock_response = Mock()
@@ -338,7 +344,11 @@ class TestRequestMiddleware(TestCase):
         request.user = mock_user
 
         middleware = middlewares.RequestMiddleware(get_response)
-        middleware(request)
+
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as django_structlog_results:
+            middleware(request)
 
         self.assertEqual(1, len(self.log_results.records))
         record = self.log_results.records[0]
@@ -348,6 +358,15 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+
+        self.assertEqual(2, len(django_structlog_results.records))
+        record = django_structlog_results.records[0]
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertEqual("foo", record.msg["request_started_log"])
+
+        record = django_structlog_results.records[1]
+        self.assertEqual("request_finished", record.msg["event"])
+        self.assertNotIn("request_started_log", record.msg)
 
     def test_signal_bind_extra_request_finished_metadata(self):
         mock_response = Mock()
