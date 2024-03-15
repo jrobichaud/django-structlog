@@ -7,7 +7,7 @@ Change Log
 See: :ref:`upgrade_8.0`
 
 *New:*
-    - add ``log_kwargs`` to :class:`django_structlog.signals.bind_extra_request_metadata`. See `#484 <https://github.com/jrobichaud/django-structlog/issues/484>`_. Special thanks to `@shtoltz <https://github.com/shtoltz>`_.
+    - add ``log_kwargs`` to :class:`django_structlog.signals.bind_extra_request_metadata`, :class:`django_structlog.signals.bind_extra_request_finished_metadata`,  and :class:`django_structlog.signals.bind_extra_request_failed_metadata`. See `#484 <https://github.com/jrobichaud/django-structlog/issues/484>`_. Special thanks to `@shtoltz <https://github.com/shtoltz>`_.
 
 
 7.1.0 (December 20, 2023)

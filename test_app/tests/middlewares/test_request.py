@@ -373,11 +373,12 @@ class TestRequestMiddleware(TestCase):
         mock_response.status_code = 200
 
         @receiver(bind_extra_request_finished_metadata)
-        def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, logger=None, response=None
+        def receiver_bind_extra_request_finished_metadata(
+            sender, signal, request=None, logger=None, response=None, log_kwargs=None
         ):
             self.assertEqual(response, mock_response)
             current_site = get_current_site(request)
+            log_kwargs["request_finished_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         def get_response(_response):
@@ -415,16 +416,25 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+        self.assertIn("request_finished_log", record.msg)
+        self.assertEqual("foo", record.msg["request_finished_log"])
 
     def test_signal_bind_extra_request_failed_metadata(self):
         expected_exception = Exception()
 
         @receiver(bind_extra_request_failed_metadata)
-        def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, response=None, logger=None, exception=None
+        def receiver_bind_extra_request_failed_metadata(
+            sender,
+            signal,
+            request=None,
+            response=None,
+            logger=None,
+            exception=None,
+            log_kwargs=None,
         ):
             self.assertEqual(exception, expected_exception)
             current_site = get_current_site(request)
+            log_kwargs["request_failed_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         request = self.factory.get("/foo")
@@ -467,6 +477,8 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+        self.assertIn("request_failed_log", record.msg)
+        self.assertEqual("foo", record.msg["request_failed_log"])
 
     def test_process_request_error(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"

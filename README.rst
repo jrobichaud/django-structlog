@@ -367,13 +367,16 @@ Upgrade Guide
 Upgrading to 8.0+
 ^^^^^^^^^^^^^^^^^
 
-The optional :class:`django_structlog.signals.bind_extra_request_metadata` signal has now a new keyword argument ``log_kwargs``.
+A new keyword argument ``log_kwargs`` was added to the the optional signals:
+    - :class:`django_structlog.signals.bind_extra_request_metadata`;
+    - :class:`django_structlog.signals.bind_extra_request_finished_metadata`;
+    - :class:`django_structlog.signals.bind_extra_request_failed_metadata`.
 
-It should not affect you if you have a ``**kwargs`` in the signature of your receiver.
+It should not affect you if you have a ``**kwargs`` in the signature of your receivers.
 
-``log_kwargs`` is a dictionary containing the log metadata that will be added to the log ``"request_started"``.
+``log_kwargs`` is a dictionary containing the log metadata that will be added to their respective logs (``"request_started"``, ``"request_finished"``, ``"request_failed"``).
 
-If you use ``bind_extra_request_metadata`` signal, you will need to update your receiver to accept this new argument.
+If you use any of these signals, you may need to update your receiver to accept this new argument:
 
 .. code-block:: python
 
@@ -383,8 +386,17 @@ If you use ``bind_extra_request_metadata`` signal, you will need to update your 
     import structlog
 
     @receiver(signals.bind_extra_request_metadata)
-    def my_receiver(request, logger, log_kwargs, **kwargs): # <- add `log_kwargs` if needed
+    def my_receiver(request, logger, log_kwargs, **kwargs): # <- add `log_kwargs` if necessary
         ...
+
+    @receiver(signals.bind_extra_request_finished_metadata)
+    def my_receiver_finished(request, logger, response, log_kwargs, **kwargs): # <- add `log_kwargs` if necessary
+        ...
+
+    @receiver(signals.bind_extra_request_failed_metadata)
+    def my_receiver_failed(request, logger, exception, log_kwargs, **kwargs): # <- add `log_kwargs` if necessary
+        ...
+
 
 .. _upgrade_7.0:
 
