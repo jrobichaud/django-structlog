@@ -88,11 +88,17 @@ class RequestMiddleware:
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
             context = structlog.contextvars.get_merged_contextvars(logger)
+
+            log_kwargs = dict(
+                code=response.status_code,
+                request=self.format_request(request),
+            )
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
                 request=request,
                 logger=logger,
                 response=response,
+                log_kwargs=log_kwargs,
             )
             if response.status_code >= 500:
                 level = logging.ERROR
@@ -103,8 +109,7 @@ class RequestMiddleware:
             logger.log(
                 level,
                 "request_finished",
-                code=response.status_code,
-                request=self.format_request(request),
+                **log_kwargs,
             )
             if isinstance(response, StreamingHttpResponse):
                 streaming_content = response.streaming_content
@@ -146,14 +151,14 @@ class RequestMiddleware:
             structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
         ip, _ = get_client_ip(request)
         structlog.contextvars.bind_contextvars(ip=ip)
+        log_kwargs = {
+            "request": self.format_request(request),
+            "user_agent": request.META.get("HTTP_USER_AGENT"),
+        }
         signals.bind_extra_request_metadata.send(
-            sender=self.__class__, request=request, logger=logger
+            sender=self.__class__, request=request, logger=logger, log_kwargs=log_kwargs
         )
-        logger.info(
-            "request_started",
-            request=self.format_request(request),
-            user_agent=request.META.get("HTTP_USER_AGENT"),
-        )
+        logger.info("request_started", **log_kwargs)
 
     @staticmethod
     def format_request(request):
@@ -178,14 +183,18 @@ class RequestMiddleware:
 
         setattr(request, "_raised_exception", exception)
         self.bind_user_id(request)
+        log_kwargs = dict(
+            code=500,
+            request=self.format_request(request),
+        )
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__,
             request=request,
             logger=logger,
             exception=exception,
+            log_kwargs=log_kwargs,
         )
         logger.exception(
             "request_failed",
-            code=500,
-            request=self.format_request(request),
+            **log_kwargs,
         )

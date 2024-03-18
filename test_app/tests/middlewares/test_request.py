@@ -318,9 +318,15 @@ class TestRequestMiddleware(TestCase):
     def test_signal_bind_extra_request_metadata(self):
         @receiver(bind_extra_request_metadata)
         def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, logger=None
+            sender,
+            signal,
+            request=None,
+            logger=None,
+            log_kwargs=None,
+            **kwargs,
         ):
             current_site = get_current_site(request)
+            log_kwargs["request_started_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         mock_response = Mock()
@@ -338,7 +344,11 @@ class TestRequestMiddleware(TestCase):
         request.user = mock_user
 
         middleware = middlewares.RequestMiddleware(get_response)
-        middleware(request)
+
+        with self.assertLogs(
+            "django_structlog.middlewares.request", logging.INFO
+        ) as django_structlog_results:
+            middleware(request)
 
         self.assertEqual(1, len(self.log_results.records))
         record = self.log_results.records[0]
@@ -349,16 +359,26 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
+        self.assertEqual(2, len(django_structlog_results.records))
+        record = django_structlog_results.records[0]
+        self.assertEqual("request_started", record.msg["event"])
+        self.assertEqual("foo", record.msg["request_started_log"])
+
+        record = django_structlog_results.records[1]
+        self.assertEqual("request_finished", record.msg["event"])
+        self.assertNotIn("request_started_log", record.msg)
+
     def test_signal_bind_extra_request_finished_metadata(self):
         mock_response = Mock()
         mock_response.status_code = 200
 
         @receiver(bind_extra_request_finished_metadata)
-        def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, logger=None, response=None
+        def receiver_bind_extra_request_finished_metadata(
+            sender, signal, request=None, logger=None, response=None, log_kwargs=None
         ):
             self.assertEqual(response, mock_response)
             current_site = get_current_site(request)
+            log_kwargs["request_finished_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         def get_response(_response):
@@ -396,16 +416,25 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+        self.assertIn("request_finished_log", record.msg)
+        self.assertEqual("foo", record.msg["request_finished_log"])
 
     def test_signal_bind_extra_request_failed_metadata(self):
         expected_exception = Exception()
 
         @receiver(bind_extra_request_failed_metadata)
-        def receiver_bind_extra_request_metadata(
-            sender, signal, request=None, response=None, logger=None, exception=None
+        def receiver_bind_extra_request_failed_metadata(
+            sender,
+            signal,
+            request=None,
+            response=None,
+            logger=None,
+            exception=None,
+            log_kwargs=None,
         ):
             self.assertEqual(exception, expected_exception)
             current_site = get_current_site(request)
+            log_kwargs["request_failed_log"] = "foo"
             structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
         request = self.factory.get("/foo")
@@ -448,6 +477,8 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("testserver", record.msg["domain"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(mock_user.id, record.msg["user_id"])
+        self.assertIn("request_failed_log", record.msg)
+        self.assertEqual("foo", record.msg["request_failed_log"])
 
     def test_process_request_error(self):
         expected_uuid = "00000000-0000-0000-0000-000000000000"

@@ -4,7 +4,9 @@ import django.dispatch
 bind_extra_request_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s request.
 
-:param logger: the logger to bind more metadata or override existing bound metadata
+:param request: the request returned by the view
+:param logger: the logger
+:param log_kwargs: dictionary of log metadata for the ``request_started`` event. It contains ``request`` and ``user_agent`` keys. You may modify it to add extra information. 
 
 >>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
@@ -12,7 +14,7 @@ bind_extra_request_metadata = django.dispatch.Signal()
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_metadata)
-... def bind_domain(request, logger, **kwargs):
+... def bind_domain(request, logger, log_kwargs, **kwargs):
 ...     current_site = get_current_site(request)
 ...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
@@ -21,8 +23,9 @@ bind_extra_request_metadata = django.dispatch.Signal()
 bind_extra_request_finished_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s finished request and response.
 
-:param logger: the logger to bind more metadata or override existing bound metadata
+:param logger: the logger
 :param response: the response resulting of the request
+:param log_kwargs: dictionary of log metadata for the ``request_finished`` event. It contains ``request`` and ``code`` keys. You may modify it to add extra information.
 
 >>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
@@ -30,7 +33,7 @@ bind_extra_request_finished_metadata = django.dispatch.Signal()
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_finished_metadata)
-... def bind_domain(request, logger, response, **kwargs):
+... def bind_domain(request, logger, response, log_kwargs, **kwargs):
 ...     current_site = get_current_site(request)
 ...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
@@ -39,8 +42,9 @@ bind_extra_request_finished_metadata = django.dispatch.Signal()
 bind_extra_request_failed_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s failed request and exception.
 
-:param logger: the logger to bind more metadata or override existing bound metadata
+:param logger: the logger
 :param exception: the exception resulting of the request
+:param log_kwargs: dictionary of log metadata for the ``request_failed`` event. It contains ``request`` and ``code`` keys. You may modify it to add extra information.
 
 >>> from django.contrib.sites.shortcuts import get_current_site
 >>> from django.dispatch import receiver
@@ -48,7 +52,7 @@ bind_extra_request_failed_metadata = django.dispatch.Signal()
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_request_failed_metadata)
-... def bind_domain(request, logger, exception, **kwargs):
+... def bind_domain(request, logger, exception, log_kwargs, **kwargs):
 ...     current_site = get_current_site(request)
 ...     structlog.contextvars.bind_contextvars(domain=current_site.domain)
 
