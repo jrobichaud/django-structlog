@@ -368,9 +368,9 @@ Upgrading to 8.0+
 ^^^^^^^^^^^^^^^^^
 
 A new keyword argument ``log_kwargs`` was added to the the optional signals:
-    - :class:`django_structlog.signals.bind_extra_request_metadata`;
-    - :class:`django_structlog.signals.bind_extra_request_finished_metadata`;
-    - :class:`django_structlog.signals.bind_extra_request_failed_metadata`.
+    - ``django_structlog.signals.bind_extra_request_metadata``;
+    - ``django_structlog.signals.bind_extra_request_finished_metadata``;
+    - ``django_structlog.signals.bind_extra_request_failed_metadata``.
 
 It should not affect you if you have a ``**kwargs`` in the signature of your receivers.
 
