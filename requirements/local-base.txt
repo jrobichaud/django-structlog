@@ -18,7 +18,7 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 
 structlog==24.1.0
 colorama==0.4.6
-django-ipware==6.0.4
+django-ipware==6.0.5
 
 Werkzeug==3.0.2  # https://github.com/pallets/werkzeug
 ipdb==0.13.13  # https://github.com/gotcha/ipdb
