@@ -6,7 +6,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
-from django_structlog_demo_project.home import views, api_views
+from django_structlog_demo_project.home import views, api_views, ninja_views
 
 
 def uncaught_exception_view(request):
@@ -50,6 +50,7 @@ urlpatterns = [
         include("django_structlog_demo_project.users.urls", namespace="users"),
     ),
     re_path(r"^accounts/", include("allauth.urls")),
+    re_path("^ninja/", ninja_views.api.urls),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

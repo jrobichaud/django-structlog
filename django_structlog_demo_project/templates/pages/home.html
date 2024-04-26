@@ -46,7 +46,6 @@
             </button>
           </div>
         </div>
-
       </div>
       <div class="card">
         <div class="card-body">
@@ -72,9 +71,7 @@
             </button>
           </div>
         </div>
-
       </div>
-
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">rest-framework</h5>
@@ -86,9 +83,19 @@
             </button>
           </div>
         </div>
-
       </div>
-
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">ninja</h5>
+          <div class="vstack gap-1">
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'ninja:ninja' %}')">
+              API View
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Celery</h5>
@@ -130,7 +137,6 @@
             </button>
           </div>
         </div>
-
       </div>
     </div>
   </div>

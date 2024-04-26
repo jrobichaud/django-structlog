@@ -1,3 +1,4 @@
+#syntax=docker/dockerfile:1.4
 ARG PYTHON_VERSION
 
 FROM python:${PYTHON_VERSION}-alpine as python
@@ -7,14 +8,16 @@ FROM python AS python-build-stage
 ARG REQUIREMENTS_FILE=local.txt
 
 
-RUN apk update \
+RUN <<EOF
+  apk update
   # psycopg2 dependencies
-  && apk add --virtual build-deps gcc python3-dev musl-dev \
-  && apk add postgresql-dev \
+  apk add --virtual build-deps gcc python3-dev musl-dev
+  apk add postgresql-dev
   # CFFI dependencies
-  && apk add libffi-dev py-cffi \
+  apk add libffi-dev py-cffi
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
-  && apk add postgresql-client
+  apk add postgresql-client
+EOF
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
@@ -26,16 +29,20 @@ FROM python as python-run-stage
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apk update \
+RUN <<EOF
+  apk update
   # Translations dependencies
-  && apk add gettext \
+  apk add gettext
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell
-  && apk add postgresql-client
+  apk add postgresql-client
+EOF
 
 COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 
-RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-	&& rm -rf /wheels/
+RUN <<EOF
+  pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/*
+  rm -rf /wheels/
+EOF
 
 COPY ./compose/local/django/entrypoint /entrypoint
 RUN sed -i 's/\r//' /entrypoint

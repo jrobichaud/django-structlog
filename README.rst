@@ -82,6 +82,13 @@ Additional Popular Integrations
 
 See `#37  <https://github.com/jrobichaud/django-structlog/issues/37>`_ for details.
 
+
+`django-ninja <https://django-ninja.dev/>`_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``django-ninja`` is supported by default 🥷.
+
+
 `Celery <http://www.celeryproject.org/>`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Celery's task logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/celery.html>`_ for details.
