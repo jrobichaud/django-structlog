@@ -12,5 +12,5 @@ urlpatterns = [
     re_path(r"^$", view=user_list_view, name="list"),
     re_path(r"~redirect/", view=user_redirect_view, name="redirect"),
     re_path(r"~update/", view=user_update_view, name="update"),
-    re_path(r"^(?P<username>\w+)/", view=user_detail_view, name="detail"),
+    re_path(r"^(?P<username>(\w|\.)+)/", view=user_detail_view, name="detail"),
 ]

@@ -11,6 +11,12 @@ def test_detail(user: settings.AUTH_USER_MODEL):
     assert resolve(route).view_name == "users:detail"
 
 
+def test_detail_username_with_dot():
+    route = f"/users/foo.bar/"
+    assert reverse("users:detail", kwargs={"username": "foo.bar"}) == route
+    assert resolve(route).view_name == "users:detail"
+
+
 def test_list():
     assert reverse("users:list") == "/users/"
     assert resolve("/users/").view_name == "users:list"
