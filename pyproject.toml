@@ -13,7 +13,7 @@ build-backend = "setuptools.build_meta"
   requires-python = ">=3.8"
   license = { text = "MIT" }
   dependencies = [
-    "django>=3.2",
+    "django>=4.2",
     "structlog>=21.4.0",
     "asgiref>=3.6.0",
     "django-ipware>=6.0.2",
@@ -21,8 +21,6 @@ build-backend = "setuptools.build_meta"
   classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
-    "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "Programming Language :: Python :: 3",
@@ -101,8 +99,7 @@ build-backend = "setuptools.build_meta"
     #
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
-        py{38,39,310}-django32-celery51-redis{3,4}-kombu5,
-        py{38,39,310,311}-django4{1,2}-celery5{2,3}-redis{3,4}-kombu5,
+        py{38,39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
         py31{0,1}-django50-celery53-redis4-kombu5,
         py312-django{42,50}-celery53-redis4-kombu5,
 
@@ -128,8 +125,6 @@ build-backend = "setuptools.build_meta"
         celery51: Celery >=5.1, <5.2
         celery52: Celery >=5.2, <5.3
         celery53: Celery >=5.3, <5.4
-        django32: Django >=3.2, <4.0
-        django41: Django >=4.1, <4.2
         django42: Django >=4.2, <5.0
         django50: Django >=5.0, <5.1
         -r{toxinidir}/requirements/ci.txt
