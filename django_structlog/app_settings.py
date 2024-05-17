@@ -19,5 +19,9 @@ class AppSettings:
     def COMMAND_LOGGING_ENABLED(self):
         return getattr(settings, self.PREFIX + "COMMAND_LOGGING_ENABLED", False)
 
+    @property
+    def USER_ID_FIELD(self):
+        return getattr(settings, self.PREFIX + "USER_ID_FIELD", "pk")
+
 
 app_settings = AppSettings()
