@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+8.1.0 (May 24, 2024)
+--------------------
+
+*New:*
+    - Add a :ref:`setting <settings>` ``DJANGO_STRUCTLOG_USER_ID_FIELD = 'pk'`` to customize what user field to use as ``user_id`` in the logs. `#546 <https://github.com/jrobichaud/django-structlog/pull/546>`_ and `#545 <https://github.com/jrobichaud/django-structlog/issues/545>`_. Special thanks to `@sshishov <https://github.com/ sshishov>`_.
+
+*Changes:*
+    - Drop support of python 3.7
+    - Drop support of django 3.2, and 4.1
+
+
 8.0.0 (March 13, 2024)
 ----------------------
 

@@ -13,6 +13,7 @@ Example:
     DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL = logging.INFO
 
 
+.. _settings:
 Settings
 --------
 
