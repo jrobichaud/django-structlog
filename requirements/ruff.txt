@@ -1,1 +1,1 @@
-ruff==0.4.4  # https://github.com/astral-sh/ruff
+ruff==0.4.5  # https://github.com/astral-sh/ruff
