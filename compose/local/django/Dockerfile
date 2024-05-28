@@ -10,9 +10,6 @@ ARG REQUIREMENTS_FILE=local.txt
 
 RUN <<EOF
   apk update
-  # psycopg2 dependencies
-  apk add --virtual build-deps gcc python3-dev musl-dev
-  apk add postgresql-dev
   # CFFI dependencies
   apk add libffi-dev py-cffi
   # https://docs.djangoproject.com/en/dev/ref/django-admin/#dbshell

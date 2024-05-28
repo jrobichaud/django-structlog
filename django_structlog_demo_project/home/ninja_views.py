@@ -14,7 +14,7 @@ class OptionalSessionAuth(SessionAuth):
         return request.user
 
 
-@router.get("/ninja", url_name="add", auth=OptionalSessionAuth())
+@router.get("/ninja", url_name="ninja", auth=OptionalSessionAuth())
 def ninja(request):
     logger.info("This is a ninja structured log")
     return {"result": "ok"}
