@@ -13,7 +13,7 @@ django-redis==5.4.0  # https://github.com/niwinz/django-redis
 asgiref==3.8.1 # https://github.com/django/asgiref
 
 # Django REST Framework
-djangorestframework==3.15.1  # https://github.com/encode/django-rest-framework
+djangorestframework==3.15.2  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
 # django-ninja
