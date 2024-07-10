@@ -100,7 +100,7 @@ Origin: `#412 <https://github.com/jrobichaud/django-structlog/issues/412>`_
             self.excluded_event_type = excluded_event_type
 
         def filter(self, record):
-            if not isinstance(msg, dict) or self.excluded_event_type is None:
+            if not isinstance(record.msg, dict) or self.excluded_event_type is None:
                 return True  # Include the log message if msg is not a dictionary or excluded_event_type is not provided
 
             if record.msg.get('event') in self.excluded_event_type:
