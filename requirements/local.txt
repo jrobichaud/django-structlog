@@ -4,6 +4,6 @@ redis==5.0.7  # https://github.com/antirez/redis
 celery==5.4.0  # pyup: < 5.0  # https://github.com/celery/celery
 kombu==5.3.7
 flower==2.0.1  # https://github.com/mher/flower
-uvicorn==0.30.1 # https://github.com/encode/uvicorn
+uvicorn==0.30.3 # https://github.com/encode/uvicorn
 gunicorn==22.0.0 # https://github.com/benoitc/gunicorn
 amqp==5.2.0 # https://github.com/celery/py-amqp
