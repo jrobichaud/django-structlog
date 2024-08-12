@@ -124,7 +124,16 @@ jobs:
           pip install -r requirements/ruff.txt
       - name: run ruff
         run: ruff check .
-
+isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+      - uses: isort/isort-action@master
+        with:
+            requirementsFiles: "requirements.txt requirements-test.txt"
 
   test-install-base:
     runs-on: ubuntu-latest

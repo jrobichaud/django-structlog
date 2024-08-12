@@ -89,6 +89,10 @@ build-backend = "setuptools.build_meta"
     'E501',
   ]
 
+[tool.isort]
+  profile = "black"
+  filter_files = true
+
 [tool.pytest.ini_options]
   DJANGO_SETTINGS_MODULE = "config.settings.test_demo_app"
 
