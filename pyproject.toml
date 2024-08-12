@@ -101,7 +101,7 @@ build-backend = "setuptools.build_meta"
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
         py{38,39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
-        py31{0,1}-django50-celery5{3,4}-redis4-kombu5,
+        py31{0,1}-django5{0,1}-celery5{3,4}-redis4-kombu5,
         py312-django{42,50,51}-celery5{3,4}-redis4-kombu5,
 
     [gh-actions]
