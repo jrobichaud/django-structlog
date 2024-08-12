@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+TBD
+---
+
+*Changes:*
+    - Django 5.1 and celery 5.4 support. See `#617 <https://github.com/jrobichaud/django-structlog/pull/617>`_.
+
+
 8.1.0 (May 24, 2024)
 --------------------
 
