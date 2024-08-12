@@ -5,5 +5,5 @@ celery==5.4.0  # pyup: < 5.0  # https://github.com/celery/celery
 kombu==5.3.7
 flower==2.0.1  # https://github.com/mher/flower
 uvicorn==0.30.5 # https://github.com/encode/uvicorn
-gunicorn==22.0.0 # https://github.com/benoitc/gunicorn
+gunicorn==23.0.0 # https://github.com/benoitc/gunicorn
 amqp==5.2.0 # https://github.com/celery/py-amqp
