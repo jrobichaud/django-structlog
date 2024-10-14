@@ -13,11 +13,12 @@ class TestCommands(TestCase):
             def handle(self, *args, **options):
                 structlog.getLogger("command").info("command_event")
 
-        with self.assertLogs(
-            "command", logging.INFO
-        ) as command_log_results, self.assertLogs(
-            "django_structlog.commands", logging.INFO
-        ) as django_structlog_commands_log_results:
+        with (
+            self.assertLogs("command", logging.INFO) as command_log_results,
+            self.assertLogs(
+                "django_structlog.commands", logging.INFO
+            ) as django_structlog_commands_log_results,
+        ):
             call_command(Command())
 
         self.assertEqual(1, len(command_log_results.records))
@@ -47,13 +48,13 @@ class TestCommands(TestCase):
             def handle(self, *args, **options):
                 structlog.getLogger("nested_command").info("nested_command_event")
 
-        with self.assertLogs(
-            "command", logging.INFO
-        ) as command_log_results, self.assertLogs(
-            "nested_command", logging.INFO
-        ), self.assertLogs(
-            "django_structlog.commands", logging.INFO
-        ) as django_structlog_commands_log_results:
+        with (
+            self.assertLogs("command", logging.INFO) as command_log_results,
+            self.assertLogs("nested_command", logging.INFO),
+            self.assertLogs(
+                "django_structlog.commands", logging.INFO
+            ) as django_structlog_commands_log_results,
+        ):
             call_command(Command())
 
         self.assertEqual(2, len(command_log_results.records))
