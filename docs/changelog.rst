@@ -1,10 +1,12 @@
 Change Log
 ==========
 
-TBD
----
+9.0.0 (TBD)
+-----------
 
 *Changes:*
+    - Add python 3.13 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.
+    - Drop python 3.8 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.
     - Django 5.1 and celery 5.4 support. See `#617 <https://github.com/jrobichaud/django-structlog/pull/617>`_.
 
 
