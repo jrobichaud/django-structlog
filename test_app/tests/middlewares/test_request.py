@@ -244,9 +244,12 @@ class TestRequestMiddleware(TestCase):
             return mock_response
 
         middleware = middlewares.RequestMiddleware(get_response)
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -290,9 +293,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -500,9 +506,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -551,9 +560,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -601,9 +613,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -652,9 +667,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -698,9 +716,12 @@ class TestRequestMiddleware(TestCase):
 
         middleware.get_response = get_response
 
-        with patch("uuid.UUID.__str__", return_value=expected_uuid), self.assertLogs(
-            logging.getLogger("django_structlog"), logging.INFO
-        ) as log_results:
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
             middleware(request)
 
         self.assertEqual(2, len(log_results.records))
@@ -836,13 +857,17 @@ class TestRequestMiddleware(TestCase):
         middleware = middlewares.RequestMiddleware(async_get_response)
 
         mock_request = Mock()
-        with patch(
-            "django_structlog.middlewares.request.RequestMiddleware.prepare"
-        ) as mock_prepare, patch(
-            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
-        ) as mock_handle_response, self.assertLogs(
-            "django_structlog.middlewares.request", logging.WARNING
-        ) as log_results:
+        with (
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+            ) as mock_prepare,
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+            ) as mock_handle_response,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.WARNING
+            ) as log_results,
+        ):
             with self.assertRaises(asyncio.CancelledError):
                 await middleware(mock_request)
         mock_prepare.assert_called_once_with(mock_request)
@@ -862,11 +887,14 @@ class TestRequestMiddlewareRouter(TestCase):
         middleware = middlewares.RequestMiddleware(async_get_response)
 
         mock_request = Mock()
-        with patch(
-            "django_structlog.middlewares.request.RequestMiddleware.prepare"
-        ) as mock_prepare, patch(
-            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
-        ) as mock_handle_response:
+        with (
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+            ) as mock_prepare,
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+            ) as mock_handle_response,
+        ):
             response = await middleware(mock_request)
         self.assertEqual(response, mock_response)
         mock_prepare.assert_called_once_with(mock_request)
@@ -881,11 +909,14 @@ class TestRequestMiddlewareRouter(TestCase):
         middleware = middlewares.RequestMiddleware(get_response)
 
         mock_request = Mock()
-        with patch(
-            "django_structlog.middlewares.request.RequestMiddleware.prepare"
-        ) as mock_prepare, patch(
-            "django_structlog.middlewares.request.RequestMiddleware.handle_response"
-        ) as mock_handle_response:
+        with (
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+            ) as mock_prepare,
+            patch(
+                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+            ) as mock_handle_response,
+        ):
             response = middleware(mock_request)
         self.assertEqual(response, mock_response)
         mock_prepare.assert_called_once_with(mock_request)
@@ -918,11 +949,12 @@ class TestSyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = sync_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(
-            __name__, logging.INFO
-        ) as streaming_content_log_results, self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            self.assertLogs(__name__, logging.INFO) as streaming_content_log_results,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             self.assertEqual(result, next(wrapped_streaming_content))
 
         self.assertEqual(1, len(log_results.records))
@@ -963,11 +995,12 @@ class TestSyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = sync_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(
-            __name__, logging.INFO
-        ) as streaming_content_log_results, self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            self.assertLogs(__name__, logging.INFO) as streaming_content_log_results,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             self.assertEqual(result, next(wrapped_streaming_content))
 
         self.assertEqual(1, len(log_results.records))
@@ -1010,11 +1043,12 @@ class TestASyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = async_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(
-            __name__, logging.INFO
-        ) as streaming_content_log_results, self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            self.assertLogs(__name__, logging.INFO) as streaming_content_log_results,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             self.assertEqual(result, await wrapped_streaming_content.__anext__())
 
         self.assertEqual(1, len(log_results.records))
@@ -1056,11 +1090,12 @@ class TestASyncStreamingContentWrapper(TestCase):
         wrapped_streaming_content = async_streaming_content_wrapper(
             streaming_content(), {"foo": "bar"}
         )
-        with self.assertLogs(
-            __name__, logging.INFO
-        ) as streaming_content_log_results, self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
+        with (
+            self.assertLogs(__name__, logging.INFO) as streaming_content_log_results,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+        ):
             self.assertEqual(result, await wrapped_streaming_content.__anext__())
 
         self.assertEqual(1, len(log_results.records))
