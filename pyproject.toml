@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
   ]
   readme = "README.rst"
   dynamic = ["version"]
-  requires-python = ">=3.8"
+  requires-python = ">=3.9"
   license = { text = "MIT" }
   dependencies = [
     "django>=4.2",
@@ -26,11 +26,11 @@ build-backend = "setuptools.build_meta"
     "Framework :: Django :: 5.1",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: System :: Logging",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -63,11 +63,11 @@ build-backend = "setuptools.build_meta"
 [tool.black]
   line-length = 88
   target-version = [
-    'py38',
     'py39',
     'py310',
     'py311',
     'py312',
+    'py313',
   ]
   include = '\.pyi?$'
   exclude = '''
@@ -85,7 +85,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
   line-length = 88
-  target-version = "py312"
+  target-version = "py313"
   lint.ignore = [
     'E501',
   ]
@@ -100,17 +100,18 @@ build-backend = "setuptools.build_meta"
     #
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
-        py{38,39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
+        py{39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
         py31{0,1}-django5{0,1}-celery5{3,4}-redis4-kombu5,
         py312-django{42,50,51}-celery5{3,4}-redis4-kombu5,
+        py313-django{51}-celery5{3,4}-redis4-kombu5,
 
     [gh-actions]
     python =
-        3.8: py38
         3.9: py39
         3.10: py310
         3.11: py311
         3.12: py312
+        3.13: py313
 
     [testenv]
     setenv =
