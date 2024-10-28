@@ -6,7 +6,7 @@ python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 django==5.1.2  # https://www.djangoproject.com/
 django-environ==0.11.2  # https://github.com/joke2k/django-environ
 django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==65.0.2  # https://github.com/pennersr/django-allauth
+django-allauth==65.1.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.3  # https://github.com/django-crispy-forms/django-crispy-forms
 crispy-bootstrap5==2024.10 # https://github.com/django-crispy-forms/crispy-bootstrap5
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
