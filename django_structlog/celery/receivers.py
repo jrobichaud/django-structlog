@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Type, Any, Optional, cast, TYPE_CHECKING
 
 import structlog

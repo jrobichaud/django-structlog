@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import logging
 import uuid
@@ -95,14 +97,14 @@ class RequestMiddleware:
         if iscoroutinefunction(self):
             return cast(RequestMiddleware, self).__acall__(request)  # type: ignore[redundant-cast,unused-ignore]
         self.prepare(request)
-        response = cast(HttpResponse, self.get_response(request))
+        response = cast("HttpResponse", self.get_response(request))
         self.handle_response(request, response)
         return response
 
     async def __acall__(self, request: HttpRequest) -> HttpResponse:
         await sync.sync_to_async(self.prepare)(request)
         try:
-            response = await cast(Awaitable[HttpResponse], self.get_response(request))
+            response = await cast(Awaitable["HttpResponse"], self.get_response(request))
         except asyncio.CancelledError:
             logger.warning("request_cancelled")
             raise

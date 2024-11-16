@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple, Mapping, Any, Type, TYPE_CHECKING
 
 import structlog
