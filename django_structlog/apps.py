@@ -6,7 +6,7 @@ from .app_settings import app_settings
 class DjangoStructLogConfig(AppConfig):
     name = "django_structlog"
 
-    def ready(self):
+    def ready(self) -> None:
         if app_settings.CELERY_ENABLED:
             from .celery.receivers import CeleryReceiver
 

@@ -125,6 +125,24 @@ jobs:
       - name: run ruff
         run: ruff check .
 
+  mypy:
+    needs:
+      - test-demo-app
+      - test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.13'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/mypy.txt
+      - name: run mypy
+        run: mypy
+
 
   test-install-base:
     runs-on: ubuntu-latest

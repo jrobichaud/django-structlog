@@ -8,19 +8,19 @@ class AppSettings:
     PREFIX = "DJANGO_STRUCTLOG_"
 
     @property
-    def CELERY_ENABLED(self):
+    def CELERY_ENABLED(self) -> bool:
         return getattr(settings, self.PREFIX + "CELERY_ENABLED", False)
 
     @property
-    def STATUS_4XX_LOG_LEVEL(self):
+    def STATUS_4XX_LOG_LEVEL(self) -> int:
         return getattr(settings, self.PREFIX + "STATUS_4XX_LOG_LEVEL", logging.WARNING)
 
     @property
-    def COMMAND_LOGGING_ENABLED(self):
+    def COMMAND_LOGGING_ENABLED(self) -> bool:
         return getattr(settings, self.PREFIX + "COMMAND_LOGGING_ENABLED", False)
 
     @property
-    def USER_ID_FIELD(self):
+    def USER_ID_FIELD(self) -> str:
         return getattr(settings, self.PREFIX + "USER_ID_FIELD", "pk")
 
 

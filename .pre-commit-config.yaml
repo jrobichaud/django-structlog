@@ -9,3 +9,17 @@ repos:
     hooks:
       - id: black
         language_version: python3
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        args: [--no-incremental]
+        exclude: |
+          (?x)(
+            ^django_structlog_demo_project/|
+            ^test_app/|
+            ^config/|
+            ^docs/|
+            ^manage.py
+          )
+

@@ -1,3 +1,5 @@
+from typing import Type, Any, Optional, cast, TYPE_CHECKING
+
 import structlog
 from celery import current_app
 from celery.signals import (
@@ -14,23 +16,27 @@ from celery.signals import (
 
 from . import signals
 
+if TYPE_CHECKING:
+    from types import TracebackType
 
 logger = structlog.getLogger(__name__)
 
 
 class CeleryReceiver:
-    def __init__(self):
+    _priority: Optional[str]
+
+    def __init__(self) -> None:
         self._priority = None
 
     def receiver_before_task_publish(
         self,
-        sender=None,
-        headers=None,
-        body=None,
-        properties=None,
-        routing_key=None,
-        **kwargs,
-    ):
+        sender: Optional[Type[Any]] = None,
+        headers: Optional[dict[str, Any]] = None,
+        body: Optional[dict[str, str]] = None,
+        properties: Optional[dict[str, Optional[str]]] = None,
+        routing_key: Optional[str] = None,
+        **kwargs: dict[str, str],
+    ) -> None:
         if current_app.conf.task_protocol < 2:
             return
 
@@ -46,12 +52,17 @@ class CeleryReceiver:
         )
         if properties:
             self._priority = properties.get("priority", None)
-
-        headers["__django_structlog__"] = context
+        if headers:
+            headers["__django_structlog__"] = context
 
     def receiver_after_task_publish(
-        self, sender=None, headers=None, body=None, routing_key=None, **kwargs
-    ):
+        self,
+        sender: Optional[Type[Any]] = None,
+        headers: Optional[dict[str, Optional[str]]] = None,
+        body: Optional[dict[str, Optional[str]]] = None,
+        routing_key: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
         properties = {}
         if self._priority is not None:
             properties["priority"] = self._priority
@@ -59,13 +70,23 @@ class CeleryReceiver:
 
         logger.info(
             "task_enqueued",
-            child_task_id=headers.get("id") if headers else body.get("id"),
-            child_task_name=headers.get("task") if headers else body.get("task"),
+            child_task_id=(
+                headers.get("id")
+                if headers
+                else cast(dict[str, Optional[str]], body).get("id")
+            ),
+            child_task_name=(
+                headers.get("task")
+                if headers
+                else cast(dict[str, Optional[str]], body).get("task")
+            ),
             routing_key=routing_key,
             **properties,
         )
 
-    def receiver_task_prerun(self, task_id, task, *args, **kwargs):
+    def receiver_task_prerun(
+        self, task_id: str, task: Any, *args: Any, **kwargs: Any
+    ) -> None:
         structlog.contextvars.clear_contextvars()
         structlog.contextvars.bind_contextvars(task_id=task_id)
         metadata = getattr(task.request, "__django_structlog__", {})
@@ -75,10 +96,18 @@ class CeleryReceiver:
         )
         logger.info("task_started", task=task.name)
 
-    def receiver_task_retry(self, request=None, reason=None, einfo=None, **kwargs):
+    def receiver_task_retry(
+        self,
+        request: Optional[Any] = None,
+        reason: Optional[str] = None,
+        einfo: Optional[Any] = None,
+        **kwargs: Any,
+    ) -> None:
         logger.warning("task_retrying", reason=reason)
 
-    def receiver_task_success(self, result=None, **kwargs):
+    def receiver_task_success(
+        self, result: Optional[str] = None, **kwargs: Any
+    ) -> None:
         signals.pre_task_succeeded.send(
             sender=self.receiver_task_success, logger=logger, result=result
         )
@@ -86,14 +115,14 @@ class CeleryReceiver:
 
     def receiver_task_failure(
         self,
-        task_id=None,
-        exception=None,
-        traceback=None,
-        einfo=None,
-        sender=None,
-        *args,
-        **kwargs,
-    ):
+        task_id: Optional[str] = None,
+        exception: Optional[Exception] = None,
+        traceback: Optional[TracebackType] = None,
+        einfo: Optional[Any] = None,
+        sender: Optional[Type[Any]] = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
             logger.info(
@@ -108,8 +137,13 @@ class CeleryReceiver:
             )
 
     def receiver_task_revoked(
-        self, request=None, terminated=None, signum=None, expired=None, **kwargs
-    ):
+        self,
+        request: Any,
+        terminated: Optional[bool] = None,
+        signum: Optional[Any] = None,
+        expired: Optional[Any] = None,
+        **kwargs: Any,
+    ) -> None:
         metadata = getattr(request, "__django_structlog__", {}).copy()
         metadata["task_id"] = request.id
         metadata["task"] = request.task
@@ -124,24 +158,31 @@ class CeleryReceiver:
         )
 
     def receiver_task_unknown(
-        self, message=None, exc=None, name=None, id=None, **kwargs
-    ):
+        self,
+        message: Optional[str] = None,
+        exc: Optional[Exception] = None,
+        name: Optional[str] = None,
+        id: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
         logger.error(
             "task_not_found",
             task=name,
             task_id=id,
         )
 
-    def receiver_task_rejected(self, message=None, exc=None, **kwargs):
+    def receiver_task_rejected(
+        self, message: Any, exc: Optional[Exception] = None, **kwargs: Any
+    ) -> None:
         logger.exception(
             "task_rejected", task_id=message.properties.get("correlation_id")
         )
 
-    def connect_signals(self):
+    def connect_signals(self) -> None:
         before_task_publish.connect(self.receiver_before_task_publish)
         after_task_publish.connect(self.receiver_after_task_publish)
 
-    def connect_worker_signals(self):
+    def connect_worker_signals(self) -> None:
         before_task_publish.connect(self.receiver_before_task_publish)
         after_task_publish.connect(self.receiver_after_task_publish)
         task_prerun.connect(self.receiver_task_prerun)
