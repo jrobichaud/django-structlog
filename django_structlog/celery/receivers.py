@@ -54,7 +54,7 @@ class CeleryReceiver:
         )
         if properties:
             self._priority = properties.get("priority", None)
-        if headers:
+        if headers is not None:
             headers["__django_structlog__"] = context
 
     def receiver_after_task_publish(
