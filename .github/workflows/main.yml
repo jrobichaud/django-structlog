@@ -34,7 +34,7 @@ jobs:
           CELERY_BROKER_URL: redis://0.0.0.0:6379
           DJANGO_SETTINGS_MODULE: config.settings.test_demo_app
         run: pytest --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   test:
@@ -63,7 +63,7 @@ jobs:
         uses: supercharge/redis-github-action@1.8.0
       - name: Test with tox
         run: tox
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
