@@ -3,6 +3,6 @@
 
 name = "django_structlog"
 
-VERSION = (9, 0, 0)
+VERSION = (9, 0, 0, "dev2")
 
 __version__ = ".".join(str(v) for v in VERSION)
