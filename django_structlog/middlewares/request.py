@@ -1,10 +1,12 @@
 import asyncio
 import logging
+import sys
 import uuid
 
 import structlog
 from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
+from django.core.signals import got_request_exception
 from django.http import Http404, StreamingHttpResponse
 from asgiref import sync
 
@@ -65,6 +67,7 @@ class RequestMiddleware:
         self.get_response = get_response
         if iscoroutinefunction(self.get_response):
             markcoroutinefunction(self)
+        got_request_exception.connect(self.process_got_request_exception)
 
     def __call__(self, request):
         if iscoroutinefunction(self):
@@ -73,6 +76,11 @@ class RequestMiddleware:
         response = self.get_response(request)
         self.handle_response(request, response)
         return response
+
+    def process_got_request_exception(self, sender, request, **kwargs):
+        if not hasattr(request, "_raised_exception"):
+            ex = sys.exc_info()
+            self.process_exception(request, ex[1])
 
     async def __acall__(self, request):
         await sync.sync_to_async(self.prepare)(request)
