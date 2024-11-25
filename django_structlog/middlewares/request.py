@@ -164,7 +164,7 @@ class RequestMiddleware:
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request: HttpRequest) -> None:
-        from ipware import get_client_ip
+        from ipware import get_client_ip  # type: ignore[import-untyped]
 
         request_id = get_request_header(
             request, "x-request-id", "HTTP_X_REQUEST_ID"

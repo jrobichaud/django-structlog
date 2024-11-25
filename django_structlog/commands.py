@@ -5,7 +5,7 @@ from typing import List, Tuple, Mapping, Any, Type, TYPE_CHECKING
 import structlog
 import uuid
 
-from django_extensions.management.signals import pre_command, post_command
+from django_extensions.management.signals import pre_command, post_command  # type: ignore[import-untyped]
 
 if TYPE_CHECKING:
     import contextvars

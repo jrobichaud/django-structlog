@@ -1,1 +1,3 @@
 mypy==1.13.0
+celery-types==0.22.0
+django-stubs[compatible-mypy]==5.1.1

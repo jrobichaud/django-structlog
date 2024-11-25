@@ -161,15 +161,3 @@ packages=[
   "django_structlog",
   "test_app",
 ]
-disallow_subclassing_any=false
-
-[[tool.mypy.overrides]]
-module = [
-  "django_extensions.*",
-  "ipware",
-  "django.*",
-  "structlog.*",
-  "celery.*",
-  "asgiref.*",
-]
-ignore_missing_imports = true
