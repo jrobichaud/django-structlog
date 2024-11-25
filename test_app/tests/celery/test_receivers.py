@@ -1,6 +1,6 @@
 import logging
 from signal import SIGTERM
-from typing import Any, Optional
+from typing import Any, Optional, Type
 from unittest.mock import Mock, patch, call, MagicMock
 
 import structlog
@@ -108,7 +108,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.modify_context_before_task_publish)  # type: ignore[misc,unused-ignore]
         def receiver_modify_context_before_task_publish(
-            sender: Any,
+            sender: Type[Any],
             signal: Any,
             context: Any,
             task_properties: Any,
@@ -237,7 +237,7 @@ class TestReceivers(TestCase):
     def test_signal_bind_extra_task_metadata(self) -> None:
         @django_receiver(signals.bind_extra_task_metadata)  # type: ignore[misc,unused-ignore]
         def receiver_bind_extra_request_metadata(
-            sender: Any, signal: Any, task: Any = None, logger: Any = None
+            sender: Type[Any], signal: Any, task: Any = None, logger: Any = None
         ) -> None:
             structlog.contextvars.bind_contextvars(
                 correlation_id=task.request.correlation_id
@@ -280,7 +280,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.pre_task_succeeded)  # type: ignore[misc,unused-ignore]
         def receiver_pre_task_succeeded(
-            sender: Any,
+            sender: Type[Any],
             signal: Any,
             task: Any = None,
             logger: Any = None,

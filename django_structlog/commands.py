@@ -14,8 +14,10 @@ logger = structlog.getLogger(__name__)
 
 
 class DjangoCommandReceiver:
+    stack: List[Tuple[str, Mapping[str, contextvars.Token[Any]]]]
+
     def __init__(self) -> None:
-        self.stack: List[Tuple[str, Mapping[str, contextvars.Token[Any]]]] = []
+        self.stack = []
 
     def pre_receiver(self, sender: Type[Any], *args: Any, **kwargs: Any) -> None:
         command_id = str(uuid.uuid4())

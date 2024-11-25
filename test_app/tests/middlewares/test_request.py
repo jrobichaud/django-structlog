@@ -2,7 +2,7 @@ import asyncio
 import logging
 import traceback
 import uuid
-from typing import Any, Generator, AsyncGenerator, Awaitable, cast
+from typing import Any, Generator, AsyncGenerator, Awaitable, cast, Type
 from unittest import mock
 from unittest.mock import patch, Mock, AsyncMock
 
@@ -331,7 +331,7 @@ class TestRequestMiddleware(TestCase):
     def test_signal_bind_extra_request_metadata(self) -> None:
         @receiver(bind_extra_request_metadata)  # type: ignore[misc,unused-ignore]
         def receiver_bind_extra_request_metadata(
-            sender: Any,
+            sender: Type[Any],
             signal: Any,
             request: Any = None,
             logger: Any = None,
@@ -387,7 +387,7 @@ class TestRequestMiddleware(TestCase):
 
         @receiver(bind_extra_request_finished_metadata)  # type: ignore[misc,unused-ignore]
         def receiver_bind_extra_request_finished_metadata(
-            sender: Any,
+            sender: Type[Any],
             signal: Any,
             request: Any = None,
             logger: Any = None,
@@ -443,7 +443,7 @@ class TestRequestMiddleware(TestCase):
 
         @receiver(bind_extra_request_failed_metadata)  # type: ignore[misc,unused-ignore]
         def receiver_bind_extra_request_failed_metadata(
-            sender: Any,
+            sender: Type[Any],
             signal: Any,
             request: Any = None,
             response: Any = None,
