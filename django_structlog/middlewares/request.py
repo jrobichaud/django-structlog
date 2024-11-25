@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import asyncio
 import logging
 import uuid
@@ -30,7 +28,7 @@ if TYPE_CHECKING:
 logger = structlog.getLogger(__name__)
 
 
-def get_request_header(request: HttpRequest, header_key: str, meta_key: str) -> Any:
+def get_request_header(request: "HttpRequest", header_key: str, meta_key: str) -> Any:
     if hasattr(request, "headers"):
         return request.headers.get(header_key)
 
@@ -84,7 +82,7 @@ class RequestMiddleware:
     def __init__(
         self,
         get_response: Callable[
-            [HttpRequest], Union[HttpResponse, Awaitable[HttpResponse]]
+            ["HttpRequest"], Union["HttpResponse", Awaitable["HttpResponse"]]
         ],
     ) -> None:
         self.get_response = get_response
@@ -92,8 +90,8 @@ class RequestMiddleware:
             markcoroutinefunction(self)
 
     def __call__(
-        self, request: HttpRequest
-    ) -> Union[HttpResponse, Awaitable[HttpResponse]]:
+        self, request: "HttpRequest"
+    ) -> Union["HttpResponse", Awaitable["HttpResponse"]]:
         if iscoroutinefunction(self):
             return cast(RequestMiddleware, self).__acall__(request)  # type: ignore[redundant-cast,unused-ignore]
         self.prepare(request)
@@ -101,7 +99,7 @@ class RequestMiddleware:
         self.handle_response(request, response)
         return response
 
-    async def __acall__(self, request: HttpRequest) -> HttpResponse:
+    async def __acall__(self, request: "HttpRequest") -> "HttpResponse":
         await sync.sync_to_async(self.prepare)(request)
         try:
             response = await cast(Awaitable["HttpResponse"], self.get_response(request))
@@ -111,7 +109,7 @@ class RequestMiddleware:
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
-    def handle_response(self, request: HttpRequest, response: HttpResponse) -> None:
+    def handle_response(self, request: "HttpRequest", response: "HttpResponse") -> None:
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
             context = structlog.contextvars.get_merged_contextvars(logger)
@@ -163,7 +161,7 @@ class RequestMiddleware:
             )
         structlog.contextvars.clear_contextvars()
 
-    def prepare(self, request: HttpRequest) -> None:
+    def prepare(self, request: "HttpRequest") -> None:
         from ipware import get_client_ip  # type: ignore[import-untyped]
 
         request_id = get_request_header(
@@ -188,11 +186,11 @@ class RequestMiddleware:
         logger.info("request_started", **log_kwargs)
 
     @staticmethod
-    def format_request(request: HttpRequest) -> str:
+    def format_request(request: "HttpRequest") -> str:
         return f"{request.method} {request.get_full_path()}"
 
     @staticmethod
-    def bind_user_id(request: HttpRequest) -> None:
+    def bind_user_id(request: "HttpRequest") -> None:
         user_id_field = app_settings.USER_ID_FIELD
         if hasattr(request, "user") and request.user is not None and user_id_field:
             user_id = None
@@ -202,7 +200,7 @@ class RequestMiddleware:
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
-    def process_exception(self, request: HttpRequest, exception: Exception) -> None:
+    def process_exception(self, request: "HttpRequest", exception: Exception) -> None:
         if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
             # an error as we want the standard `request_finished` log message

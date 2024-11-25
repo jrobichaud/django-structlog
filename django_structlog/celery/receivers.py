@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Type, Any, Optional, cast, TYPE_CHECKING
 
 import structlog
@@ -119,7 +117,7 @@ class CeleryReceiver:
         self,
         task_id: Optional[str] = None,
         exception: Optional[Exception] = None,
-        traceback: Optional[TracebackType] = None,
+        traceback: Optional["TracebackType"] = None,
         einfo: Optional[Any] = None,
         sender: Optional[Type[Any]] = None,
         *args: Any,

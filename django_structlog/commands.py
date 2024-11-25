@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import List, Tuple, Mapping, Any, Type, TYPE_CHECKING
 
 import structlog
@@ -14,7 +12,7 @@ logger = structlog.getLogger(__name__)
 
 
 class DjangoCommandReceiver:
-    stack: List[Tuple[str, Mapping[str, contextvars.Token[Any]]]]
+    stack: List[Tuple[str, Mapping[str, "contextvars.Token[Any]"]]]
 
     def __init__(self) -> None:
         self.stack = []
