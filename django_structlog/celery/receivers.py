@@ -35,7 +35,7 @@ class CeleryReceiver:
         sender: Optional[Type[Any]] = None,
         headers: Optional[dict[str, Any]] = None,
         body: Optional[dict[str, str]] = None,
-        properties: Optional[dict[str, Optional[str]]] = None,
+        properties: Optional[dict[str, Any]] = None,
         routing_key: Optional[str] = None,
         **kwargs: dict[str, str],
     ) -> None:

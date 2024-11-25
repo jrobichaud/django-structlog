@@ -17,7 +17,6 @@ repos:
         exclude: |
           (?x)(
             ^django_structlog_demo_project/|
-            ^test_app/|
             ^config/|
             ^docs/|
             ^manage.py

@@ -158,7 +158,8 @@ include = [
 python_version=3.9
 strict=true
 packages=[
-  "django_structlog"
+  "django_structlog",
+  "test_app",
 ]
 disallow_subclassing_any=false
 

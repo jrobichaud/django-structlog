@@ -7,7 +7,7 @@ from django_structlog.celery import receivers
 
 
 class TestAppConfig(TestCase):
-    def test_celery_enabled(self):
+    def test_celery_enabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
         )
@@ -23,7 +23,7 @@ class TestAppConfig(TestCase):
         self.assertTrue(hasattr(app, "_celery_receiver"))
         self.assertIsNotNone(app._celery_receiver)
 
-    def test_celery_disabled(self):
+    def test_celery_disabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
         )
@@ -39,7 +39,7 @@ class TestAppConfig(TestCase):
 
         self.assertFalse(hasattr(app, "_celery_receiver"))
 
-    def test_command_enabled(self):
+    def test_command_enabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
         )
@@ -55,7 +55,7 @@ class TestAppConfig(TestCase):
         self.assertTrue(hasattr(app, "_django_command_receiver"))
         self.assertIsNotNone(app._django_command_receiver)
 
-    def test_command_disabled(self):
+    def test_command_disabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
         )
