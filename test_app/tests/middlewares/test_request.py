@@ -872,10 +872,10 @@ class TestRequestMiddleware(TestCase):
         mock_request = Mock()
         with (
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+                "django_structlog.middlewares.RequestMiddleware.prepare"
             ) as mock_prepare,
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+                "django_structlog.middlewares.RequestMiddleware.handle_response"
             ) as mock_handle_response,
             self.assertLogs(
                 "django_structlog.middlewares.request", logging.WARNING
@@ -902,10 +902,10 @@ class TestRequestMiddlewareRouter(TestCase):
         mock_request = Mock()
         with (
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+                "django_structlog.middlewares.RequestMiddleware.prepare"
             ) as mock_prepare,
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+                "django_structlog.middlewares.RequestMiddleware.handle_response"
             ) as mock_handle_response,
         ):
             response = await cast(Awaitable[HttpResponse], middleware(mock_request))
@@ -924,10 +924,10 @@ class TestRequestMiddlewareRouter(TestCase):
         mock_request = Mock()
         with (
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.prepare"
+                "django_structlog.middlewares.RequestMiddleware.prepare"
             ) as mock_prepare,
             patch(
-                "django_structlog.middlewares.request.RequestMiddleware.handle_response"
+                "django_structlog.middlewares.RequestMiddleware.handle_response"
             ) as mock_handle_response,
         ):
             response = middleware(mock_request)
