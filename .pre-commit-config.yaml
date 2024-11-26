@@ -9,3 +9,23 @@ repos:
     hooks:
       - id: black
         language_version: python3
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        args: [--no-incremental]
+        additional_dependencies: [
+            celery-types==0.22.0,
+            "django-stubs[compatible-mypy]==5.1.1",
+            structlog==24.4.0,
+            django-extensions==3.2.3,
+            django-ipware==7.0.1,
+        ]
+        exclude: |
+          (?x)(
+            ^django_structlog_demo_project/|
+            ^config/|
+            ^docs/|
+            ^manage.py
+          )
+

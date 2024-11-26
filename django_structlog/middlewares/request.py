@@ -1,9 +1,21 @@
 import asyncio
 import logging
+import sys
 import uuid
+from typing import (
+    Any,
+    Generator,
+    AsyncGenerator,
+    Callable,
+    Union,
+    Awaitable,
+    cast,
+    Iterator,
+    TYPE_CHECKING,
+    AsyncIterator,
+)
 
 import structlog
-from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, StreamingHttpResponse
 from asgiref import sync
@@ -11,17 +23,27 @@ from asgiref import sync
 from .. import signals
 from ..app_settings import app_settings
 
+if sys.version_info >= (3, 12, 0):
+    from inspect import iscoroutinefunction, markcoroutinefunction  # type: ignore[attr-defined]
+else:
+    from asgiref.sync import iscoroutinefunction, markcoroutinefunction  # type: ignore[no-redef]
+
+if TYPE_CHECKING:  # pragma: no cover
+    from django.http import HttpRequest, HttpResponse
+
 logger = structlog.getLogger(__name__)
 
 
-def get_request_header(request, header_key, meta_key):
+def get_request_header(request: "HttpRequest", header_key: str, meta_key: str) -> Any:
     if hasattr(request, "headers"):
         return request.headers.get(header_key)
 
     return request.META.get(meta_key)
 
 
-def sync_streaming_content_wrapper(streaming_content, context):
+def sync_streaming_content_wrapper(
+    streaming_content: Iterator[bytes], context: Any
+) -> Generator[bytes, None, None]:
     with structlog.contextvars.bound_contextvars(**context):
         logger.info("streaming_started")
         try:
@@ -33,7 +55,9 @@ def sync_streaming_content_wrapper(streaming_content, context):
             logger.info("streaming_finished")
 
 
-async def async_streaming_content_wrapper(streaming_content, context):
+async def async_streaming_content_wrapper(
+    streaming_content: AsyncIterator[bytes], context: Any
+) -> AsyncGenerator[bytes, Any]:
     with structlog.contextvars.bound_contextvars(**context):
         logger.info("streaming_started")
         try:
@@ -61,30 +85,37 @@ class RequestMiddleware:
     sync_capable = True
     async_capable = True
 
-    def __init__(self, get_response):
+    def __init__(
+        self,
+        get_response: Callable[
+            ["HttpRequest"], Union["HttpResponse", Awaitable["HttpResponse"]]
+        ],
+    ) -> None:
         self.get_response = get_response
         if iscoroutinefunction(self.get_response):
             markcoroutinefunction(self)
 
-    def __call__(self, request):
+    def __call__(
+        self, request: "HttpRequest"
+    ) -> Union["HttpResponse", Awaitable["HttpResponse"]]:
         if iscoroutinefunction(self):
-            return self.__acall__(request)
+            return cast(RequestMiddleware, self).__acall__(request)
         self.prepare(request)
-        response = self.get_response(request)
+        response = cast("HttpResponse", self.get_response(request))
         self.handle_response(request, response)
         return response
 
-    async def __acall__(self, request):
+    async def __acall__(self, request: "HttpRequest") -> "HttpResponse":
         await sync.sync_to_async(self.prepare)(request)
         try:
-            response = await self.get_response(request)
+            response = await cast(Awaitable["HttpResponse"], self.get_response(request))
         except asyncio.CancelledError:
             logger.warning("request_cancelled")
             raise
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
-    def handle_response(self, request, response):
+    def handle_response(self, request: "HttpRequest", response: "HttpResponse") -> None:
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
             context = structlog.contextvars.get_merged_contextvars(logger)
@@ -113,15 +144,13 @@ class RequestMiddleware:
             )
             if isinstance(response, StreamingHttpResponse):
                 streaming_content = response.streaming_content
-                try:
-                    iter(streaming_content)
-                except TypeError:
+                if response.is_async:
                     response.streaming_content = async_streaming_content_wrapper(
-                        streaming_content, context
+                        cast(AsyncIterator[bytes], streaming_content), context
                     )
                 else:
                     response.streaming_content = sync_streaming_content_wrapper(
-                        streaming_content, context
+                        cast(Iterator[bytes], streaming_content), context
                     )
 
         else:
@@ -136,8 +165,8 @@ class RequestMiddleware:
             )
         structlog.contextvars.clear_contextvars()
 
-    def prepare(self, request):
-        from ipware import get_client_ip
+    def prepare(self, request: "HttpRequest") -> None:
+        from ipware import get_client_ip  # type: ignore[import-untyped]
 
         request_id = get_request_header(
             request, "x-request-id", "HTTP_X_REQUEST_ID"
@@ -161,11 +190,11 @@ class RequestMiddleware:
         logger.info("request_started", **log_kwargs)
 
     @staticmethod
-    def format_request(request):
+    def format_request(request: "HttpRequest") -> str:
         return f"{request.method} {request.get_full_path()}"
 
     @staticmethod
-    def bind_user_id(request):
+    def bind_user_id(request: "HttpRequest") -> None:
         user_id_field = app_settings.USER_ID_FIELD
         if hasattr(request, "user") and request.user is not None and user_id_field:
             user_id = None
@@ -175,7 +204,7 @@ class RequestMiddleware:
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
-    def process_exception(self, request, exception):
+    def process_exception(self, request: "HttpRequest", exception: Exception) -> None:
         if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
             # an error as we want the standard `request_finished` log message
