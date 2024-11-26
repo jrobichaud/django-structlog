@@ -24,13 +24,9 @@ from .. import signals
 from ..app_settings import app_settings
 
 if sys.version_info >= (3, 12, 0):
-    import inspect
-
-    iscoroutinefunction = inspect.iscoroutinefunction
-    markcoroutinefunction = inspect.markcoroutinefunction  # type: ignore[attr-defined]
+    from inspect import iscoroutinefunction, markcoroutinefunction  # type: ignore[attr-defined]
 else:
-    iscoroutinefunction = sync.iscoroutinefunction
-    markcoroutinefunction = sync.markcoroutinefunction
+    from asgiref.sync import iscoroutinefunction, markcoroutinefunction  # type: ignore[no-redef]
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
