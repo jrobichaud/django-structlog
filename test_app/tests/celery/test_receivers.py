@@ -26,7 +26,7 @@ class TestReceivers(TestCase):
         request = self.factory.get("/foo")
         request.user = AnonymousUser()
 
-        @shared_task  # type: ignore[misc,unused-ignore]
+        @shared_task
         def test_task(value: Any) -> None:  # pragma: no cover
             pass
 
@@ -106,7 +106,7 @@ class TestReceivers(TestCase):
         received_properties: Any = None
         received_routing_key: Any = None
 
-        @django_receiver(signals.modify_context_before_task_publish)  # type: ignore[misc,unused-ignore]
+        @django_receiver(signals.modify_context_before_task_publish)
         def receiver_modify_context_before_task_publish(
             sender: Type[Any],
             signal: Any,
@@ -235,7 +235,7 @@ class TestReceivers(TestCase):
         self.assertEqual("task_name", record.msg["task"])
 
     def test_signal_bind_extra_task_metadata(self) -> None:
-        @django_receiver(signals.bind_extra_task_metadata)  # type: ignore[misc,unused-ignore]
+        @django_receiver(signals.bind_extra_task_metadata)
         def receiver_bind_extra_request_metadata(
             sender: Type[Any], signal: Any, task: Any = None, logger: Any = None
         ) -> None:
@@ -278,7 +278,7 @@ class TestReceivers(TestCase):
     def test_receiver_task_success(self) -> None:
         expected_result = "foo"
 
-        @django_receiver(signals.pre_task_succeeded)  # type: ignore[misc,unused-ignore]
+        @django_receiver(signals.pre_task_succeeded)
         def receiver_pre_task_succeeded(
             sender: Type[Any],
             signal: Any,

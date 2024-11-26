@@ -329,7 +329,7 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(mock_user.id, record.msg["user_id"])
 
     def test_signal_bind_extra_request_metadata(self) -> None:
-        @receiver(bind_extra_request_metadata)  # type: ignore[misc,unused-ignore]
+        @receiver(bind_extra_request_metadata)
         def receiver_bind_extra_request_metadata(
             sender: Type[Any],
             signal: Any,
@@ -385,7 +385,7 @@ class TestRequestMiddleware(TestCase):
         mock_response = Mock()
         mock_response.status_code = 200
 
-        @receiver(bind_extra_request_finished_metadata)  # type: ignore[misc,unused-ignore]
+        @receiver(bind_extra_request_finished_metadata)
         def receiver_bind_extra_request_finished_metadata(
             sender: Type[Any],
             signal: Any,
@@ -441,7 +441,7 @@ class TestRequestMiddleware(TestCase):
     def test_signal_bind_extra_request_failed_metadata(self) -> None:
         expected_exception = Exception()
 
-        @receiver(bind_extra_request_failed_metadata)  # type: ignore[misc,unused-ignore]
+        @receiver(bind_extra_request_failed_metadata)
         def receiver_bind_extra_request_failed_metadata(
             sender: Type[Any],
             signal: Any,
@@ -660,7 +660,7 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertFalse(hasattr(request, "_raised_exception"))
 
-    @override_settings(DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL=logging.INFO)  # type: ignore[misc,unused-ignore]
+    @override_settings(DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL=logging.INFO)
     def test_process_request_4XX_can_be_personalized(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
