@@ -103,7 +103,7 @@ class RequestMiddleware:
         self, request: "HttpRequest"
     ) -> Union["HttpResponse", Awaitable["HttpResponse"]]:
         if iscoroutinefunction(self):
-            return cast(RequestMiddleware, self).__acall__(request)  # type: ignore[redundant-cast,unused-ignore]
+            return cast(RequestMiddleware, self).__acall__(request)
         self.prepare(request)
         response = cast("HttpResponse", self.get_response(request))
         self.handle_response(request, response)
