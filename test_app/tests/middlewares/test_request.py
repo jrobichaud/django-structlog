@@ -93,7 +93,7 @@ class TestRequestMiddleware(TestCase):
             return mock_response
 
         request = self.factory.get("/foo")
-        request.user = None  # type: ignore[assignment, unused-ignore]
+        setattr(request, "user", None)
 
         middleware = RequestMiddleware(get_response)
         with patch("uuid.UUID.__str__", return_value=expected_uuid):
@@ -224,7 +224,7 @@ class TestRequestMiddleware(TestCase):
         class SimpleUser:
             pass
 
-        request.user = SimpleUser()  # type: ignore[assignment, unused-ignore]
+        request.user = cast(Any, SimpleUser())
         middleware = RequestMiddleware(get_response)
         middleware(request)
 
