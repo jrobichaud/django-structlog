@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 import uuid
 from typing import (
     Any,
@@ -15,13 +16,21 @@ from typing import (
 )
 
 import structlog
-from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, StreamingHttpResponse
 from asgiref import sync
 
 from .. import signals
 from ..app_settings import app_settings
+
+if sys.version_info >= (3, 12, 0):
+    import inspect
+
+    iscoroutinefunction = inspect.iscoroutinefunction
+    markcoroutinefunction = inspect.markcoroutinefunction  # type: ignore[attr-defined]
+else:
+    iscoroutinefunction = sync.iscoroutinefunction
+    markcoroutinefunction = sync.markcoroutinefunction
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
