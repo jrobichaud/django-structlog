@@ -11,6 +11,7 @@ from typing import (
     cast,
     Iterator,
     TYPE_CHECKING,
+    AsyncIterator,
 )
 
 import structlog
@@ -36,8 +37,8 @@ def get_request_header(request: "HttpRequest", header_key: str, meta_key: str) -
 
 
 def sync_streaming_content_wrapper(
-    streaming_content: Any, context: Any
-) -> Generator[Any, None, None]:
+    streaming_content: Iterator[bytes], context: Any
+) -> Generator[bytes, None, None]:
     with structlog.contextvars.bound_contextvars(**context):
         logger.info("streaming_started")
         try:
@@ -50,8 +51,8 @@ def sync_streaming_content_wrapper(
 
 
 async def async_streaming_content_wrapper(
-    streaming_content: Any, context: Any
-) -> AsyncGenerator[Any, None]:
+    streaming_content: AsyncIterator[bytes], context: Any
+) -> AsyncGenerator[bytes, Any]:
     with structlog.contextvars.bound_contextvars(**context):
         logger.info("streaming_started")
         try:
@@ -138,15 +139,13 @@ class RequestMiddleware:
             )
             if isinstance(response, StreamingHttpResponse):
                 streaming_content = response.streaming_content
-                try:
-                    iter(cast(Iterator[bytes], streaming_content))
-                except TypeError:
+                if response.is_async:
                     response.streaming_content = async_streaming_content_wrapper(
-                        streaming_content, context
+                        cast(AsyncIterator[bytes], streaming_content), context
                     )
                 else:
                     response.streaming_content = sync_streaming_content_wrapper(
-                        streaming_content, context
+                        cast(Iterator[bytes], streaming_content), context
                     )
 
         else:

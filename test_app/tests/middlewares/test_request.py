@@ -819,6 +819,7 @@ class TestRequestMiddleware(TestCase):
 
         mock_response = mock.create_autospec(StreamingHttpResponse)
         mock_response.streaming_content = streaming_content()
+        mock_response.is_async = False
         mock_response.status_code = 200
 
         def get_response(_request: HttpRequest) -> Any:
@@ -844,6 +845,7 @@ class TestRequestMiddleware(TestCase):
 
         mock_response = mock.create_autospec(StreamingHttpResponse)
         mock_response.streaming_content = streaming_content()
+        mock_response.is_async = True
         mock_response.status_code = 200
 
         def get_response(_request: HttpRequest) -> Any:
