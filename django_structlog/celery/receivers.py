@@ -16,7 +16,7 @@ from celery.signals import (
 
 from . import signals
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from types import TracebackType
 
 logger = structlog.getLogger(__name__)
@@ -52,8 +52,7 @@ class CeleryReceiver:
         )
         if properties:
             self._priority = properties.get("priority", None)
-        if headers is not None:
-            headers["__django_structlog__"] = context
+        cast(dict[str, Any], headers)["__django_structlog__"] = context
 
     def receiver_after_task_publish(
         self,

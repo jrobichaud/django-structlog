@@ -5,7 +5,7 @@ import uuid
 
 from django_extensions.management.signals import pre_command, post_command  # type: ignore[import-untyped]
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     import contextvars
 
 logger = structlog.getLogger(__name__)

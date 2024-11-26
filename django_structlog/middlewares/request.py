@@ -28,7 +28,7 @@ if sys.version_info >= (3, 12, 0):
 else:
     from asgiref.sync import iscoroutinefunction, markcoroutinefunction  # type: ignore[no-redef]
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from django.http import HttpRequest, HttpResponse
 
 logger = structlog.getLogger(__name__)

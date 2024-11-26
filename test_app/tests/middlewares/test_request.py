@@ -814,7 +814,7 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
     def test_sync_streaming_response(self) -> None:
-        def streaming_content() -> Generator[Any, None, None]:
+        def streaming_content() -> Generator[Any, None, None]:  # pragma: no cover
             yield
 
         mock_response = mock.create_autospec(StreamingHttpResponse)
@@ -840,7 +840,7 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual(response.streaming_content, mock_wrapper)
 
     def test_async_streaming_response(self) -> None:
-        async def streaming_content() -> AsyncGenerator[Any, None]:
+        async def streaming_content() -> AsyncGenerator[Any, None]:  # pragma: no cover
             yield
 
         mock_response = mock.create_autospec(StreamingHttpResponse)
