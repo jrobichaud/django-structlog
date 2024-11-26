@@ -37,6 +37,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -66,6 +67,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
 
   test-docs:
     needs:
