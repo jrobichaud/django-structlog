@@ -4,11 +4,12 @@ import time
 
 import structlog
 from django.http import HttpResponse, StreamingHttpResponse
+
 from django_structlog_demo_project.taskapp.celery import (
-    successful_task,
     failing_task,
     nesting_task,
     rejected_task,
+    successful_task,
 )
 
 logger = structlog.get_logger(__name__)
@@ -44,9 +45,7 @@ def revoke_task(request):
 
 
 def enqueue_unknown_task(request):
-    from django_structlog_demo_project.taskapp.celery import (
-        unknown_task,
-    )
+    from django_structlog_demo_project.taskapp.celery import unknown_task
 
     logger.info("Enqueuing unknown task")
     unknown_task.delay()

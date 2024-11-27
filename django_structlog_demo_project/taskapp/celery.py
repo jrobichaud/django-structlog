@@ -4,7 +4,7 @@ import os
 
 import structlog
 from celery import Celery, shared_task, signals
-from django.apps import apps, AppConfig
+from django.apps import AppConfig, apps
 from django.conf import settings
 
 from django_structlog.celery.steps import DjangoStructLogInitStep

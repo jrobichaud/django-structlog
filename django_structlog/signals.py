@@ -1,6 +1,5 @@
 import django.dispatch
 
-
 bind_extra_request_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``django``'s request.
 

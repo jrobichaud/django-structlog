@@ -1,17 +1,17 @@
-from typing import Type, Any, Optional, cast, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional, Type, cast
 
 import structlog
 from celery import current_app
 from celery.signals import (
-    before_task_publish,
     after_task_publish,
-    task_prerun,
-    task_retry,
-    task_success,
+    before_task_publish,
     task_failure,
-    task_revoked,
-    task_unknown,
+    task_prerun,
     task_rejected,
+    task_retry,
+    task_revoked,
+    task_success,
+    task_unknown,
 )
 
 from . import signals

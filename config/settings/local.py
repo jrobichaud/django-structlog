@@ -1,7 +1,7 @@
 import structlog
 
 from .base import *  # noqa: F403
-from .base import env, MIDDLEWARE
+from .base import MIDDLEWARE, env
 
 # GENERAL
 # ------------------------------------------------------------------------------

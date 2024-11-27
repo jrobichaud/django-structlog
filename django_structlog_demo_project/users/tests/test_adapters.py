@@ -1,8 +1,6 @@
 import pytest
 
-from django_structlog_demo_project.users.adapters import (
-    AccountAdapter,
-)
+from django_structlog_demo_project.users.adapters import AccountAdapter
 
 pytestmark = pytest.mark.django_db
 

@@ -161,3 +161,7 @@ packages=[
   "django_structlog",
   "test_app",
 ]
+
+[tool.isort]
+profile = "black"
+filter_files = true
