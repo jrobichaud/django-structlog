@@ -1,16 +1,25 @@
-import structlog
 import uuid
+from typing import TYPE_CHECKING, Any, List, Mapping, Tuple, Type
 
-from django_extensions.management.signals import pre_command, post_command
+import structlog
+from django_extensions.management.signals import (  # type: ignore[import-untyped]
+    post_command,
+    pre_command,
+)
+
+if TYPE_CHECKING:  # pragma: no cover
+    import contextvars
 
 logger = structlog.getLogger(__name__)
 
 
 class DjangoCommandReceiver:
-    def __init__(self):
+    stack: List[Tuple[str, Mapping[str, "contextvars.Token[Any]"]]]
+
+    def __init__(self) -> None:
         self.stack = []
 
-    def pre_receiver(self, sender, *args, **kwargs):
+    def pre_receiver(self, sender: Type[Any], *args: Any, **kwargs: Any) -> None:
         command_id = str(uuid.uuid4())
         if len(self.stack):
             parent_command_id, _ = self.stack[-1]
@@ -26,13 +35,15 @@ class DjangoCommandReceiver:
             command_name=sender.__module__.replace(".management.commands", ""),
         )
 
-    def post_receiver(self, sender, outcome, *args, **kwargs):
+    def post_receiver(
+        self, sender: Type[Any], outcome: str, *args: Any, **kwargs: Any
+    ) -> None:
         logger.info("command_finished")
 
         if len(self.stack):  # pragma: no branch
             command_id, tokens = self.stack.pop()
             structlog.contextvars.reset_contextvars(**tokens)
 
-    def connect_signals(self):
+    def connect_signals(self) -> None:
         pre_command.connect(self.pre_receiver)
         post_command.connect(self.post_receiver)

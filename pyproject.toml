@@ -34,6 +34,7 @@ build-backend = "setuptools.build_meta"
     "Topic :: System :: Logging",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Typing :: Typed",
   ]
 
 [project.urls]
@@ -152,3 +153,15 @@ include = [
   "./django_structlog_demo_project/*",
   "./test_app/*",
 ]
+
+[tool.mypy]
+python_version=3.9
+strict=true
+packages=[
+  "django_structlog",
+  "test_app",
+]
+
+[tool.isort]
+profile = "black"
+filter_files = true

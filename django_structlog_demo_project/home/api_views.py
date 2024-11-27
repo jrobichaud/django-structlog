@@ -1,6 +1,6 @@
+import structlog
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import structlog
 
 logger = structlog.get_logger(__name__)
 

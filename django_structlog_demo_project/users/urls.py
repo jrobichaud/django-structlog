@@ -1,10 +1,10 @@
 from django.urls import re_path
 
 from django_structlog_demo_project.users.views import (
+    user_detail_view,
     user_list_view,
     user_redirect_view,
     user_update_view,
-    user_detail_view,
 )
 
 app_name = "users"

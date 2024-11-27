@@ -1,3 +1,5 @@
+from typing import Any
+
 from celery import bootsteps
 
 from .receivers import CeleryReceiver
@@ -14,7 +16,7 @@ class DjangoStructLogInitStep(bootsteps.Step):
 
     """
 
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent: Any, **kwargs: Any) -> None:
         super().__init__(parent, **kwargs)
         self.receiver = CeleryReceiver()
         self.receiver.connect_worker_signals()

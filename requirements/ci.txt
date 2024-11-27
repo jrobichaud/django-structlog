@@ -17,7 +17,7 @@ pytest-cov==6.0.0
 
 # Code quality
 # ------------------------------------------------------------------------------
-coverage==7.6.7  # https://github.com/nedbat/coveragepy
+-r coverage.txt
 pylint-django==2.6.1  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 

@@ -1,32 +1,33 @@
 import logging
 from signal import SIGTERM
-from unittest.mock import Mock, patch, call, MagicMock
+from typing import Any, Optional, Type
+from unittest.mock import MagicMock, Mock, call, patch
 
 import structlog
 from celery import shared_task
 from django.contrib.auth.models import AnonymousUser
 from django.dispatch import receiver as django_receiver
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
 from django_structlog.celery import receivers, signals
 
 
 class TestReceivers(TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.factory = RequestFactory()
         self.logger = structlog.getLogger(__name__)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         structlog.contextvars.clear_contextvars()
 
-    def test_defer_task(self):
+    def test_defer_task(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
 
         request = self.factory.get("/foo")
         request.user = AnonymousUser()
 
         @shared_task
-        def test_task(value):  # pragma: no cover
+        def test_task(value: Any) -> None:  # pragma: no cover
             pass
 
         receiver = receivers.CeleryReceiver()
@@ -37,18 +38,18 @@ class TestReceivers(TestCase):
         ) as log_results:
             test_task.delay("foo")
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_enqueued", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("child_task_id", record.msg)
         self.assertEqual(expected_uuid, record.msg["request_id"])
 
-    def test_receiver_before_task_publish_celery_protocol_v2(self):
+    def test_receiver_before_task_publish_celery_protocol_v2(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
 
-        headers = {}
+        headers: dict[str, Any] = {}
         structlog.contextvars.bind_contextvars(
             request_id=expected_uuid,
             user_id=expected_user_id,
@@ -68,13 +69,13 @@ class TestReceivers(TestCase):
             headers,
         )
 
-    def test_receiver_before_task_publish_celery_protocol_v1(self):
+    def test_receiver_before_task_publish_celery_protocol_v1(self) -> None:
         """Protocol v1 does not allow to store metadata"""
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         expected_user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
 
-        headers = {}
+        headers: dict[str, Any] = {}
         structlog.contextvars.bind_contextvars(
             request_id=expected_uuid,
             user_id=expected_user_id,
@@ -93,20 +94,27 @@ class TestReceivers(TestCase):
             headers,
         )
 
-    def test_signal_modify_context_before_task_publish_celery_protocol_v2(self):
+    def test_signal_modify_context_before_task_publish_celery_protocol_v2(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
         routing_key = "foo"
-        properties = {"correlation_id": "22222222-2222-2222-2222-222222222222"}
+        properties: dict[str, Optional[str]] = {
+            "correlation_id": "22222222-2222-2222-2222-222222222222"
+        }
 
-        received_properties = None
-        received_routing_key = None
+        received_properties: Any = None
+        received_routing_key: Any = None
 
         @django_receiver(signals.modify_context_before_task_publish)
         def receiver_modify_context_before_task_publish(
-            sender, signal, context, task_properties, task_routing_key, **kwargs
-        ):
+            sender: Type[Any],
+            signal: Any,
+            context: Any,
+            task_properties: Any,
+            task_routing_key: str,
+            **kwargs: Any,
+        ) -> None:
             keys_to_keep = {"request_id", "parent_task_id"}
             new_dict = {
                 key_to_keep: context[key_to_keep]
@@ -120,7 +128,7 @@ class TestReceivers(TestCase):
             nonlocal received_routing_key
             received_routing_key = task_routing_key
 
-        headers = {}
+        headers: dict[str, Any] = {}
         structlog.contextvars.bind_contextvars(
             request_id=expected_uuid,
             user_id=user_id,
@@ -149,10 +157,10 @@ class TestReceivers(TestCase):
         )
         self.assertEqual("foo", received_routing_key)
 
-    def test_receiver_after_task_publish(self):
+    def test_receiver_after_task_publish(self) -> None:
         expected_task_id = "00000000-0000-0000-0000-000000000000"
         expected_task_name = "Foo"
-        headers = {"id": expected_task_id, "task": expected_task_name}
+        headers: dict[str, Any] = {"id": expected_task_id, "task": expected_task_name}
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
@@ -160,7 +168,7 @@ class TestReceivers(TestCase):
             receiver.receiver_after_task_publish(headers=headers)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_enqueued", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("child_task_id", record.msg)
@@ -168,10 +176,10 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_name", record.msg)
         self.assertEqual(expected_task_name, record.msg["child_task_name"])
 
-    def test_receiver_after_task_publish_protocol_v1(self):
+    def test_receiver_after_task_publish_protocol_v1(self) -> None:
         expected_task_id = "00000000-0000-0000-0000-000000000000"
         expected_task_name = "Foo"
-        body = {"id": expected_task_id, "task": expected_task_name}
+        body: dict[str, Any] = {"id": expected_task_id, "task": expected_task_name}
 
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
@@ -180,7 +188,7 @@ class TestReceivers(TestCase):
             receiver.receiver_after_task_publish(body=body)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_enqueued", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("child_task_id", record.msg)
@@ -188,7 +196,7 @@ class TestReceivers(TestCase):
         self.assertIn("child_task_name", record.msg)
         self.assertEqual(expected_task_name, record.msg["child_task_name"])
 
-    def test_receiver_task_pre_run(self):
+    def test_receiver_task_pre_run(self) -> None:
         expected_request_uuid = "00000000-0000-0000-0000-000000000000"
         task_id = "11111111-1111-1111-1111-111111111111"
         expected_user_id = "1234"
@@ -220,17 +228,17 @@ class TestReceivers(TestCase):
         )
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_started", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("task", record.msg)
         self.assertEqual("task_name", record.msg["task"])
 
-    def test_signal_bind_extra_task_metadata(self):
+    def test_signal_bind_extra_task_metadata(self) -> None:
         @django_receiver(signals.bind_extra_task_metadata)
         def receiver_bind_extra_request_metadata(
-            sender, signal, task=None, logger=None
-        ):
+            sender: Type[Any], signal: Any, task: Any = None, logger: Any = None
+        ) -> None:
             structlog.contextvars.bind_contextvars(
                 correlation_id=task.request.correlation_id
             )
@@ -251,7 +259,7 @@ class TestReceivers(TestCase):
         self.assertEqual(context["correlation_id"], expected_correlation_uuid)
         self.assertEqual(context["task_id"], task_id)
 
-    def test_receiver_task_retry(self):
+    def test_receiver_task_retry(self) -> None:
         expected_reason = "foo"
 
         receiver = receivers.CeleryReceiver()
@@ -261,19 +269,23 @@ class TestReceivers(TestCase):
             receiver.receiver_task_retry(reason=expected_reason)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_retrying", record.msg["event"])
         self.assertEqual("WARNING", record.levelname)
         self.assertIn("reason", record.msg)
         self.assertEqual(expected_reason, record.msg["reason"])
 
-    def test_receiver_task_success(self):
+    def test_receiver_task_success(self) -> None:
         expected_result = "foo"
 
         @django_receiver(signals.pre_task_succeeded)
         def receiver_pre_task_succeeded(
-            sender, signal, task=None, logger=None, result=None
-        ):
+            sender: Type[Any],
+            signal: Any,
+            task: Any = None,
+            logger: Any = None,
+            result: Any = None,
+        ) -> None:
             structlog.contextvars.bind_contextvars(result=result)
 
         receiver = receivers.CeleryReceiver()
@@ -283,13 +295,13 @@ class TestReceivers(TestCase):
             receiver.receiver_task_success(result=expected_result)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_succeeded", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("result", record.msg)
         self.assertEqual(expected_result, record.msg["result"])
 
-    def test_receiver_task_failure(self):
+    def test_receiver_task_failure(self) -> None:
         expected_exception = "foo"
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
@@ -298,14 +310,14 @@ class TestReceivers(TestCase):
             receiver.receiver_task_failure(exception=Exception("foo"))
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("error", record.msg)
         self.assertIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
-    def test_receiver_task_failure_with_throws(self):
+    def test_receiver_task_failure_with_throws(self) -> None:
         expected_exception = "foo"
 
         mock_sender = Mock()
@@ -319,14 +331,14 @@ class TestReceivers(TestCase):
             )
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("error", record.msg)
         self.assertNotIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
-    def test_receiver_task_revoked(self):
+    def test_receiver_task_revoked(self) -> None:
         expected_request_uuid = "00000000-0000-0000-0000-000000000000"
         task_id = "11111111-1111-1111-1111-111111111111"
         expected_user_id = "1234"
@@ -348,7 +360,7 @@ class TestReceivers(TestCase):
             )
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_revoked", record.msg["event"])
         self.assertEqual("WARNING", record.levelname)
         self.assertIn("terminated", record.msg)
@@ -368,7 +380,7 @@ class TestReceivers(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertEqual(expected_user_id, record.msg["user_id"])
 
-    def test_receiver_task_revoked_terminated(self):
+    def test_receiver_task_revoked_terminated(self) -> None:
         expected_request_uuid = "00000000-0000-0000-0000-000000000000"
         task_id = "11111111-1111-1111-1111-111111111111"
         expected_user_id = "1234"
@@ -390,7 +402,7 @@ class TestReceivers(TestCase):
             )
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_revoked", record.msg["event"])
         self.assertEqual("WARNING", record.levelname)
         self.assertIn("terminated", record.msg)
@@ -410,7 +422,7 @@ class TestReceivers(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertEqual(expected_user_id, record.msg["user_id"])
 
-    def test_receiver_task_unknown(self):
+    def test_receiver_task_unknown(self) -> None:
         task_id = "11111111-1111-1111-1111-111111111111"
         expected_task_name = "task_name"
 
@@ -421,7 +433,7 @@ class TestReceivers(TestCase):
             receiver.receiver_task_unknown(id=task_id, name=expected_task_name)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_not_found", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("task_id", record.msg)
@@ -429,7 +441,7 @@ class TestReceivers(TestCase):
         self.assertIn("task", record.msg)
         self.assertEqual(expected_task_name, record.msg["task"])
 
-    def test_receiver_task_rejected(self):
+    def test_receiver_task_rejected(self) -> None:
         task_id = "11111111-1111-1111-1111-111111111111"
         message = Mock(name="message")
         message.properties = dict(correlation_id=task_id)
@@ -441,13 +453,13 @@ class TestReceivers(TestCase):
             receiver.receiver_task_rejected(message=message)
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_rejected", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
         self.assertIn("task_id", record.msg)
         self.assertEqual(task_id, record.msg["task_id"])
 
-    def test_priority(self):
+    def test_priority(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
         user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
@@ -455,7 +467,7 @@ class TestReceivers(TestCase):
         expected_priority = 6
         properties = {"priority": expected_priority}
 
-        headers = {}
+        headers: dict[str, Any] = {}
         structlog.contextvars.bind_contextvars(
             request_id=expected_uuid,
             user_id=user_id,
@@ -492,7 +504,7 @@ class TestReceivers(TestCase):
             )
 
         self.assertEqual(1, len(log_results.records))
-        record = log_results.records[0]
+        record: Any = log_results.records[0]
         self.assertEqual("task_enqueued", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("child_task_id", record.msg)
@@ -508,17 +520,17 @@ class TestReceivers(TestCase):
 
 
 class TestConnectCeleryTaskSignals(TestCase):
-    def test_call(self):
+    def test_call(self) -> None:
         from celery.signals import (
-            before_task_publish,
             after_task_publish,
-            task_prerun,
-            task_retry,
-            task_success,
+            before_task_publish,
             task_failure,
-            task_revoked,
-            task_unknown,
+            task_prerun,
             task_rejected,
+            task_retry,
+            task_revoked,
+            task_success,
+            task_unknown,
         )
 
         from django_structlog.celery.receivers import CeleryReceiver
@@ -545,8 +557,9 @@ class TestConnectCeleryTaskSignals(TestCase):
 
 
 class TestConnectCelerySignals(TestCase):
-    def test_call(self):
-        from celery.signals import before_task_publish, after_task_publish
+    def test_call(self) -> None:
+        from celery.signals import after_task_publish, before_task_publish
+
         from django_structlog.celery.receivers import CeleryReceiver
 
         receiver = CeleryReceiver()

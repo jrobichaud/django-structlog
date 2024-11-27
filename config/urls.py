@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.conf.urls import include
-from django.urls import re_path
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.urls import re_path
 from django.views import defaults as default_views
+from django.views.generic import TemplateView
 
-from django_structlog_demo_project.home import views, api_views, ninja_views
+from django_structlog_demo_project.home import api_views, ninja_views, views
 
 
 def uncaught_exception_view(request):

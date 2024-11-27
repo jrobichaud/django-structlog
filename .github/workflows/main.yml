@@ -37,6 +37,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -58,7 +59,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -U setuptools
-          python -m pip install tox tox-gh-actions
+          python -m pip install tox tox-gh-actions -r requirements/coverage.txt
       - name: Start Redis
         uses: supercharge/redis-github-action@1.8.0
       - name: Test with tox
@@ -66,6 +67,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
 
   test-docs:
     needs:
@@ -125,6 +127,34 @@ jobs:
       - name: run ruff
         run: ruff check .
 
+  mypy:
+    needs:
+      - test-demo-app
+      - test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.13'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/local.txt -r requirements/mypy.txt
+      - name: run mypy
+        run: mypy
+
+  isort:
+    needs:
+      - test-demo-app
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: isort/isort-action@v1
+        with:
+            requirements-files: "requirements/local-base.txt requirements/isort.txt"
 
   test-install-base:
     runs-on: ubuntu-latest

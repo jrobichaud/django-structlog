@@ -1,6 +1,5 @@
 import django.dispatch
 
-
 bind_extra_task_metadata = django.dispatch.Signal()
 """ Signal to add extra ``structlog`` bindings from ``celery``'s task.
 

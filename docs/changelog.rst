@@ -4,6 +4,9 @@ Change Log
 9.0.0 (TBD)
 -----------
 
+*New:*
+    - Add type definitions for the project. See `#697 <https://github.com/jrobichaud/django-structlog/pull/697>`_ and `#696 <https://github.com/jrobichaud/django-structlog/issues/696>`_. Special thanks to `@j00bar <https://github.com/j00bar>`_
+
 *Changes:*
     - Add python 3.13 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.
     - Drop python 3.8 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.

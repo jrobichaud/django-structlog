@@ -6,7 +6,7 @@ from django_structlog.celery import steps
 
 
 class TestDjangoStructLogInitStep(TestCase):
-    def test_call(self):
+    def test_call(self) -> None:
         with patch(
             "django_structlog.celery.receivers.CeleryReceiver.connect_worker_signals",
             autospec=True,
