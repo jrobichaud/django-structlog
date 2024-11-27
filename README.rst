@@ -383,7 +383,7 @@ Upgrading to 9.0+
 Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
 - requires python 3.9+
-- django 4.2 and 5.1+ are supported
+- django 4.2 and 5.0+ are supported
 
 
 Type hints
