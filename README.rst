@@ -380,6 +380,12 @@ Minimum requirements
 - django 4.2 and 5.1+ are supported
 
 
+Type hints
+~~~~~~~~~~
+
+``django-structlog`` now uses `python type hints <https://docs.python.org/3/library/typing.html>`_ and is being validated with `mypy <https://mypy.readthedocs.io/en/stable/>`_ ``--strict``.
+
+
 For ``drf-standardized-errors`` users
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
