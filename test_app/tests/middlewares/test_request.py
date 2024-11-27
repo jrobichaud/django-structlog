@@ -11,6 +11,7 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
+from django.core.signals import got_request_exception
 from django.dispatch import receiver
 from django.http import (
     Http404,
@@ -289,8 +290,8 @@ class TestRequestMiddleware(TestCase):
             request.user = mock_user
             try:
                 raise exception
-            except Exception as e:
-                middleware.process_exception(request, e)
+            except Exception:
+                got_request_exception.send(object, request=request)
                 self.exception_traceback = traceback.format_exc()
             return mock_response
 
@@ -463,7 +464,10 @@ class TestRequestMiddleware(TestCase):
         request.user = mock_user
 
         def get_response(_request: HttpRequest) -> HttpResponse:
-            middleware.process_exception(request, expected_exception)
+            try:
+                raise expected_exception
+            except Exception:
+                got_request_exception.send(object, request=request)
             return mock_response
 
         middleware = RequestMiddleware(get_response)
@@ -510,8 +514,8 @@ class TestRequestMiddleware(TestCase):
             """Simulate an exception"""
             try:
                 raise exception
-            except Exception as e:
-                middleware.process_exception(request, e)
+            except Exception:
+                got_request_exception.send(object, request=request)
                 self.exception_traceback = traceback.format_exc()
 
         middleware = RequestMiddleware(get_response)
@@ -563,8 +567,10 @@ class TestRequestMiddleware(TestCase):
         request.user = AnonymousUser()
 
         def get_response(_request: HttpRequest) -> HttpResponse:
-            """Simulate an exception"""
-            middleware.process_exception(request, exception)
+            try:
+                raise exception
+            except Exception:
+                got_request_exception.send(object, request=request)
             return HttpResponseForbidden()
 
         middleware = RequestMiddleware(get_response)
@@ -615,8 +621,10 @@ class TestRequestMiddleware(TestCase):
         request.user = AnonymousUser()
 
         def get_response(_request: HttpRequest) -> HttpResponse:
-            """Simulate an exception"""
-            middleware.process_exception(request, exception)
+            try:
+                raise exception
+            except Exception:
+                got_request_exception.send(object, request=request)
             return HttpResponseNotFound()
 
         middleware = RequestMiddleware(get_response)
@@ -668,8 +676,10 @@ class TestRequestMiddleware(TestCase):
         request.user = AnonymousUser()
 
         def get_response(_request: HttpRequest) -> HttpResponse:
-            """Simulate an exception"""
-            middleware.process_exception(request, exception)
+            try:
+                raise exception
+            except Exception:
+                got_request_exception.send(object, request=request)
             return HttpResponseNotFound()
 
         middleware = RequestMiddleware(get_response)

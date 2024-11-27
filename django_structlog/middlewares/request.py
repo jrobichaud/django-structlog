@@ -11,6 +11,7 @@ from typing import (
     Callable,
     Generator,
     Iterator,
+    Type,
     Union,
     cast,
 )
@@ -18,6 +19,7 @@ from typing import (
 import structlog
 from asgiref import sync
 from django.core.exceptions import PermissionDenied
+from django.core.signals import got_request_exception
 from django.http import Http404, StreamingHttpResponse
 
 from .. import signals
@@ -35,6 +37,8 @@ else:
     )
 
 if TYPE_CHECKING:  # pragma: no cover
+    from types import TracebackType
+
     from django.http import HttpRequest, HttpResponse
 
 logger = structlog.getLogger(__name__)
@@ -100,6 +104,7 @@ class RequestMiddleware:
         self.get_response = get_response
         if iscoroutinefunction(self.get_response):
             markcoroutinefunction(self)
+        got_request_exception.connect(self.process_got_request_exception)
 
     def __call__(
         self, request: "HttpRequest"
@@ -210,7 +215,17 @@ class RequestMiddleware:
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
-    def process_exception(self, request: "HttpRequest", exception: Exception) -> None:
+    def process_got_request_exception(
+        self, sender: Type[Any], request: "HttpRequest", **kwargs: Any
+    ) -> None:
+        if not hasattr(request, "_raised_exception"):
+            ex = cast(
+                tuple[Type[Exception], Exception, "TracebackType"],
+                sys.exc_info(),
+            )
+            self._process_exception(request, ex[1])
+
+    def _process_exception(self, request: "HttpRequest", exception: Exception) -> None:
         if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
             # an error as we want the standard `request_finished` log message
