@@ -369,6 +369,38 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_9.0:
+
+Upgrading to 9.0+
+^^^^^^^^^^^^^^^^^
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires python 3.9+
+- django 4.2 and 5.1+ are supported
+
+
+For ``drf-standardized-errors`` users
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now unhandled exceptions when using `drf-standardized-errors <https://github.com/ghazi-git/drf-standardized-errors>`_ will be intercepted and the exception logged properly.
+
+If you also use `structlog-sentry <https://github.com/kiwicom/structlog-sentry>`_, the exception will now be propagated as expected.
+
+Other libraries alike may be affected by this change.
+
+Internal changes in how ``RequestMiddleware`` handles exceptions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This only affects you if you implemented a middleware inheriting from ``RequestMiddleware`` and you overrided the ``process_exception`` method.
+
+Did you?
+
+If so:
+
+   - ``RequestMiddleware.process_exception`` was renamed to ``RequestMiddleware._process_exception``, you should to the same in the middleware.
+
+
 .. _upgrade_8.0:
 
 Upgrading to 8.0+

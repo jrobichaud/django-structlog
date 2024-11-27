@@ -1,23 +1,31 @@
 Change Log
 ==========
 
-9.0.0 (TBD)
------------
+9.0.0 (November 26, 2024)
+-------------------------
+
+See: :ref:`upgrade_9.0`
 
 *New:*
-    - Add type definitions for the project. See `#697 <https://github.com/jrobichaud/django-structlog/pull/697>`_ and `#696 <https://github.com/jrobichaud/django-structlog/issues/696>`_. Special thanks to `@j00bar <https://github.com/j00bar>`_
+    - Add type definitions for the project. See `#697 <https://github.com/jrobichaud/django-structlog/pull/697>`_ and `#696 <https://github.com/jrobichaud/django-structlog/issues/696>`_. Special thanks to `@j00bar <https://github.com/j00bar>`_.
 
 *Changes:*
+    - ``RequestMiddleware`` now relies on django signal `got_request_exception <https://docs.djangoproject.com/en/dev/ref/signals/#got-request-exception>`_ instead of Middleware `process_exception <https://docs.djangoproject.com/en/dev/topics/http/middleware/#process-exception>`_ method. See `#705 <https://github.com/jrobichaud/django-structlog/pull/705>`_, `#658 <https://github.com/jrobichaud/django-structlog/issues/658>`_ and :ref:`upgrade_9.0`. Special thanks to `@sshishov <https://github.com/sshishov>`_.
     - Add python 3.13 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.
     - Drop python 3.8 support. See `#674 <https://github.com/jrobichaud/django-structlog/pull/674>`_.
     - Django 5.1 and celery 5.4 support. See `#617 <https://github.com/jrobichaud/django-structlog/pull/617>`_.
+
+*Other:*
+    - Migrated project to use python 3.13 along with readthedocs generation.
+    - now use `isort <https://pycqa.github.io/isort/>`_
+    - fixed ``codecov`` github action that was not properly configured and therefore not properly reporting coverage.
 
 
 8.1.0 (May 24, 2024)
 --------------------
 
 *New:*
-    - Add a :ref:`setting <settings>` ``DJANGO_STRUCTLOG_USER_ID_FIELD = 'pk'`` to customize what user field to use as ``user_id`` in the logs. `#546 <https://github.com/jrobichaud/django-structlog/pull/546>`_ and `#545 <https://github.com/jrobichaud/django-structlog/issues/545>`_. Special thanks to `@sshishov <https://github.com/ sshishov>`_.
+    - Add a :ref:`setting <settings>` ``DJANGO_STRUCTLOG_USER_ID_FIELD = 'pk'`` to customize what user field to use as ``user_id`` in the logs. See `#546 <https://github.com/jrobichaud/django-structlog/pull/546>`_ and `#545 <https://github.com/jrobichaud/django-structlog/issues/545>`_. Special thanks to `@sshishov <https://github.com/sshishov>`_.
 
 *Changes:*
     - Drop support of python 3.7

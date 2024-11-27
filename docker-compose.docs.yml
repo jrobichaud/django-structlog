@@ -12,7 +12,7 @@ services:
     environment:
       - SPHINX_COMMAND=html
     ports:
-      - "5000:5000"
+      - "8080:8080"
   docs-test:
     image: django_structlog_demo_project_docs
     volumes:
