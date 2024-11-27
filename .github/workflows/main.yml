@@ -250,6 +250,8 @@ jobs:
       - test-install-commands
       - black
       - ruff
+      - mypy
+      - isort
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
