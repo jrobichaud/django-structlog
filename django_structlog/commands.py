@@ -1,9 +1,11 @@
-from typing import List, Tuple, Mapping, Any, Type, TYPE_CHECKING
+import uuid
+from typing import TYPE_CHECKING, Any, List, Mapping, Tuple, Type
 
 import structlog
-import uuid
-
-from django_extensions.management.signals import pre_command, post_command  # type: ignore[import-untyped]
+from django_extensions.management.signals import (  # type: ignore[import-untyped]
+    post_command,
+    pre_command,
+)
 
 if TYPE_CHECKING:  # pragma: no cover
     import contextvars

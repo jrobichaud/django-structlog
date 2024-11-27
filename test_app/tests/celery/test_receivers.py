@@ -1,13 +1,13 @@
 import logging
 from signal import SIGTERM
 from typing import Any, Optional, Type
-from unittest.mock import Mock, patch, call, MagicMock
+from unittest.mock import MagicMock, Mock, call, patch
 
 import structlog
 from celery import shared_task
 from django.contrib.auth.models import AnonymousUser
 from django.dispatch import receiver as django_receiver
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
 from django_structlog.celery import receivers, signals
 
@@ -522,15 +522,15 @@ class TestReceivers(TestCase):
 class TestConnectCeleryTaskSignals(TestCase):
     def test_call(self) -> None:
         from celery.signals import (
-            before_task_publish,
             after_task_publish,
-            task_prerun,
-            task_retry,
-            task_success,
+            before_task_publish,
             task_failure,
-            task_revoked,
-            task_unknown,
+            task_prerun,
             task_rejected,
+            task_retry,
+            task_revoked,
+            task_success,
+            task_unknown,
         )
 
         from django_structlog.celery.receivers import CeleryReceiver
@@ -558,7 +558,8 @@ class TestConnectCeleryTaskSignals(TestCase):
 
 class TestConnectCelerySignals(TestCase):
     def test_call(self) -> None:
-        from celery.signals import before_task_publish, after_task_publish
+        from celery.signals import after_task_publish, before_task_publish
+
         from django_structlog.celery.receivers import CeleryReceiver
 
         receiver = CeleryReceiver()

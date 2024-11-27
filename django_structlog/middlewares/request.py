@@ -3,30 +3,36 @@ import logging
 import sys
 import uuid
 from typing import (
-    Any,
-    Generator,
-    AsyncGenerator,
-    Callable,
-    Union,
-    Awaitable,
-    cast,
-    Iterator,
     TYPE_CHECKING,
+    Any,
+    AsyncGenerator,
     AsyncIterator,
+    Awaitable,
+    Callable,
+    Generator,
+    Iterator,
+    Union,
+    cast,
 )
 
 import structlog
+from asgiref import sync
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, StreamingHttpResponse
-from asgiref import sync
 
 from .. import signals
 from ..app_settings import app_settings
 
 if sys.version_info >= (3, 12, 0):
-    from inspect import iscoroutinefunction, markcoroutinefunction  # type: ignore[attr-defined]
+    from inspect import (  # type: ignore[attr-defined]
+        iscoroutinefunction,
+        markcoroutinefunction,
+    )
 else:
-    from asgiref.sync import iscoroutinefunction, markcoroutinefunction  # type: ignore[no-redef]
+    from asgiref.sync import (  # type: ignore[no-redef]
+        iscoroutinefunction,
+        markcoroutinefunction,
+    )
 
 if TYPE_CHECKING:  # pragma: no cover
     from django.http import HttpRequest, HttpResponse

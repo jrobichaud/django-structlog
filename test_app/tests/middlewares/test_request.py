@@ -2,10 +2,11 @@ import asyncio
 import logging
 import traceback
 import uuid
-from typing import Any, Generator, AsyncGenerator, Awaitable, cast, Type
+from typing import Any, AsyncGenerator, Awaitable, Generator, Type, cast
 from unittest import mock
-from unittest.mock import patch, Mock, AsyncMock
+from unittest.mock import AsyncMock, Mock, patch
 
+import structlog
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
@@ -13,26 +14,25 @@ from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.http import (
     Http404,
-    HttpResponseNotFound,
-    HttpResponseForbidden,
-    HttpResponseServerError,
-    StreamingHttpResponse,
     HttpRequest,
     HttpResponse,
+    HttpResponseForbidden,
+    HttpResponseNotFound,
+    HttpResponseServerError,
+    StreamingHttpResponse,
 )
-from django.test import TestCase, RequestFactory, override_settings
-import structlog
+from django.test import RequestFactory, TestCase, override_settings
 
 from django_structlog.middlewares.request import (
+    RequestMiddleware,
+    async_streaming_content_wrapper,
     get_request_header,
     sync_streaming_content_wrapper,
-    async_streaming_content_wrapper,
-    RequestMiddleware,
 )
 from django_structlog.signals import (
-    bind_extra_request_metadata,
-    bind_extra_request_finished_metadata,
     bind_extra_request_failed_metadata,
+    bind_extra_request_finished_metadata,
+    bind_extra_request_metadata,
 )
 
 
