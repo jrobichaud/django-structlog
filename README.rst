@@ -5,7 +5,13 @@ django-structlog
 
 | |pypi| |wheels| |build-status| |docs| |coverage| |open_issues| |pull_requests|
 | |django| |python| |license| |black| |ruff|
+| |django_packages|
 | |watchers| |stars| |forks|
+
+
+.. |django_packages| image:: https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26
+   :target: https://djangopackages.org/packages/p/django-structlog/
+   :alt: Published on Django Packages
 
 .. |build-status| image:: https://github.com/jrobichaud/django-structlog/actions/workflows/main.yml/badge.svg?branch=main
    :target: https://github.com/jrobichaud/django-structlog/actions
