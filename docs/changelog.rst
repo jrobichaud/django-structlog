@@ -7,7 +7,7 @@ Change Log
 See: :ref:`upgrade_9.0`
 
 *New:*
-    - Add type definitions for the project. See `#697 <https://github.com/jrobichaud/django-structlog/pull/697>`_ and `#696 <https://github.com/jrobichaud/django-structlog/issues/696>`_. Special thanks to `@j00bar <https://github.com/j00bar>`_.
+    - Add type definitions for the project. See `#697 <https://github.com/jrobichaud/django-structlog/pull/697>`_ and `#696 <https://github.com/jrobichaud/django-structlog/issues/696>`_. Special thanks to `@j00bar <https://github.com/j00bar>`_ and `@MaxDude132 <https://github.com/MaxDude132>`_ for the review.
 
 *Changes:*
     - ``RequestMiddleware`` now relies on django signal `got_request_exception <https://docs.djangoproject.com/en/dev/ref/signals/#got-request-exception>`_ instead of Middleware `process_exception <https://docs.djangoproject.com/en/dev/topics/http/middleware/#process-exception>`_ method. See `#705 <https://github.com/jrobichaud/django-structlog/pull/705>`_, `#658 <https://github.com/jrobichaud/django-structlog/issues/658>`_ and :ref:`upgrade_9.0`. Special thanks to `@sshishov <https://github.com/sshishov>`_.
