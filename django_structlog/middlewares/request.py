@@ -116,16 +116,6 @@ class RequestMiddleware:
         self.handle_response(request, response)
         return response
 
-    def process_got_request_exception(
-        self, sender: Type[Any], request: "HttpRequest", **kwargs: Any
-    ) -> None:
-        if not hasattr(request, "_raised_exception"):
-            ex = cast(
-                tuple[Type[Exception], Exception, "TracebackType"],
-                sys.exc_info(),
-            )
-            self.process_exception(request, ex[1])
-
     async def __acall__(self, request: "HttpRequest") -> "HttpResponse":
         await sync.sync_to_async(self.prepare)(request)
         try:
@@ -225,7 +215,17 @@ class RequestMiddleware:
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
 
-    def process_exception(self, request: "HttpRequest", exception: Exception) -> None:
+    def process_got_request_exception(
+        self, sender: Type[Any], request: "HttpRequest", **kwargs: Any
+    ) -> None:
+        if not hasattr(request, "_raised_exception"):
+            ex = cast(
+                tuple[Type[Exception], Exception, "TracebackType"],
+                sys.exc_info(),
+            )
+            self._process_exception(request, ex[1])
+
+    def _process_exception(self, request: "HttpRequest", exception: Exception) -> None:
         if isinstance(exception, (Http404, PermissionDenied)):
             # We don't log an exception here, and we don't set that we handled
             # an error as we want the standard `request_finished` log message
