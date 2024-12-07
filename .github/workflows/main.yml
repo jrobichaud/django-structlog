@@ -37,7 +37,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false # disable for the moment because it prevents PR to succeed
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -67,7 +67,7 @@ jobs:
       - uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false # disable for the moment because it prevents PR to succeed
 
   test-docs:
     needs:
