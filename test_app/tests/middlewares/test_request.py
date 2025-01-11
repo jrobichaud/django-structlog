@@ -306,6 +306,29 @@ class TestRequestMiddleware(TestCase):
         self.assertIn("user_id", record.msg)
         self.assertIsNone(record.msg["user_id"])
 
+    @override_settings(
+        USER_ID_FIELD=None,
+    )
+    def test_process_request_no_user_id_field(self) -> None:
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return HttpResponse()
+
+        request = self.factory.get("/foo")
+
+        middleware = RequestMiddleware(get_response)
+        response = middleware(request)
+        self.assertEqual(200, cast(HttpResponse, response).status_code)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+
+        self.assertNotIn("user_id", record.msg)
+
     def test_log_user_in_request_finished(self) -> None:
         mock_response = Mock()
         mock_response.status_code = 200
