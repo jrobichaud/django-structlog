@@ -307,7 +307,7 @@ class TestRequestMiddleware(TestCase):
         self.assertIsNone(record.msg["user_id"])
 
     @override_settings(
-        USER_ID_FIELD=None,
+        DJANGO_STRUCTLOG_USER_ID_FIELD=None,
     )
     def test_process_request_no_user_id_field(self) -> None:
         def get_response(_request: HttpRequest) -> HttpResponse:
