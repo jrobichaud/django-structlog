@@ -253,6 +253,11 @@ jobs:
       - mypy
       - isort
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/django-structlog
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
@@ -266,6 +271,3 @@ jobs:
       - name: Publish package
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_DEPLOYMENT_KEY }}
