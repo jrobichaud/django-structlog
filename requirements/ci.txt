@@ -1,13 +1,13 @@
 # Django
 # ------------------------------------------------------------------------------
-django-environ==0.11.2  # https://github.com/joke2k/django-environ
+django-environ==0.12.0  # https://github.com/joke2k/django-environ
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
 django-extensions==3.2.3
 
 structlog>=21.4.0
 colorama>=0.4.3
 
-psycopg[binary]==3.2.3 # https://github.com/psycopg/psycopg
+psycopg[binary]==3.2.4 # https://github.com/psycopg/psycopg
 
 # Testing
 # ------------------------------------------------------------------------------

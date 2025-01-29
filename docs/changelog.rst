@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+9.0.1 (January 29, 2024)
+------------------------
+
+*Fixes:*
+    - Fix exceptions not being propagated when using streaming response. See `#747 <https://github.com/jrobichaud/django-structlog/pull/747>`_. Special thanks to `@liambuchanan <https://github.com/liambuchanan>`_.
+
+
 9.0.0 (November 26, 2024)
 -------------------------
 
