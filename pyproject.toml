@@ -24,6 +24,7 @@ build-backend = "setuptools.build_meta"
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
     "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
@@ -102,9 +103,9 @@ build-backend = "setuptools.build_meta"
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
         py{39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
-        py31{0,1}-django5{0,1}-celery5{3,4}-redis4-kombu5,
-        py312-django{42,50,51}-celery5{3,4}-redis4-kombu5,
-        py313-django{51}-celery5{3,4}-redis4-kombu5,
+        py31{0,1}-django5{0,1,2}-celery5{3,4}-redis4-kombu5,
+        py312-django{42,50,51,52}-celery5{3,4}-redis4-kombu5,
+        py313-django5{1,2}-celery5{3,4}-redis4-kombu5,
 
     [gh-actions]
     python =
@@ -132,6 +133,7 @@ build-backend = "setuptools.build_meta"
         django42: Django >=4.2, <5.0
         django50: Django >=5.0, <5.1
         django51: Django >=5.1, <5.2
+        django52: Django == 5.2a1
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
