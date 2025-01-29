@@ -1011,7 +1011,10 @@ class TestSyncStreamingContentWrapper(TestCase):
     def test_failure(self) -> None:
         result = Mock()
 
-        exception = Exception()
+        class CustomException(Exception):
+            pass
+
+        exception = CustomException()
 
         def streaming_content() -> Generator[Any, None, None]:
             self.logger.info("streaming_content")
@@ -1040,7 +1043,7 @@ class TestSyncStreamingContentWrapper(TestCase):
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
-            self.assertRaises(Exception, next, wrapped_streaming_content)
+            self.assertRaises(CustomException, next, wrapped_streaming_content)
 
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = streaming_content_log_results.records[0]
@@ -1108,7 +1111,10 @@ class TestASyncStreamingContentWrapper(TestCase):
     async def test_failure(self) -> None:
         result = Mock()
 
-        exception = Exception()
+        class CustomException(Exception):
+            pass
+
+        exception = CustomException()
 
         async def streaming_content() -> AsyncGenerator[Any, None]:
             self.logger.info("streaming_content")
@@ -1137,7 +1143,7 @@ class TestASyncStreamingContentWrapper(TestCase):
         with self.assertLogs(
             "django_structlog.middlewares.request", logging.INFO
         ) as log_results:
-            with self.assertRaises(StopAsyncIteration):
+            with self.assertRaises(CustomException):
                 await wrapped_streaming_content.__anext__()
 
         self.assertEqual(1, len(streaming_content_log_results.records))
