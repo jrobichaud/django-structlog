@@ -61,6 +61,7 @@ def sync_streaming_content_wrapper(
                 yield chunk
         except Exception:
             logger.exception("streaming_failed")
+            raise
         else:
             logger.info("streaming_finished")
 
@@ -78,6 +79,7 @@ async def async_streaming_content_wrapper(
             raise
         except Exception:
             logger.exception("streaming_failed")
+            raise
         else:
             logger.info("streaming_finished")
 
