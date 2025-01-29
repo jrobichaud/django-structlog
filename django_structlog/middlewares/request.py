@@ -211,21 +211,22 @@ class RequestMiddleware:
     @staticmethod
     def bind_user_id(request: "HttpRequest") -> None:
         user_id_field = app_settings.USER_ID_FIELD
-        if not user_id_field:
+        if not user_id_field or not hasattr(request, "user"):
             return
 
         session_was_accessed = (
             request.session.accessed if hasattr(request, "session") else None
         )
 
-        if hasattr(request, "user") and request.user is not None:
+        if request.user is not None:
             user_id = None
             if hasattr(request.user, user_id_field):
                 user_id = getattr(request.user, user_id_field)
                 if isinstance(user_id, uuid.UUID):
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
-        if session_was_accessed is not None and not session_was_accessed:
+
+        if session_was_accessed is False:
             """using SessionMiddleware but user was never accessed, must reset accessed state"""
             user = request.user
 
