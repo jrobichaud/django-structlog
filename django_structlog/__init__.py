@@ -1,5 +1,4 @@
-""" ``django-structlog`` is a structured logging integration for ``Django`` project using ``structlog``.
-"""
+"""``django-structlog`` is a structured logging integration for ``Django`` project using ``structlog``."""
 
 name = "django_structlog"
 
