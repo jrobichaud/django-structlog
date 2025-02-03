@@ -1,2 +1,1 @@
-""" ``celery`` integration for ``django_structlog``.
-"""
+"""``celery`` integration for ``django_structlog``."""
