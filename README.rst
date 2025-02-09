@@ -404,7 +404,7 @@ Other libraries alike may be affected by this change.
 Internal changes in how ``RequestMiddleware`` handles exceptions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This only affects you if you implemented a middleware inheriting from ``RequestMiddleware`` and you overrided the ``process_exception`` method.
+This only affects you if you implemented a middleware inheriting from ``RequestMiddleware`` and you overrode the ``process_exception`` method.
 
 Did you?
 
