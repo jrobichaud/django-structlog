@@ -7,7 +7,9 @@ from unittest import mock
 from unittest.mock import AsyncMock, Mock, patch
 
 import structlog
+from django.contrib.auth.middleware import AuthenticationMiddleware
 from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
@@ -235,6 +237,97 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("INFO", record.levelname)
         self.assertIn("user_id", record.msg)
         self.assertIsNone(record.msg["user_id"])
+
+    @override_settings(
+        SECRET_KEY="00000000000000000000000000000000",
+    )
+    def test_process_request_session_middleware_without_vary(self) -> None:
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return HttpResponse()
+
+        request = self.factory.get("/foo")
+
+        # simulate SessionMiddleware, AuthenticationMiddleware, and RequestMiddleware called in that order
+        request_middleware = RequestMiddleware(get_response)
+        authentication_middleware = AuthenticationMiddleware(
+            cast(
+                Any,
+                lambda r: request_middleware(r),
+            )
+        )
+        session_middleware = SessionMiddleware(
+            cast(Any, lambda r: authentication_middleware(r))
+        )
+        response = session_middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+        self.assertIsNone(cast(HttpResponse, response).headers.get("Vary"))
+
+        self.assertEqual("INFO", record.levelname)
+
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+    @override_settings(
+        SECRET_KEY="00000000000000000000000000000000",
+    )
+    def test_process_request_session_middleware_with_vary(self) -> None:
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            assert isinstance(
+                request.user, AnonymousUser
+            )  # force evaluate user to trigger session middleware
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return HttpResponse()
+
+        request = self.factory.get("/foo")
+
+        # simulate SessionMiddleware, AuthenticationMiddleware, and RequestMiddleware called in that order
+        request_middleware = RequestMiddleware(get_response)
+        authentication_middleware = AuthenticationMiddleware(
+            cast(Any, lambda r: request_middleware(r))
+        )
+        session_middleware = SessionMiddleware(
+            cast(Any, lambda r: authentication_middleware(r))
+        )
+        response = session_middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+        self.assertIsNotNone(cast(HttpResponse, response).headers.get("Vary"))
+
+        self.assertEqual("INFO", record.levelname)
+
+        self.assertIn("user_id", record.msg)
+        self.assertIsNone(record.msg["user_id"])
+
+    @override_settings(
+        DJANGO_STRUCTLOG_USER_ID_FIELD=None,
+    )
+    def test_process_request_no_user_id_field(self) -> None:
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return HttpResponse()
+
+        request = self.factory.get("/foo")
+
+        middleware = RequestMiddleware(get_response)
+        response = middleware(request)
+        self.assertEqual(200, cast(HttpResponse, response).status_code)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+
+        self.assertNotIn("user_id", record.msg)
 
     def test_log_user_in_request_finished(self) -> None:
         mock_response = Mock()
