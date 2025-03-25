@@ -87,8 +87,7 @@ class CeleryReceiver:
         self, task_id: str, task: Any, *args: Any, **kwargs: Any
     ) -> None:
         structlog.contextvars.clear_contextvars()
-        structlog.contextvars.bind_contextvars(task_id=task_id)
-        structlog.contextvars.bind_contextvars(task=task.name)
+        structlog.contextvars.bind_contextvars(task_id=task_id, task=task.name)
         metadata = getattr(task.request, "__django_structlog__", {})
         structlog.contextvars.bind_contextvars(**metadata)
         signals.bind_extra_task_metadata.send(
