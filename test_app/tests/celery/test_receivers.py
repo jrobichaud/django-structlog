@@ -221,6 +221,7 @@ class TestReceivers(TestCase):
         self.assertDictEqual(
             {
                 "task_id": task_id,
+                "task": "task_name",
                 "request_id": expected_request_uuid,
                 "user_id": expected_user_id,
             },
