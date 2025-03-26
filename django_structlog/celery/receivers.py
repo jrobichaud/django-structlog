@@ -114,10 +114,10 @@ class CeleryReceiver:
             sender=self.receiver_task_success, logger=logger, result=result
         )
 
-        task_duration = _get_task_duration(sender)
+        task_duration_ms = _get_task_duration_ms(sender)
         log_vars = {}
-        if task_duration is not None:
-            log_vars["duration"] = task_duration
+        if task_duration_ms is not None:
+            log_vars["duration_ms"] = task_duration_ms
         logger.info("task_succeeded", **log_vars)
 
     def receiver_task_failure(
@@ -130,10 +130,10 @@ class CeleryReceiver:
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        task_duration = _get_task_duration(sender)
+        task_duration_ms = _get_task_duration_ms(sender)
         log_vars = {}
-        if task_duration is not None:
-            log_vars["duration"] = task_duration
+        if task_duration_ms is not None:
+            log_vars["duration_ms"] = task_duration_ms
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
             logger.info(
@@ -207,9 +207,9 @@ class CeleryReceiver:
         task_rejected.connect(self.receiver_task_rejected)
 
 
-def _get_task_duration(task: Any) -> Optional[float]:
+def _get_task_duration_ms(task: Any) -> Optional[int]:
     try:
         started_at = task._django_structlog_started_at
     except AttributeError:
         return None
-    return round(time.monotonic() - started_at, 3)
+    return round((time.monotonic() - started_at) * 1000)

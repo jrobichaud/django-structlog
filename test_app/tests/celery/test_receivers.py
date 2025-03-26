@@ -303,8 +303,8 @@ class TestReceivers(TestCase):
         self.assertEqual("task_succeeded", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("result", record.msg)
-        self.assertIn("duration", record.msg)
-        self.assertGreaterEqual(record.msg["duration"], 0)
+        self.assertIn("duration_ms", record.msg)
+        self.assertGreaterEqual(record.msg["duration_ms"], 0)
         self.assertEqual(expected_result, record.msg["result"])
 
     def test_receiver_task_failure(self) -> None:
@@ -342,7 +342,7 @@ class TestReceivers(TestCase):
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("error", record.msg)
-        self.assertIn("duration", record.msg)
+        self.assertIn("duration_ms", record.msg)
         self.assertNotIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
