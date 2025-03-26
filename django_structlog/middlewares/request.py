@@ -21,6 +21,7 @@ from asgiref import sync
 from django.core.exceptions import PermissionDenied
 from django.core.signals import got_request_exception
 from django.http import Http404, StreamingHttpResponse
+from django.utils.functional import SimpleLazyObject
 
 from .. import signals
 from ..app_settings import app_settings
@@ -39,6 +40,7 @@ else:
 if TYPE_CHECKING:  # pragma: no cover
     from types import TracebackType
 
+    from django.contrib.auth.base_user import AbstractBaseUser
     from django.http import HttpRequest, HttpResponse
 
 logger = structlog.getLogger(__name__)
@@ -209,13 +211,31 @@ class RequestMiddleware:
     @staticmethod
     def bind_user_id(request: "HttpRequest") -> None:
         user_id_field = app_settings.USER_ID_FIELD
-        if hasattr(request, "user") and request.user is not None and user_id_field:
+        if not user_id_field or not hasattr(request, "user"):
+            return
+
+        session_was_accessed = (
+            request.session.accessed if hasattr(request, "session") else None
+        )
+
+        if request.user is not None:
             user_id = None
             if hasattr(request.user, user_id_field):
                 user_id = getattr(request.user, user_id_field)
                 if isinstance(user_id, uuid.UUID):
                     user_id = str(user_id)
             structlog.contextvars.bind_contextvars(user_id=user_id)
+
+        if session_was_accessed is False:
+            """using SessionMiddleware but user was never accessed, must reset accessed state"""
+            user = request.user
+
+            def get_user() -> Any:
+                request.session.accessed = True
+                return user
+
+            request.user = cast("AbstractBaseUser", SimpleLazyObject(get_user))
+            request.session.accessed = False
 
     def process_got_request_exception(
         self, sender: Type[Any], request: "HttpRequest", **kwargs: Any
