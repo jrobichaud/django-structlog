@@ -114,3 +114,5 @@ DATABASES = {
 INSTALLED_APPS += ["django_structlog", "test_app"]
 
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
+
+IS_WORKER = False
