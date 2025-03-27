@@ -307,6 +307,21 @@ class TestReceivers(TestCase):
         self.assertGreaterEqual(record.msg["duration_ms"], 0)
         self.assertEqual(expected_result, record.msg["result"])
 
+    def test_receiver_task_success_no_started_at(self) -> None:
+        expected_result = "foo"
+
+        receiver = receivers.CeleryReceiver()
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receiver.receiver_task_success(result=expected_result)
+
+        self.assertEqual(1, len(log_results.records))
+        record: Any = log_results.records[0]
+        self.assertEqual("task_succeeded", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertNotIn("duration_ms", record.msg)
+
     def test_receiver_task_failure(self) -> None:
         expected_exception = "foo"
         receiver = receivers.CeleryReceiver()
