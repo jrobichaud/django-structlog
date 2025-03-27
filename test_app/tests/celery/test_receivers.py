@@ -1,4 +1,5 @@
 import logging
+import time
 from signal import SIGTERM
 from typing import Any, Optional, Type
 from unittest.mock import MagicMock, Mock, call, patch
@@ -288,6 +289,27 @@ class TestReceivers(TestCase):
         ) -> None:
             structlog.contextvars.bind_contextvars(result=result)
 
+        mock_sender = Mock()
+        mock_sender.request._django_structlog_started_at = time.monotonic()
+
+        receiver = receivers.CeleryReceiver()
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.INFO
+        ) as log_results:
+            receiver.receiver_task_success(result=expected_result, sender=mock_sender)
+
+        self.assertEqual(1, len(log_results.records))
+        record: Any = log_results.records[0]
+        self.assertEqual("task_succeeded", record.msg["event"])
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("result", record.msg)
+        self.assertIn("duration_ms", record.msg)
+        self.assertGreaterEqual(record.msg["duration_ms"], 0)
+        self.assertEqual(expected_result, record.msg["result"])
+
+    def test_receiver_task_success_no_started_at(self) -> None:
+        expected_result = "foo"
+
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
@@ -298,8 +320,7 @@ class TestReceivers(TestCase):
         record: Any = log_results.records[0]
         self.assertEqual("task_succeeded", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("result", record.msg)
-        self.assertEqual(expected_result, record.msg["result"])
+        self.assertNotIn("duration_ms", record.msg)
 
     def test_receiver_task_failure(self) -> None:
         expected_exception = "foo"
@@ -322,6 +343,7 @@ class TestReceivers(TestCase):
 
         mock_sender = Mock()
         mock_sender.throws = (Exception,)
+        mock_sender.request._django_structlog_started_at = time.monotonic()
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
@@ -335,6 +357,7 @@ class TestReceivers(TestCase):
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
         self.assertIn("error", record.msg)
+        self.assertIn("duration_ms", record.msg)
         self.assertNotIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
