@@ -1,3 +1,4 @@
+import time
 from typing import TYPE_CHECKING, Any, Optional, Type, cast
 
 import structlog
@@ -93,7 +94,10 @@ class CeleryReceiver:
         signals.bind_extra_task_metadata.send(
             sender=self.receiver_task_prerun, task=task, logger=logger
         )
+        # Record the start time so we can log the task duration later.
+        task.request._django_structlog_started_at = time.monotonic_ns()
         logger.info("task_started")
+
 
     def receiver_task_retry(
         self,
@@ -105,12 +109,17 @@ class CeleryReceiver:
         logger.warning("task_retrying", reason=reason)
 
     def receiver_task_success(
-        self, result: Optional[str] = None, **kwargs: Any
+        self, result: Optional[str] = None, sender: Optional[Any] = None, **kwargs: Any
     ) -> None:
         signals.pre_task_succeeded.send(
             sender=self.receiver_task_success, logger=logger, result=result
         )
-        logger.info("task_succeeded")
+
+        task_duration_ms = _get_task_duration_ms(sender)
+        log_vars = {}
+        if task_duration_ms is not None:
+            log_vars["duration_ms"] = task_duration_ms
+        logger.info("task_succeeded", **log_vars)
 
     def receiver_task_failure(
         self,
@@ -122,17 +131,23 @@ class CeleryReceiver:
         *args: Any,
         **kwargs: Any,
     ) -> None:
+        task_duration_ms = _get_task_duration_ms(sender)
+        log_vars = {}
+        if task_duration_ms is not None:
+            log_vars["duration_ms"] = task_duration_ms
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
             logger.info(
                 "task_failed",
                 error=str(exception),
+                **log_vars,
             )
         else:
             logger.exception(
                 "task_failed",
                 error=str(exception),
                 exception=exception,
+                **log_vars,
             )
 
     def receiver_task_revoked(
@@ -191,3 +206,11 @@ class CeleryReceiver:
         task_revoked.connect(self.receiver_task_revoked)
         task_unknown.connect(self.receiver_task_unknown)
         task_rejected.connect(self.receiver_task_rejected)
+
+
+def _get_task_duration_ms(task: Any) -> Optional[int]:
+    try:
+        started_at: int = task.request._django_structlog_started_at
+    except AttributeError:
+        return None
+    return round((time.monotonic_ns() - started_at) / 1_000_000)
