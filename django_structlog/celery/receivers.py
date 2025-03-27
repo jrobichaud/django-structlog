@@ -98,7 +98,6 @@ class CeleryReceiver:
         task.request._django_structlog_started_at = time.monotonic_ns()
         logger.info("task_started")
 
-
     def receiver_task_retry(
         self,
         request: Optional[Any] = None,
