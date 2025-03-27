@@ -95,7 +95,7 @@ class CeleryReceiver:
             sender=self.receiver_task_prerun, task=task, logger=logger
         )
         # Record the start time so we can log the task duration later.
-        task.request._django_structlog_started_at = time.monotonic()
+        task.request._django_structlog_started_at = time.monotonic_ns()
         logger.info("task_started", task=task.name)
 
     def receiver_task_retry(
@@ -212,4 +212,4 @@ def _get_task_duration_ms(task: Any) -> Optional[int]:
         started_at = task._django_structlog_started_at
     except AttributeError:
         return None
-    return round((time.monotonic() - started_at) * 1000)
+    return round((time.monotonic_ns() - started_at) / 1000)
