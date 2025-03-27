@@ -88,7 +88,7 @@ class CeleryReceiver:
         self, task_id: str, task: Any, *args: Any, **kwargs: Any
     ) -> None:
         structlog.contextvars.clear_contextvars()
-        structlog.contextvars.bind_contextvars(task_id=task_id)
+        structlog.contextvars.bind_contextvars(task_id=task_id, task=task.name)
         metadata = getattr(task.request, "__django_structlog__", {})
         structlog.contextvars.bind_contextvars(**metadata)
         signals.bind_extra_task_metadata.send(
@@ -96,7 +96,7 @@ class CeleryReceiver:
         )
         # Record the start time so we can log the task duration later.
         task.request._django_structlog_started_at = time.monotonic_ns()
-        logger.info("task_started", task=task.name)
+        logger.info("task_started")
 
     def receiver_task_retry(
         self,
