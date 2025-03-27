@@ -290,7 +290,7 @@ class TestReceivers(TestCase):
             structlog.contextvars.bind_contextvars(result=result)
 
         mock_sender = Mock()
-        mock_sender._django_structlog_started_at = time.monotonic()
+        mock_sender.request._django_structlog_started_at = time.monotonic()
 
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
@@ -328,7 +328,7 @@ class TestReceivers(TestCase):
 
         mock_sender = Mock()
         mock_sender.throws = (Exception,)
-        mock_sender._django_structlog_started_at = time.monotonic()
+        mock_sender.request._django_structlog_started_at = time.monotonic()
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO

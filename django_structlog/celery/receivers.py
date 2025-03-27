@@ -209,7 +209,7 @@ class CeleryReceiver:
 
 def _get_task_duration_ms(task: Any) -> Optional[int]:
     try:
-        started_at: int = task._django_structlog_started_at
+        started_at: int = task.request._django_structlog_started_at
     except AttributeError:
         return None
     return round((time.monotonic_ns() - started_at) / 1_000_000)
