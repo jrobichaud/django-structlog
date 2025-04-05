@@ -29,5 +29,5 @@ Settings
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED | boolean | False           | See :ref:`commands`                                                           |
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
-| DJANGO_STRUCTLOG_USER_ID_FIELD           | boolean | ``"pk"``        | Change field used to identify user in logs, ``None`` to disable user binding  |
+| DJANGO_STRUCTLOG_USER_ID_FIELD           | string  | ``"pk"``        | Change field used to identify user in logs, ``None`` to disable user binding  |
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
