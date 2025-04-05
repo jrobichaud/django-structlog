@@ -12,6 +12,10 @@ class AppSettings:
         return getattr(settings, self.PREFIX + "CELERY_ENABLED", False)
 
     @property
+    def IP_LOGGING_ENABLED(self) -> bool:
+        return getattr(settings, self.PREFIX + "IP_LOGGING_ENABLED", True)
+
+    @property
     def STATUS_4XX_LOG_LEVEL(self) -> int:
         return getattr(settings, self.PREFIX + "STATUS_4XX_LOG_LEVEL", logging.WARNING)
 

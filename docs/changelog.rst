@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+9.1.0 (TBD)
+------------------------
+
+*New:*
+    - new setting ``DJANGO_STRUCTLOG_IP_LOGGING_ENABLED`` (default ``True``) to allow to disable ip binding. See `#803 <https://github.com/jrobichaud/django-structlog/issues/803>`_. Special thanks to `@dulguunpc <https://github.com/dulguunpc>`_.
+
+
 9.0.1 (January 29, 2024)
 ------------------------
 
