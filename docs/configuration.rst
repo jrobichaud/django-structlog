@@ -14,6 +14,7 @@ Example:
 
 
 .. _settings:
+
 Settings
 --------
 
