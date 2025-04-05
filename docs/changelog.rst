@@ -1,14 +1,21 @@
 Change Log
 ==========
 
-9.1.0 (TBD)
+9.1.0 (April 4, 2025)
 ------------------------
 
 *New:*
     - new setting ``DJANGO_STRUCTLOG_IP_LOGGING_ENABLED`` (default ``True``) to allow to disable ip binding. See `#803 <https://github.com/jrobichaud/django-structlog/issues/803>`_. Special thanks to `@dulguunpc <https://github.com/dulguunpc>`_.
+    - add ``duration_ms`` to the celery tasks metadata. See `#796 <https://github.com/jrobichaud/django-structlog/pull/796>`_. Special thanks to `@ahumeau <https://github.com/ahumeau>`_.
+
+*Fixes:*
+    - `vary: Cookie` was always set. See `#734 <https://github.com/jrobichaud/django-structlog/issues/734>`_. Special thanks to `@last-partizan <https://github.com/last-partizan>`_
+
+*Other:*
+    - add support of django 5.2 (just adding it to the test matrix, no code changes)
 
 
-9.0.1 (January 29, 2024)
+9.0.1 (January 29, 2025)
 ------------------------
 
 *Fixes:*

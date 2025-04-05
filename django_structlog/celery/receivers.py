@@ -114,10 +114,8 @@ class CeleryReceiver:
             sender=self.receiver_task_success, logger=logger, result=result
         )
 
-        task_duration_ms = _get_task_duration_ms(sender)
-        log_vars = {}
-        if task_duration_ms is not None:
-            log_vars["duration_ms"] = task_duration_ms
+        log_vars: dict[str, Any] = {}
+        self.add_duration_ms(sender, log_vars)
         logger.info("task_succeeded", **log_vars)
 
     def receiver_task_failure(
@@ -130,10 +128,8 @@ class CeleryReceiver:
         *args: Any,
         **kwargs: Any,
     ) -> None:
-        task_duration_ms = _get_task_duration_ms(sender)
-        log_vars = {}
-        if task_duration_ms is not None:
-            log_vars["duration_ms"] = task_duration_ms
+        log_vars: dict[str, Any] = {}
+        self.add_duration_ms(sender, log_vars)
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
             logger.info(
@@ -147,6 +143,16 @@ class CeleryReceiver:
                 error=str(exception),
                 exception=exception,
                 **log_vars,
+            )
+
+    @classmethod
+    def add_duration_ms(
+        cls, task: Optional[Type[Any]], log_vars: dict[str, Any]
+    ) -> None:
+        if task and hasattr(task, "_django_structlog_started_at"):
+            started_at: int = task.request._django_structlog_started_at
+            log_vars["duration_ms"] = round(
+                (time.monotonic_ns() - started_at) / 1_000_000
             )
 
     def receiver_task_revoked(
@@ -205,11 +211,3 @@ class CeleryReceiver:
         task_revoked.connect(self.receiver_task_revoked)
         task_unknown.connect(self.receiver_task_unknown)
         task_rejected.connect(self.receiver_task_rejected)
-
-
-def _get_task_duration_ms(task: Any) -> Optional[int]:
-    try:
-        started_at: int = task.request._django_structlog_started_at
-    except AttributeError:
-        return None
-    return round((time.monotonic_ns() - started_at) / 1_000_000)

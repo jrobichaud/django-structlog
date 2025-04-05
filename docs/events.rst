@@ -154,9 +154,13 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_started     | task             | name of the task                       |
 +------------------+------------------+----------------------------------------+
+| task_succeeded   | duration_ms      | duration of the task in milliseconds   |
++------------------+------------------+----------------------------------------+
 | task_failed      | error            | exception as string                    |
 +------------------+------------------+----------------------------------------+
 | task_failed      | exception*       | exception's traceback                  |
++------------------+------------------+----------------------------------------+
+| task_failed      | duration_ms      | duration of the task in milliseconds   |
 +------------------+------------------+----------------------------------------+
 | task_revoked     | terminated       | Set to True if the task was terminated |
 +------------------+------------------+----------------------------------------+
