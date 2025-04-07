@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+9.1.1 (April 7, 2025)
+------------------------
+
+*Fixes:*
+    - fix ``duration_ms`` to the celery tasks metadata not working. See `#811 <https://github.com/jrobichaud/django-structlog/pull/811>`_. Special thanks to `@ahumeau <https://github.com/ahumeau>`_.
+
+
 9.1.0 (April 4, 2025)
 ------------------------
 
