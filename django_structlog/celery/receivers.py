@@ -149,7 +149,7 @@ class CeleryReceiver:
     def add_duration_ms(
         cls, task: Optional[Type[Any]], log_vars: dict[str, Any]
     ) -> None:
-        if task and hasattr(task, "_django_structlog_started_at"):
+        if task and hasattr(task.request, "_django_structlog_started_at"):
             started_at: int = task.request._django_structlog_started_at
             log_vars["duration_ms"] = round(
                 (time.monotonic_ns() - started_at) / 1_000_000
