@@ -2,7 +2,7 @@ import uuid
 from typing import TYPE_CHECKING, Any, List, Mapping, Tuple, Type
 
 import structlog
-from django_extensions.management.signals import (  # type: ignore[import-untyped]
+from django_extensions.management.signals import (
     post_command,
     pre_command,
 )

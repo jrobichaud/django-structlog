@@ -4,7 +4,7 @@ from typing import Any
 import structlog
 from django.core.management import BaseCommand, call_command
 from django.test import TestCase
-from django_extensions.management.utils import (  # type: ignore[import-untyped]
+from django_extensions.management.utils import (
     signalcommand,
 )
 

@@ -19,10 +19,10 @@ repos:
       - id: mypy
         args: [--no-incremental]
         additional_dependencies: [
-            celery-types==0.22.0,
+            celery-types==0.23.0,
             "django-stubs[compatible-mypy]==5.1.3",
-            structlog==24.4.0,
-            django-extensions==3.2.3,
+            structlog==25.2.0,
+            django-extensions==4.1.0,
             django-ipware==7.0.1,
         ]
         exclude: |
