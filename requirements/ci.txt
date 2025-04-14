@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------------------
 django-environ==0.12.0  # https://github.com/joke2k/django-environ
 django-redis==5.4.0  # https://github.com/niwinz/django-redis
-django-extensions==3.2.3
+django-extensions==4.1
 
 structlog>=21.4.0
 colorama>=0.4.3
