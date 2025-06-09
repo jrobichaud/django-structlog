@@ -19,7 +19,7 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 # django-ninja
 django-ninja==1.4.1  # https://github.com/vitalik/django-ninja
 
-structlog==25.3.0
+structlog==25.4.0
 colorama==0.4.6
 django-ipware==7.0.1
 
