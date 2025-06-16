@@ -2,7 +2,7 @@
 
 redis==6.2.0  # https://github.com/antirez/redis
 celery==5.5.2  # pyup: < 5.0  # https://github.com/celery/celery
-kombu==5.5.3
+kombu==5.5.4
 flower==2.0.1  # https://github.com/mher/flower
 uvicorn==0.34.3 # https://github.com/encode/uvicorn
 gunicorn==23.0.0 # https://github.com/benoitc/gunicorn
