@@ -31,7 +31,7 @@ psycopg[binary]==3.2.9 # https://github.com/psycopg/psycopg
 # ------------------------------------------------------------------------------
 pytest==8.4.1   # https://github.com/pytest-dev/pytest
 pytest-sugar==1.0.0  # https://github.com/Frozenball/pytest-sugar
-pytest-cov==6.1.1
+pytest-cov==6.2.1
 pytest-asyncio==1.0.0 # https://github.com/pytest-dev/pytest-asyncio
 pytest-mock==3.14.1 # https://github.com/pytest-dev/pytest-mock
 
