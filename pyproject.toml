@@ -102,10 +102,10 @@ build-backend = "setuptools.build_meta"
     #
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
-        py{39,310,311}-django42-celery5{2,3}-redis{3,4}-kombu5,
+        py{39,310,311}-django42-celery5{2,3}-redis4-kombu5,
         py31{0,1}-django5{0,1,2}-celery5{3,4}-redis4-kombu5,
         py312-django{42,50,51,52}-celery5{3,4}-redis4-kombu5,
-        py313-django5{1,2}-celery5{3,4}-redis4-kombu5,
+        py313-django5{1,2}-celery5{3,4}-redis5-kombu5,
 
     [gh-actions]
     python =
@@ -123,8 +123,8 @@ build-backend = "setuptools.build_meta"
         DJANGO_SETTINGS_MODULE=config.settings.test
     pip_pre = True
     deps =
-        redis3: redis>=3, <4
         redis4: redis>=4, <5
+        redis5: redis>=5, <6
         kombu5: kombu<6
         celery51: Celery >=5.1, <5.2
         celery52: Celery >=5.2, <5.3
