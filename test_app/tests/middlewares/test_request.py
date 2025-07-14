@@ -458,7 +458,7 @@ class TestRequestMiddleware(TestCase):
             middleware(request)
 
         self.assertEqual(1, len(self.log_results.records))
-        record = self.log_results.records[0]
+        record: Any = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
         self.assertIn("request_id", record.msg)
