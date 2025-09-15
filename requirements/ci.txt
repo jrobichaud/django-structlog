@@ -13,7 +13,7 @@ psycopg[binary]==3.2.10 # https://github.com/psycopg/psycopg
 # ------------------------------------------------------------------------------
 pytest==8.4.2   # https://github.com/pytest-dev/pytest
 pytest-sugar==1.1.1  # https://github.com/Frozenball/pytest-sugar
-pytest-cov==6.3.0
+pytest-cov==7.0.0
 
 # Code quality
 # ------------------------------------------------------------------------------
