@@ -10,7 +10,7 @@ django-allauth==65.11.2  # https://github.com/pennersr/django-allauth
 django-crispy-forms==2.4  # https://github.com/django-crispy-forms/django-crispy-forms
 crispy-bootstrap5==2025.6 # https://github.com/django-crispy-forms/crispy-bootstrap5
 django-redis==6.0.0  # https://github.com/niwinz/django-redis
-asgiref==3.9.1 # https://github.com/django/asgiref
+asgiref==3.9.2 # https://github.com/django/asgiref
 
 # Django REST Framework
 djangorestframework==3.16.1  # https://github.com/encode/django-rest-framework
