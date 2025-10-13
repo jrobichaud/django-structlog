@@ -3,6 +3,6 @@ sphinx_rtd_theme==3.0.2
 celery==5.5.3
 django>=4.2,<6
 structlog
-sphinx-autobuild==2024.10.3
+sphinx-autobuild==2025.8.25
 Jinja2==3.1.6
 importlib-metadata>=8.0.0,<9
