@@ -1,11 +1,11 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.3
+    rev: v0.14.0
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pycqa/isort
-    rev: 6.1.0
+    rev: 7.0.0
     hooks:
       - id: isort
   - repo: https://github.com/ambv/black
