@@ -375,6 +375,16 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_10.0:
+
+Upgrading to 10.0+
+^^^^^^^^^^^^^^^^^
+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires python 3.10+
+
+
 .. _upgrade_9.0:
 
 Upgrading to 9.0+
