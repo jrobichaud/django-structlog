@@ -27,6 +27,8 @@ Settings
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_STATUS_4XX_LOG_LEVEL    | int     | logging.WARNING | Log level of 4XX status codes                                                 |
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
+| DJANGO_STRUCTLOG_STATUS_5XX_LOG_LEVEL    | int     | logging.ERROR   | Log level of 5XX status codes                                                 |
++------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED | boolean | False           | See :ref:`commands`                                                           |
 +------------------------------------------+---------+-----------------+-------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_USER_ID_FIELD           | string  | ``"pk"``        | Change field used to identify user in logs, ``None`` to disable user binding  |

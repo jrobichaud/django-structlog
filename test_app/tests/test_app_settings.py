@@ -15,3 +15,13 @@ class TestAppSettings(TestCase):
 
         with self.settings(DJANGO_STRUCTLOG_CELERY_ENABLED=False):
             self.assertFalse(settings.CELERY_ENABLED)
+
+    def test_status_5xx_log_level_default(self) -> None:
+        settings = app_settings.AppSettings()
+        self.assertEqual(settings.STATUS_5XX_LOG_LEVEL, logging.ERROR)
+
+    def test_status_5xx_log_level_custom(self) -> None:
+        settings = app_settings.AppSettings()
+
+        with self.settings(DJANGO_STRUCTLOG_STATUS_5XX_LOG_LEVEL=logging.CRITICAL):
+            self.assertEqual(settings.STATUS_5XX_LOG_LEVEL, logging.CRITICAL)
