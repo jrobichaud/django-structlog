@@ -1,11 +1,15 @@
 Change Log
 ==========
 
-10.0.0 (TBD)
-------------
+10.0.0 (October 22, 2025)
+-------------------------
+
+*New:*
+    - Add 5xx and cancelled request log level config. See `#935 <https://github.com/jrobichaud/django-structlog/pull/935>`_. Special thanks to `@fcortes <https://github.com/fcortes>`_.
 
 *Changes:*
     - Drop python 3.9 support.
+
 
 
 
