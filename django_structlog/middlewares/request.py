@@ -125,7 +125,7 @@ class RequestMiddleware:
         try:
             response = await cast(Awaitable["HttpResponse"], self.get_response(request))
         except asyncio.CancelledError:
-            logger.warning("request_cancelled")
+            logger.log(app_settings.REQUEST_CANCELLED_LOG_LEVEL, "request_cancelled")
             raise
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
@@ -147,7 +147,7 @@ class RequestMiddleware:
                 log_kwargs=log_kwargs,
             )
             if response.status_code >= 500:
-                level = logging.ERROR
+                level = app_settings.STATUS_5XX_LOG_LEVEL
             elif response.status_code >= 400:
                 level = app_settings.STATUS_4XX_LOG_LEVEL
             else:

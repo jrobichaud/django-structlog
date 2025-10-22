@@ -864,6 +864,36 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertFalse(hasattr(request, "_raised_exception"))
 
+    @override_settings(DJANGO_STRUCTLOG_STATUS_5XX_LOG_LEVEL=logging.CRITICAL)
+    def test_process_request_5XX_can_be_personalized(self) -> None:
+        expected_uuid = "00000000-0000-0000-0000-000000000000"
+
+        request = self.factory.get("/foo")
+        request.user = AnonymousUser()
+
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            return HttpResponseServerError()
+
+        middleware = RequestMiddleware(get_response)
+
+        with (
+            patch("uuid.UUID.__str__", return_value=expected_uuid),
+            self.assertLogs(
+                logging.getLogger("django_structlog"), logging.INFO
+            ) as log_results,
+        ):
+            middleware(request)
+
+        self.assertEqual(2, len(log_results.records))
+        record: Any
+        record = log_results.records[0]
+        self.assertEqual("INFO", record.levelname)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+
+        record = log_results.records[1]
+        self.assertEqual("CRITICAL", record.levelname)
+        self.assertEqual(expected_uuid, record.msg["request_id"])
+
     def test_should_log_request_id_from_request_x_request_id_header(self) -> None:
         mock_response = Mock()
         mock_response.status_code = 200
@@ -992,6 +1022,34 @@ class TestRequestMiddleware(TestCase):
         mock_handle_response.assert_not_called()
         self.assertEqual(1, len(log_results.records))
         record: Any = log_results.records[0]
+        self.assertEqual("request_cancelled", record.msg["event"])
+
+    @override_settings(DJANGO_STRUCTLOG_REQUEST_CANCELLED_LOG_LEVEL=logging.DEBUG)
+    async def test_request_cancelled_log_level_can_be_personalized(self) -> None:
+        async def async_get_response(request: HttpRequest) -> Any:
+            raise asyncio.CancelledError
+
+        middleware = RequestMiddleware(async_get_response)
+
+        mock_request = Mock()
+        with (
+            patch(
+                "django_structlog.middlewares.RequestMiddleware.prepare"
+            ) as mock_prepare,
+            patch(
+                "django_structlog.middlewares.RequestMiddleware.handle_response"
+            ) as mock_handle_response,
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.DEBUG
+            ) as log_results,
+        ):
+            with self.assertRaises(asyncio.CancelledError):
+                await cast(Awaitable[HttpResponse], middleware(mock_request))
+        mock_prepare.assert_called_once_with(mock_request)
+        mock_handle_response.assert_not_called()
+        self.assertEqual(1, len(log_results.records))
+        record: Any = log_results.records[0]
+        self.assertEqual("DEBUG", record.levelname)
         self.assertEqual("request_cancelled", record.msg["event"])
 
     @override_settings(DJANGO_STRUCTLOG_IP_LOGGING_ENABLED=False)
