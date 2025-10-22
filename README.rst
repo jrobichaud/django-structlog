@@ -378,7 +378,7 @@ Upgrade Guide
 .. _upgrade_10.0:
 
 Upgrading to 10.0+
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 Minimum requirements
 ~~~~~~~~~~~~~~~~~~~~
