@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: ./compose/local/docs/Dockerfile
       args:
-        PYTHON_VERSION: 3.13
+        PYTHON_VERSION: 3.14
     image: django_structlog_demo_project_docs
     volumes:
       - .:/app:cached
