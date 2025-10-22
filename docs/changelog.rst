@@ -6,6 +6,7 @@ Change Log
 
 *New:*
     - Add 5xx and cancelled request log level config. See `#935 <https://github.com/jrobichaud/django-structlog/pull/935>`_. Special thanks to `@fcortes <https://github.com/fcortes>`_.
+    - Add python 3.14 support. See `#937 <https://github.com/jrobichaud/django-structlog/pull/937>`_.
 
 *Changes:*
     - Drop python 3.9 support.
