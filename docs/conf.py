@@ -26,7 +26,7 @@ master_doc = "index"
 # -- Project information -----------------------------------------------------
 
 project = "django-structlog"
-copyright = "2019, Jules Robichaud-Gagnon"
+copyright = "2019-2025, Jules Robichaud-Gagnon"
 author = "Jules Robichaud-Gagnon"
 
 
