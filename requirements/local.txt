@@ -1,6 +1,6 @@
 -r local-base.txt
 
-redis==6.4.0  # https://github.com/antirez/redis
+redis==7.0.0  # https://github.com/antirez/redis
 celery==5.5.3  # pyup: < 5.0  # https://github.com/celery/celery
 kombu==5.5.4
 flower==2.0.1  # https://github.com/mher/flower
