@@ -17,7 +17,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -49,7 +49,7 @@ jobs:
           - '3.13'
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -79,7 +79,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -101,7 +101,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -119,7 +119,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -137,7 +137,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -151,7 +151,7 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: isort/isort-action@v1
         with:
             requirements-files: "requirements/local-base.txt requirements/isort.txt"
@@ -163,7 +163,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -189,7 +189,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -220,7 +220,7 @@ jobs:
         python-version:
           - '3.14'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
@@ -259,7 +259,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
