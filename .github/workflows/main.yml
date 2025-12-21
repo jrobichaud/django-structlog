@@ -32,6 +32,7 @@ jobs:
       - name: Test demo app
         env:
           CELERY_BROKER_URL: redis://0.0.0.0:6379
+          DJANGO_STRUCTLOG_CACHE: redis://0.0.0.0:6379
           DJANGO_SETTINGS_MODULE: config.settings.test_demo_app
         run: pytest --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
       - uses: codecov/codecov-action@v5

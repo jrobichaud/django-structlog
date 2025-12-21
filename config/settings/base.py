@@ -275,4 +275,15 @@ TASKS = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    "django_structlog": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env("DJANGO_STRUCTLOG_CACHE"),
+    },
+}
+
+
 INSTALLED_APPS += ["django_structlog"]

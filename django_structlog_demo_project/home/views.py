@@ -2,7 +2,6 @@ import asyncio
 import logging
 import time
 
-import django
 import structlog
 from django.http import HttpResponse, StreamingHttpResponse
 
@@ -11,6 +10,10 @@ from django_structlog_demo_project.taskapp.celery import (
     nesting_task,
     rejected_task,
     successful_task,
+)
+from django_structlog_demo_project.tasks import (
+    django_failing_task,
+    django_task,
 )
 
 logger = structlog.get_logger(__name__)
@@ -35,14 +38,14 @@ def enqueue_nesting_task(request):
 
 
 def enqueue_django_task(request):
-
-    if django.VERSION < (6, 0):
-        return HttpResponse(status=200)
-
-    from django_structlog_demo_project.tasks import django_task
-
     logger.info("Enqueuing Django 6 native task")
     django_task.enqueue()
+    return HttpResponse(status=201)
+
+
+def enqueue_django_failing_task(request):
+    logger.info("Enqueuing Django 6 native failing task")
+    django_failing_task.enqueue()
     return HttpResponse(status=201)
 
 

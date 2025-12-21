@@ -328,7 +328,7 @@ In your formatters, add the ``foreign_pre_chain`` section, and then add ``struct
                ],
            },
        },
-       ...
+       #...
     }
 
 
@@ -357,7 +357,7 @@ Flat lines file (\ ``logs/flat_lines.log``\ )
 Json file (\ ``logs/json.log``\ )
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block:: json
+.. code-block:: jsonl
 
    {"request_id": "c53dff1d-3fc5-4257-a78a-9a567c937561", "user_id": 1, "ip": "0.0.0.0", "request": "GET /", "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36", "event": "request_started", "timestamp": "2019-04-13T19:39:29.321453Z", "logger": "django_structlog.middlewares.request", "level": "info"}
    {"request_id": "c53dff1d-3fc5-4257-a78a-9a567c937561", "user_id": 1, "ip": "0.0.0.0", "code": 200, "event": "request_finished", "timestamp": "2019-04-13T19:39:29.345207Z", "logger": "django_structlog.middlewares.request", "level": "info"}
@@ -624,7 +624,7 @@ Changes you need to do
                ],
            },
        },
-       ...
+       #...
     }
 
 
@@ -662,8 +662,8 @@ Note: For the moment redis is needed to run the tests. The easiest way is to sta
 
    docker compose up -d redis
    pip install -r requirements.txt
-   env CELERY_BROKER_URL=redis://0.0.0.0:6379 DJANGO_SETTINGS_MODULE=config.settings.test pytest test_app
-   env CELERY_BROKER_URL=redis://0.0.0.0:6379 DJANGO_SETTINGS_MODULE=config.settings.test_demo_app pytest django_structlog_demo_project
+   env DJANGO_SETTINGS_MODULE=config.settings.test pytest test_app
+   env DJANGO_SETTINGS_MODULE=config.settings.test_demo_app pytest django_structlog_demo_project
    docker compose stop redis
 
 .. inclusion-marker-running-tests-end
