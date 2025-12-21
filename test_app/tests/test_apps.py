@@ -1,5 +1,7 @@
+import unittest
 from unittest.mock import create_autospec, patch
 
+import django
 from django.test import TestCase
 
 from django_structlog import apps, commands
@@ -72,6 +74,7 @@ class TestAppConfig(TestCase):
 
         self.assertFalse(hasattr(app, "_django_command_receiver"))
 
+    @unittest.skipIf(django.VERSION < (6, 0), "Django 6.0+ required for native tasks")
     def test_django_tasks_enabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
@@ -88,6 +91,7 @@ class TestAppConfig(TestCase):
         self.assertTrue(hasattr(app, "_django_task_receiver"))
         self.assertIsNotNone(app._django_task_receiver)
 
+    @unittest.skipIf(django.VERSION < (6, 0), "Django 6.0+ required for native tasks")
     def test_django_tasks_disabled(self) -> None:
         app = apps.DjangoStructLogConfig(
             "django_structlog", __import__("django_structlog")
