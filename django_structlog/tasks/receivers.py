@@ -3,11 +3,6 @@ from typing import TYPE_CHECKING, Any, Type
 import django
 import structlog
 from django.core.cache import caches
-from django.tasks.signals import (  # type: ignore[import-untyped]
-    task_enqueued,
-    task_finished,
-    task_started,
-)
 
 from django_structlog.tasks import signals
 
@@ -96,6 +91,12 @@ class DjangoTaskReceiver(BaseTaskReceiver):
             logger.error("task_failed", **log_vars)
 
     def connect_signals(self) -> None:
+        from django.tasks.signals import (  # type: ignore[import-untyped]
+            task_enqueued,
+            task_finished,
+            task_started,
+        )
+
         task_started.connect(self.receiver_task_started)
         task_finished.connect(self.receiver_task_finished)
         task_enqueued.connect(self.receiver_task_enqueued)
