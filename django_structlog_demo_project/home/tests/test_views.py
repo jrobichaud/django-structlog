@@ -93,3 +93,31 @@ class TestSyncStreamingViewView:
         assert b"4" == next(response.streaming_content)
         with pytest.raises(StopIteration):
             next(response.streaming_content)
+
+
+class TestEnqueueDjangoTask:
+    def test_django6(self, caplog, mocker):
+        import django
+
+        if django.VERSION < (6, 0):
+            pytest.skip("Django 6+ required")
+
+        mock_task = mocker.patch("django_structlog_demo_project.tasks.django_task")
+
+        response = views.enqueue_django_task(None)
+        assert response.status_code == 201
+
+        mock_task.enqueue.assert_called_once()
+
+        assert len(caplog.records) == 1
+        record = caplog.records[0]
+        assert "Enqueuing Django 6 native task" in record.msg["event"]
+
+    def test_django_less_than_6(self):
+        import django
+
+        if django.VERSION >= (6, 0):
+            pytest.skip("Django < 6 required")
+
+        response = views.enqueue_django_task(None)
+        assert response.status_code == 200
