@@ -369,25 +369,24 @@ class TestReceivers(TestCase):
 @unittest.skipIf(django.VERSION < (6, 0), "Django 6.0+ required for native tasks")
 class TestConnectDjangoTaskSignals(TestCase):
     def test_call(self) -> None:
-        if django.VERSION >= (6, 0):
-            from django.tasks.signals import (  # type: ignore[import-untyped]
-                task_enqueued,
-                task_finished,
-                task_started,
-            )
+        from django.tasks.signals import (  # type: ignore[import-untyped]
+            task_enqueued,
+            task_finished,
+            task_started,
+        )
 
-            from django_structlog.tasks.receivers import DjangoTaskReceiver
+        from django_structlog.tasks.receivers import DjangoTaskReceiver
 
-            receiver = DjangoTaskReceiver()
-            with patch(
-                "django.dispatch.dispatcher.Signal.connect", autospec=True
-            ) as mock_connect:
-                receiver.connect_signals()
+        receiver = DjangoTaskReceiver()
+        with patch(
+            "django.dispatch.dispatcher.Signal.connect", autospec=True
+        ) as mock_connect:
+            receiver.connect_signals()
 
-            mock_connect.assert_has_calls(
-                [
-                    call(task_started, receiver.receiver_task_started),
-                    call(task_finished, receiver.receiver_task_finished),
-                    call(task_enqueued, receiver.receiver_task_enqueued),
-                ]
-            )
+        mock_connect.assert_has_calls(
+            [
+                call(task_started, receiver.receiver_task_started),
+                call(task_finished, receiver.receiver_task_finished),
+                call(task_enqueued, receiver.receiver_task_enqueued),
+            ]
+        )
