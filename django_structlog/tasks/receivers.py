@@ -3,12 +3,17 @@ from typing import TYPE_CHECKING, Any, Type
 import django
 import structlog
 from django.core.cache import caches
+from django.tasks.signals import (  # type: ignore[import-untyped]
+    task_enqueued,
+    task_finished,
+    task_started,
+)
 
 from django_structlog.tasks import signals
 
 logger = structlog.getLogger(__name__)
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     if django.VERSION >= (6, 0):
         from django.tasks.base import TaskResult  # type: ignore[import-untyped]
     else:
@@ -84,20 +89,13 @@ class DjangoTaskReceiver(BaseTaskReceiver):
             )
             logger.info("task_succeeded", **log_vars)
         elif task_result.status == TaskResultStatus.FAILED:
-            last_error = task_result.errors[-1]  # Get the last error
-            if last_error:
+            if task_result.errors:
+                last_error = task_result.errors[-1]  # Get the last error
                 log_vars["exception_class"] = last_error.exception_class_path
                 log_vars["traceback"] = last_error.traceback
             logger.error("task_failed", **log_vars)
 
     def connect_signals(self) -> None:
-        if django.VERSION >= (6, 0):
-            from django.tasks.signals import (  # type: ignore[import-untyped]
-                task_enqueued,
-                task_finished,
-                task_started,
-            )
-
-            task_started.connect(self.receiver_task_started)
-            task_finished.connect(self.receiver_task_finished)
-            task_enqueued.connect(self.receiver_task_enqueued)
+        task_started.connect(self.receiver_task_started)
+        task_finished.connect(self.receiver_task_finished)
+        task_enqueued.connect(self.receiver_task_enqueued)
