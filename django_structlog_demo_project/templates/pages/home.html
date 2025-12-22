@@ -138,6 +138,24 @@
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Django Task Framework</h5>
+          <div class="vstack gap-1">
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_django_task' %}')">
+              Successful task
+            </button>
+
+            <button
+              class="btn btn-outline-success"
+              onclick="fetchUrl('{% url 'enqueue_django_failing_task' %}')">
+              Failing task
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

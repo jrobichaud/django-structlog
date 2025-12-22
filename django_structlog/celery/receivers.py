@@ -15,6 +15,7 @@ from celery.signals import (
     task_unknown,
 )
 
+from ..tasks.receivers import BaseTaskReceiver
 from . import signals
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -23,7 +24,7 @@ if TYPE_CHECKING:  # pragma: no cover
 logger = structlog.getLogger(__name__)
 
 
-class CeleryReceiver:
+class CeleryReceiver(BaseTaskReceiver):
     _priority: Optional[str]
 
     def __init__(self) -> None:
@@ -41,10 +42,7 @@ class CeleryReceiver:
         if current_app.conf.task_protocol < 2:
             return
 
-        context = structlog.contextvars.get_merged_contextvars(logger)
-        if "task_id" in context:
-            context["parent_task_id"] = context.pop("task_id")
-
+        context = self.get_task_context()
         signals.modify_context_before_task_publish.send(
             sender=self.receiver_before_task_publish,
             context=context,
@@ -90,7 +88,7 @@ class CeleryReceiver:
         structlog.contextvars.clear_contextvars()
         structlog.contextvars.bind_contextvars(task_id=task_id)
         metadata = getattr(task.request, "__django_structlog__", {})
-        structlog.contextvars.bind_contextvars(**metadata)
+        self.bind_context(metadata)
         signals.bind_extra_task_metadata.send(
             sender=self.receiver_task_prerun, task=task, logger=logger
         )
