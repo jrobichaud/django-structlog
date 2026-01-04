@@ -11,6 +11,10 @@ from django_structlog_demo_project.taskapp.celery import (
     rejected_task,
     successful_task,
 )
+from django_structlog_demo_project.tasks import (
+    django_failing_task,
+    django_task,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -30,6 +34,18 @@ def enqueue_failing_task(request):
 def enqueue_nesting_task(request):
     logger.info("Enqueuing nesting task")
     nesting_task.delay()
+    return HttpResponse(status=201)
+
+
+def enqueue_django_task(request):
+    logger.info("Enqueuing Django 6 native task")
+    django_task.enqueue()
+    return HttpResponse(status=201)
+
+
+def enqueue_django_failing_task(request):
+    logger.info("Enqueuing Django 6 native failing task")
+    django_failing_task.enqueue()
     return HttpResponse(status=201)
 
 
