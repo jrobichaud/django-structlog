@@ -1,0 +1,935 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Change Log &mdash; django-structlog 10.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=335988e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Upgrade Guide" href="upgrade_guide.html" />
+    <link rel="prev" title="Demo app" href="demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            django-structlog
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events and Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#october-22-2025">10.0.0 (October 22, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-7-2025">9.1.1 (April 7, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-4-2025">9.1.0 (April 4, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#january-29-2025">9.0.1 (January 29, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-26-2024">9.0.0 (November 26, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-24-2024">8.1.0 (May 24, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-13-2024">8.0.0 (March 13, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#december-20-2023">7.1.0 (December 20, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#december-13-2023">7.0.0 (December 13, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-29-2023">6.0.1 (November 29, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#october-3-2023">6.0 (October 3, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-30-2023">5.3.0 (June 30, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-29-2023">5.2.0 (June 29, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-22-2023">5.1.0 (April 22, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-16-2023">5.0.2 (April 16, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-24-2023">5.0.1 (March 24, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-23-2023">5.0.0 (March 23, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#february-7-2023">4.1.1 (February 7, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#february-4-2023">4.1.0 (February 4, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#october-25-2022">4.0.1 (October 25, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#october-22-2022">4.0.0 (October 22, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#august-2-2022">3.0.1 (August 2, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#august-1-2022">3.0.0 (August 1, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-18-2021">2.2.0 (November 18, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#september-28-2021">2.1.3 (September 28, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#august-31-2021">2.1.2 (August 31, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-22-2021">2.1.1 (June 22, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-26-2020">2.1.0 (November 26, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-25-2020">2.0.0 (November 25, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-11-2020">1.6.3 (November 11, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#october-4-2020">1.6.2 (October 4, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#august-13-2020">1.6.1 (August 13, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-17-2020">1.6.0 (June 17, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-16-2020">1.5.5 (June 16, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#june-15-2020">1.5.4 (June 15, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id70">1.5.3 (June 15, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-2-2020">1.5.2 (April 2, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-18-2020">1.5.1 (March 18, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#march-6-2020">1.5.0 (March 6, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#february-8-2020">1.4.1 (February 8, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#february-7-2020">1.4.0 (February 7, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#december-23-2019">1.3.5 (December 23, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#november-27-2019">1.3.4 (November 27, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#october-6-2019">1.3.3 (October 6, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#september-21-2019">1.3.2 (September 21, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#september-4-2019">1.3.1 (September 4, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#september-3-2019">1.3.0 (September 3, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-18-2019">1.2.3 (May 18, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-13-2019">1.2.2 (May 13, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-8-2019">1.2.1 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id87">1.2.0 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id88">1.1.6 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id89">1.1.5 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-22-2019">1.1.4 (April 22, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id90">1.1.3 (April 22, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-19-2019">1.1.2 (April 19, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-18-2019">1.1.1 (April 18, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-16-2019">1.1 (April 16, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#to-1-0-7-april-14-2019">1.0.4 to 1.0.7 (April 14, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-14-2019">1.0.3 (April 14, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#april-13-2019">1.0.2 (April 13, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id91">1.0.0 (April 13, 2019)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_guide.html">Upgrade Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">django-structlog</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Change Log</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="change-log">
+<h1>Change Log<a class="headerlink" href="#change-log" title="Link to this heading"></a></h1>
+<section id="october-22-2025">
+<h2>10.0.0 (October 22, 2025)<a class="headerlink" href="#october-22-2025" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add 5xx and cancelled request log level config. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/935">#935</a>. Special thanks to <a class="reference external" href="https://github.com/fcortes">&#64;fcortes</a>.</p></li>
+<li><p>Add python 3.14 support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/937">#937</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Drop python 3.9 support.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-7-2025">
+<h2>9.1.1 (April 7, 2025)<a class="headerlink" href="#april-7-2025" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>fix <code class="docutils literal notranslate"><span class="pre">duration_ms</span></code> to the celery tasks metadata not working. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/811">#811</a>. Special thanks to <a class="reference external" href="https://github.com/ahumeau">&#64;ahumeau</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-4-2025">
+<h2>9.1.0 (April 4, 2025)<a class="headerlink" href="#april-4-2025" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>new setting <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_IP_LOGGING_ENABLED</span></code> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>) to allow to disable ip binding. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/803">#803</a>. Special thanks to <a class="reference external" href="https://github.com/dulguunpc">&#64;dulguunpc</a>.</p></li>
+<li><p>add <code class="docutils literal notranslate"><span class="pre">duration_ms</span></code> to the celery tasks metadata. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/796">#796</a>. Special thanks to <a class="reference external" href="https://github.com/ahumeau">&#64;ahumeau</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p><cite>vary: Cookie</cite> was always set. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/734">#734</a>. Special thanks to <a class="reference external" href="https://github.com/last-partizan">&#64;last-partizan</a></p></li>
+</ul>
+</dd>
+<dt><em>Other:</em></dt><dd><ul class="simple">
+<li><p>add support of django 5.2 (just adding it to the test matrix, no code changes)</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="january-29-2025">
+<h2>9.0.1 (January 29, 2025)<a class="headerlink" href="#january-29-2025" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Fix exceptions not being propagated when using streaming response. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/747">#747</a>. Special thanks to <a class="reference external" href="https://github.com/liambuchanan">&#64;liambuchanan</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-26-2024">
+<h2>9.0.0 (November 26, 2024)<a class="headerlink" href="#november-26-2024" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-9-0"><span class="std std-ref">Upgrading to 9.0+</span></a></p>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add type definitions for the project. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/697">#697</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/696">#696</a>. Special thanks to <a class="reference external" href="https://github.com/j00bar">&#64;j00bar</a> and <a class="reference external" href="https://github.com/MaxDude132">&#64;MaxDude132</a> for the review.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> now relies on django signal <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/signals/#got-request-exception">got_request_exception</a> instead of Middleware <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/http/middleware/#process-exception">process_exception</a> method. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/705">#705</a>, <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/658">#658</a> and <a class="reference internal" href="upgrade_guide.html#upgrade-9-0"><span class="std std-ref">Upgrading to 9.0+</span></a>. Special thanks to <a class="reference external" href="https://github.com/sshishov">&#64;sshishov</a>.</p></li>
+<li><p>Add python 3.13 support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/674">#674</a>.</p></li>
+<li><p>Drop python 3.8 support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/674">#674</a>.</p></li>
+<li><p>Django 5.1 and celery 5.4 support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/617">#617</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Other:</em></dt><dd><ul class="simple">
+<li><p>Migrated project to use python 3.13 along with readthedocs generation.</p></li>
+<li><p>now use <a class="reference external" href="https://pycqa.github.io/isort/">isort</a></p></li>
+<li><p>fixed <code class="docutils literal notranslate"><span class="pre">codecov</span></code> github action that was not properly configured and therefore not properly reporting coverage.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="may-24-2024">
+<h2>8.1.0 (May 24, 2024)<a class="headerlink" href="#may-24-2024" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add a <a class="reference internal" href="configuration.html#settings"><span class="std std-ref">setting</span></a> <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_USER_ID_FIELD</span> <span class="pre">=</span> <span class="pre">'pk'</span></code> to customize what user field to use as <code class="docutils literal notranslate"><span class="pre">user_id</span></code> in the logs. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/546">#546</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/545">#545</a>. Special thanks to <a class="reference external" href="https://github.com/sshishov">&#64;sshishov</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Drop support of python 3.7</p></li>
+<li><p>Drop support of django 3.2, and 4.1</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="march-13-2024">
+<h2>8.0.0 (March 13, 2024)<a class="headerlink" href="#march-13-2024" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-8-0"><span class="std std-ref">Upgrading to 8.0+</span></a></p>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>add <code class="docutils literal notranslate"><span class="pre">log_kwargs</span></code> to <a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_metadata" title="django_structlog.signals.bind_extra_request_metadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_metadata</span></code></a>, <a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_finished_metadata" title="django_structlog.signals.bind_extra_request_finished_metadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_finished_metadata</span></code></a>,  and <a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_failed_metadata" title="django_structlog.signals.bind_extra_request_failed_metadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_failed_metadata</span></code></a>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/484">#484</a>. Special thanks to <a class="reference external" href="https://github.com/shtoltz">&#64;shtoltz</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="december-20-2023">
+<h2>7.1.0 (December 20, 2023)<a class="headerlink" href="#december-20-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>add <code class="docutils literal notranslate"><span class="pre">asgi</span></code>’s async view cancellation event <code class="docutils literal notranslate"><span class="pre">request_cancelled</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/413">#413</a> and  and <a class="reference internal" href="events.html#request-events"><span class="std std-ref">Request Events</span></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="december-13-2023">
+<h2>7.0.0 (December 13, 2023)<a class="headerlink" href="#december-13-2023" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-7-0"><span class="std std-ref">Upgrading to 7.0+</span></a></p>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>(celery) add <code class="docutils literal notranslate"><span class="pre">priority</span></code> (if available) and <code class="docutils literal notranslate"><span class="pre">routing_key</span></code> to <code class="docutils literal notranslate"><span class="pre">task_enqueued</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/345">#345</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/341">#341</a>. Special thanks to <a class="reference external" href="https://github.com/badziyoussef">badziyoussef</a>.</p></li>
+<li><p>Django 5.0 support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/350">#350</a>. Take note async view cancellation when using <code class="docutils literal notranslate"><span class="pre">asgi</span></code> does not work yet, see <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/351">#351</a>.</p></li>
+<li><p>Add streaming response support (for both sync and async) and Django 5’s async cancellation. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/353">#353</a> and <a class="reference internal" href="events.html#streaming-response-events"><span class="std std-ref">StreamingHttpResponse Events</span></a>.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Supports django-ipware 6+ only. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/403">#403</a>. Special thanks to the maintainer <a class="reference external" href="https://github.com/un33k">&#64;un33k</a>.</p></li>
+<li><p>Drop support of django 4.0. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/338">#338</a>. Special thanks to <a class="reference external" href="https://github.com/jairhenrique">&#64;jairhenrique</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Other:</em></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>Improved demo project</dt><dd><ul>
+<li><p>Better UI</p></li>
+<li><p>Easy switch between <code class="docutils literal notranslate"><span class="pre">runserver_plus</span></code>, <code class="docutils literal notranslate"><span class="pre">wsgi</span></code> an <code class="docutils literal notranslate"><span class="pre">asgi</span></code></p></li>
+<li><p>Front-end request feedbacks using <code class="docutils literal notranslate"><span class="pre">toasts</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-29-2023">
+<h2>6.0.1 (November 29, 2023)<a class="headerlink" href="#november-29-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>freeze <code class="docutils literal notranslate"><span class="pre">django-ipware&lt;6</span></code> for now due to breaking changes. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/388">#388</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="october-3-2023">
+<h2>6.0 (October 3, 2023)<a class="headerlink" href="#october-3-2023" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-6-0"><span class="std std-ref">Upgrading to 6.0+</span></a></p>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Python 3.12 support</p></li>
+<li><p>Add support of logging <a class="reference internal" href="commands.html#commands"><span class="std std-ref">Commands</span></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_revoked</span></code> has now a <code class="docutils literal notranslate"><span class="pre">signame</span></code> metadata. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/323">#323</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_not_found</span></code> has now a <code class="docutils literal notranslate"><span class="pre">task_id</span></code> and a <code class="docutils literal notranslate"><span class="pre">task</span></code> metadata. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/323">#323</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Add missing metadata when a task is revoked. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/317">#317</a>. Special thanks to <a class="reference external" href="https://github.com/badziyoussef">&#64;badziyoussef</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Drop support of python 3.7</p></li>
+<li><p>Drop legacy code still supporting celery &lt; 4</p></li>
+<li><dl class="simple">
+<dt>Removal of deprecated:</dt><dd><ul>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.CeleryMiddleware</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.SyncRequestMiddleware</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.AsyncRequestMiddleware</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.request_middleware_router</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4XX</span></code> status codes now log by default as <code class="docutils literal notranslate"><span class="pre">WARNING</span></code> and <code class="docutils literal notranslate"><span class="pre">5XX</span></code> as <code class="docutils literal notranslate"><span class="pre">ERROR</span></code>. The behaviour of <code class="docutils literal notranslate"><span class="pre">4XX</span></code> can be customized with <a class="reference internal" href="configuration.html#configuration"><span class="std std-ref">Configuration</span></a>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/308">#308</a>. Special thanks to <a class="reference external" href="https://github.com/adinhodovic">&#64;adinhodovic</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_revoked</span></code>’s <code class="docutils literal notranslate"><span class="pre">signum</span></code> is now an integer instead of an object. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/323">#323</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_not_found</span></code>’s <code class="docutils literal notranslate"><span class="pre">message</span></code> was removed and replaced by <code class="docutils literal notranslate"><span class="pre">task_id</span></code> and <code class="docutils literal notranslate"><span class="pre">task</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/323">#323</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_rejected</span></code>’s <code class="docutils literal notranslate"><span class="pre">message</span></code> was removed and replaced by <code class="docutils literal notranslate"><span class="pre">task_id</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/323">#323</a>.</p></li>
+<li><p>Switched from <code class="docutils literal notranslate"><span class="pre">git</span></code>’s <code class="docutils literal notranslate"><span class="pre">master</span></code> to <code class="docutils literal notranslate"><span class="pre">main</span></code> branch</p></li>
+</ul>
+</dd>
+<dt><em>Other:</em></dt><dd><ul class="simple">
+<li><p>Add new <a class="reference internal" href="how_tos.html#how-tos"><span class="std std-ref">How Tos</span></a> section in the documentation.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-30-2023">
+<h2>5.3.0 (June 30, 2023)<a class="headerlink" href="#june-30-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>django setting <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_CELERY_ENABLED</span> <span class="pre">=</span> <span class="pre">True</span></code> replacing <code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.CeleryMiddleware</span></code>. See <a class="reference internal" href="upgrade_guide.html#upgrade-6-0"><span class="std std-ref">Upgrading to 6.0+</span></a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/265">#265</a>. Also introduce new internal <cite>app_settings</cite> that may come handy for future configurations.</p></li>
+</ul>
+</dd>
+<dt><em>Deprecations:</em></dt><dd><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.CeleryMiddleware</span></code> (see above).</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-29-2023">
+<h2>5.2.0 (June 29, 2023)<a class="headerlink" href="#june-29-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add new event <code class="docutils literal notranslate"><span class="pre">task_started</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/260">#260</a>. Special thanks to <a class="reference external" href="https://github.com/adrenaline681">&#64;adrenaline681</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-22-2023">
+<h2>5.1.0 (April 22, 2023)<a class="headerlink" href="#april-22-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add new signal <a class="reference internal" href="api_documentation.html#django_structlog.signals.update_failure_response" title="django_structlog.signals.update_failure_response"><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.signals.update_failure_response</span></code></a> allowing to modify the response in case of failure. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/231">#231</a>. Special thanks to <a class="reference external" href="https://github.com/HMaker">&#64;HMaker</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-16-2023">
+<h2>5.0.2 (April 16, 2023)<a class="headerlink" href="#april-16-2023" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-5-0"><span class="std std-ref">Upgrading to 5.0+</span></a></p>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Fix regression in 5.0.0 and 5.0.1 where exceptions were not logged as <code class="docutils literal notranslate"><span class="pre">error</span></code> but as <code class="docutils literal notranslate"><span class="pre">info</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/226">#226</a>. Special thanks to <a class="reference external" href="https://github.com/ntap-fge">&#64;ntap-fge</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Rollbacks from 5.0.0:</em></dt><dd><ul class="simple">
+<li><p>Rollback removal of <code class="docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_failed_metadata</span></code>. Relates the above fix.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="march-24-2023">
+<h2>5.0.1 (March 24, 2023)<a class="headerlink" href="#march-24-2023" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-5-0"><span class="std std-ref">Upgrading to 5.0+</span></a></p>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>minimum requirements change for <code class="docutils literal notranslate"><span class="pre">asgiref</span></code> to 3.6.0. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/209">#209</a>. Special thanks to <a class="reference external" href="https://github.com/adinsoon">&#64;adinsoon</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="march-23-2023">
+<h2>5.0.0 (March 23, 2023)<a class="headerlink" href="#march-23-2023" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-5-0"><span class="std std-ref">Upgrading to 5.0+</span></a></p>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> and <code class="docutils literal notranslate"><span class="pre">CeleryMiddleware</span></code> now properly support async views</p></li>
+</ul>
+</dd>
+<dt><em>Removed:</em></dt><dd><ul class="simple">
+<li><p><em>(Rolled back in 5.0.2)</em> <code class="docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_failed_metadata</span></code></p></li>
+</ul>
+</dd>
+<dt><em>Deprecates:</em></dt><dd><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.request_middleware_router</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.requests.AsyncRequestMiddleware</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.requests.SyncRequestMiddleware</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="february-7-2023">
+<h2>4.1.1 (February 7, 2023)<a class="headerlink" href="#february-7-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.middlewares.request_middleware_router</span></code> to choose automatically between Async or Sync middleware</p></li>
+</ul>
+</dd>
+<dt><em>Rollbacks from 4.1.0:</em></dt><dd><ul class="simple">
+<li><p>Rollback <code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> not being a class anymore, its an internal <code class="docutils literal notranslate"><span class="pre">SyncRequestMiddleware</span></code></p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Migrate project to <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> instead of <code class="docutils literal notranslate"><span class="pre">setup.py</span></code></p></li>
+<li><p>Add <cite>asgi</cite> server to demo project see <a class="reference internal" href="development.html#development"><span class="std std-ref">Development</span></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="february-4-2023">
+<h2>4.1.0 (February 4, 2023)<a class="headerlink" href="#february-4-2023" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <a class="reference external" href="https://docs.djangoproject.com/en/4.1/topics/async/#async-views">async view</a> support. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/180">#180</a>. Special thanks to <a class="reference external" href="https://github.com/DamianMel">&#64;DamianMel</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> is no longer a class but a function due to async view support. This should only affect projects using the middleware not as intended. If this cause you problems, please refer to this issue <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/183">#183</a>, <a class="reference external" href="https://django-structlog.readthedocs.io">the documentation</a> or feel free to open a new issue. Special thanks to <a class="reference external" href="https://github.com/gvangool">&#64;gvangool</a> for pointing that out.</p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Add colours in log in the demo project. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/commit/63bdb4d">63bdb4d</a> to update your projects. Special thanks to <a class="reference external" href="https://github.com/RoscoeTheDog">&#64;RoscoeTheDog</a>.</p></li>
+<li><p>Upgrade or remove various development packages</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="october-25-2022">
+<h2>4.0.1 (October 25, 2022)<a class="headerlink" href="#october-25-2022" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add support to <code class="docutils literal notranslate"><span class="pre">python</span></code> 3.11. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/142">#142</a>. Special thanks to <a class="reference external" href="https://github.com/jairhenrique">&#64;jairhenrique</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="october-22-2022">
+<h2>4.0.0 (October 22, 2022)<a class="headerlink" href="#october-22-2022" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-4-0"><span class="std std-ref">Upgrading to 4.0+</span></a></p>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> will now on follow LTS versions of Python, Django, and Celery. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/110">#110</a>. Special thanks to <a class="reference external" href="https://github.com/jairhenrique">&#64;jairhenrique</a> for his convincing arguments.</p></li>
+</ul>
+</dd>
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>You can now install <code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> with <code class="docutils literal notranslate"><span class="pre">celery</span></code> extra. Specifying <code class="docutils literal notranslate"><span class="pre">django-structlog[celery]==4.0.0</span></code> in <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> will make sure your <code class="docutils literal notranslate"><span class="pre">celery</span></code>’s version is compatible.</p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Upgrade or remove various development packages</p></li>
+<li><p>Upgrade local development environment from python 3.7 to 3.10 and from django 3.2 to django 4.1</p></li>
+<li><p>Added a <a class="reference external" href="https://jrobichaud.github.io/django-structlog/">gh-pages</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="august-2-2022">
+<h2>3.0.1 (August 2, 2022)<a class="headerlink" href="#august-2-2022" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AttributeError</span></code> with custom User without <code class="docutils literal notranslate"><span class="pre">pk</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/80">#80</a>. Special thanks to <a class="reference external" href="https://github.com/mlegner">&#64;mlegner</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">dependabot</span></code> to manage dependencies. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/83">#83</a>. Special thanks to <a class="reference external" href="https://github.com/jairhenrique">&#64;jairhenrique</a>.</p></li>
+<li><p>Upgrade various development packages</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="august-1-2022">
+<h2>3.0.0 (August 1, 2022)<a class="headerlink" href="#august-1-2022" title="Link to this heading"></a></h2>
+<p>See: <a class="reference internal" href="upgrade_guide.html#upgrade-3-0"><span class="std std-ref">Upgrading to 3.0+</span></a></p>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> now uses <code class="docutils literal notranslate"><span class="pre">structlog.contextvars</span></code> instead of <code class="docutils literal notranslate"><span class="pre">structlog.threadlocal</span></code>. See the upgrade guide for more information (<a class="reference internal" href="upgrade_guide.html#upgrade-3-0"><span class="std std-ref">Upgrading to 3.0+</span></a>) and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/78">#78</a>. Special thanks to <a class="reference external" href="https://github.com/AndrewGuenther">&#64;AndrewGuenther</a>  and <a class="reference external" href="https://github.com/shimizukawa">&#64;shimizukawa</a>.</dt><dd><ul>
+<li><p>removed <code class="docutils literal notranslate"><span class="pre">django_structlog.processors.inject_context_dict</span></code></p></li>
+<li><p>minimum requirements change to <code class="docutils literal notranslate"><span class="pre">python</span></code> 3.7+</p></li>
+<li><p>minimum requirements change to <code class="docutils literal notranslate"><span class="pre">structlog</span></code> 21.5</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add python 3.10, celery 5.2 and django 4.0 to the test matrix.</p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">wrapper_class</span></code> from the configuration</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-18-2021">
+<h2>2.2.0 (November 18, 2021)<a class="headerlink" href="#november-18-2021" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Requests were logged as <code class="docutils literal notranslate"><span class="pre">&lt;WSGIRequest:</span> <span class="pre">GET</span> <span class="pre">'/'&gt;</span></code> (as an object) and now they are logged like this <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code> (as a string). See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/72">#72</a>. Special thanks to <a class="reference external" href="https://github.com/humitos">&#64;humitos</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="september-28-2021">
+<h2>2.1.3 (September 28, 2021)<a class="headerlink" href="#september-28-2021" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Implement <a class="reference external" href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws">Celery Task.throws</a>’ behaviour of logging expected exception as <code class="docutils literal notranslate"><span class="pre">INFO</span></code> with no tracebacks. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/62">#62</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/70">#70</a>. Special thanks to <a class="reference external" href="https://github.com/meunomemauricio">&#64;meunomemauricio</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="august-31-2021">
+<h2>2.1.2 (August 31, 2021)<a class="headerlink" href="#august-31-2021" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">django.core.exceptions.PermissionDenied</span></code> is no longer logged as 500 but 403. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/68">#68</a>. Special thanks to <a class="reference external" href="https://github.com/rabbit-aaron">&#64;rabbit-aaron</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-22-2021">
+<h2>2.1.1 (June 22, 2021)<a class="headerlink" href="#june-22-2021" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">django</span></code> 3.2 and <code class="docutils literal notranslate"><span class="pre">python</span></code> 3.9 to the test matrix and <code class="docutils literal notranslate"><span class="pre">pypi</span></code> metadata. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/65">#65</a>. Special thanks to <a class="reference external" href="https://github.com/kashewnuts">&#64;kashewnuts</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-26-2020">
+<h2>2.1.0 (November 26, 2020)<a class="headerlink" href="#november-26-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">django_structlog.processors.inject_context_dict</span></code> for standard python loggers. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/24">#24</a>. Special thanks to <a class="reference external" href="https://github.com/debfx">&#64;debfx</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-25-2020">
+<h2>2.0.0 (November 25, 2020)<a class="headerlink" href="#november-25-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Upgrade:</em></dt><dd><ul class="simple">
+<li><p>There are necessary configuration changes needed. See <a class="reference internal" href="upgrade_guide.html#upgrade-2-0"><span class="std std-ref">Upgrading to 2.0+</span></a> for the details.</p></li>
+</ul>
+</dd>
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>No longer add <code class="docutils literal notranslate"><span class="pre">error</span></code> and <code class="docutils literal notranslate"><span class="pre">error_traceback</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/55">#55</a> and <a class="reference internal" href="upgrade_guide.html#upgrade-2-0"><span class="std std-ref">Upgrading to 2.0+</span></a>. Special thanks to <a class="reference external" href="https://github.com/debfx">&#64;debfx</a>.</p></li>
+</ul>
+</dd>
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Fix crash when request’s user is <code class="docutils literal notranslate"><span class="pre">None</span></code> for <a class="reference external" href="https://github.com/jazzband/django-oauth-toolkit">django-oauth-toolkit</a>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/56">#56</a>. Special thanks to <a class="reference external" href="https://github.com/nicholasamorim">&#64;nicholasamorim</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-11-2020">
+<h2>1.6.3 (November 11, 2020)<a class="headerlink" href="#november-11-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Call stack of exception in log is now an appropriate string. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/54">#54</a>. Special thanks to <a class="reference external" href="https://github.com/debfx">&#64;debfx</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="october-4-2020">
+<h2>1.6.2 (October 4, 2020)<a class="headerlink" href="#october-4-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Fix UUID as User pk causing issues. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/52">#52</a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/45">#45</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/51">#51</a>. Special thanks to <a class="reference external" href="https://github.com/fadedDexofan">&#64;fadedDexofan</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="august-13-2020">
+<h2>1.6.1 (August 13, 2020)<a class="headerlink" href="#august-13-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Fixes:</em></dt><dd><ul class="simple">
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">providing_args</span></code> from signals to fix django 4.0 deprecation warnings introduced by django 3.1. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/44">#44</a>. Special thanks to <a class="reference external" href="https://github.com/ticosax">&#64;ticosax</a>.</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">sender</span></code> of <code class="docutils literal notranslate"><span class="pre">signals.pre_task_succeeded</span></code></p></li>
+<li><p>Documented signal parameters in doc strings and <code class="docutils literal notranslate"><span class="pre">API</span> <span class="pre">documentation</span></code> to replace <code class="docutils literal notranslate"><span class="pre">providing_args</span></code></p></li>
+</ul>
+</dd>
+<dt><em>Others:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">django</span></code> 3.0 and 3.1 to the test matrix and <code class="docutils literal notranslate"><span class="pre">pypi</span></code> supported frameworks metadata</p></li>
+<li><p>Fix reference of the previous ci in the documentation</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-17-2020">
+<h2>1.6.0 (June 17, 2020)<a class="headerlink" href="#june-17-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">task_succeed</span></code> is now <code class="docutils literal notranslate"><span class="pre">task_succeeded</span></code>. Special thanks to <a class="reference external" href="https://github.com/PawelMorawian">&#64;PawelMorawian</a>.</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">result</span></code> from <code class="docutils literal notranslate"><span class="pre">task_succeeded</span></code> log (may be added back, see below). Special thanks to <a class="reference external" href="https://github.com/PawelMorawian">&#64;PawelMorawian</a> as well.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">django_structlog.celery.signals.pre_task_succeeded</span></code>. To be able to bind <code class="docutils literal notranslate"><span class="pre">result</span></code> if someone really needs it.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-16-2020">
+<h2>1.5.5 (June 16, 2020)<a class="headerlink" href="#june-16-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">bind_extra_request_finished_metadata</span></code> and <code class="docutils literal notranslate"><span class="pre">bind_extra_request_failed_metadata</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/39">#39</a>. Special thanks to <a class="reference external" href="https://github.com/prik2693">&#64;prik2693</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="june-15-2020">
+<h2>1.5.4 (June 15, 2020)<a class="headerlink" href="#june-15-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Remove redundant <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED</span></code> setting and just always make sure <code class="docutils literal notranslate"><span class="pre">user_id</span></code> is in <code class="docutils literal notranslate"><span class="pre">request_finished</span></code> and <code class="docutils literal notranslate"><span class="pre">request_failed</span></code> instead. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/37">#37</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id70">
+<h2>1.5.3 (June 15, 2020)<a class="headerlink" href="#id70" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_LOG_USER_IN_REQUEST_FINISHED</span></code> setting to support <a class="reference external" href="https://www.django-rest-framework.org/">Django REST framework</a>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/37">#37</a>. Special thanks to <a class="reference external" href="https://github.com/immortaleeb">&#64;immortaleeb</a>.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-2-2020">
+<h2>1.5.2 (April 2, 2020)<a class="headerlink" href="#april-2-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">modify_context_before_task_publish</span></code> signal.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="march-18-2020">
+<h2>1.5.1 (March 18, 2020)<a class="headerlink" href="#march-18-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Allow to override celery task metadata from binding. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/32">#32</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/33">#33</a>. Special thanks to <a class="reference external" href="https://github.com/chiragjn">&#64;chiragjn</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="march-6-2020">
+<h2>1.5.0 (March 6, 2020)<a class="headerlink" href="#march-6-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Add support for celery 3. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/26">#26</a> and <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/31">#31</a>. Special thanks to <a class="reference external" href="https://github.com/chiragjn">&#64;chiragjn</a> and <a class="reference external" href="https://github.com/prik2693">&#64;prik2693</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="february-8-2020">
+<h2>1.4.1 (February 8, 2020)<a class="headerlink" href="#february-8-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Bind <code class="docutils literal notranslate"><span class="pre">X-Correlation-ID</span></code> HTTP header’s value as <code class="docutils literal notranslate"><span class="pre">correlation_id</span></code> when provided in request.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="february-7-2020">
+<h2>1.4.0 (February 7, 2020)<a class="headerlink" href="#february-7-2020" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">X-Request-ID</span></code> HTTP header’s value as <code class="docutils literal notranslate"><span class="pre">request_id</span></code> when provided in request. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/22">#22</a>. Special thanks to <a class="reference external" href="https://github.com/jairhenrique">&#64;jairhenrique</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="december-23-2019">
+<h2>1.3.5 (December 23, 2019)<a class="headerlink" href="#december-23-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add python 3.8, celery 4.4 and django 3.0 to the test matrix.</p></li>
+</ul>
+</dd>
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Extract <code class="docutils literal notranslate"><span class="pre">test_app</span></code> from <code class="docutils literal notranslate"><span class="pre">django_structlog_demo_app</span></code> in order to test <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> all by itself</p></li>
+<li><p>Improve CI execution speed by merging stages</p></li>
+<li><p>Upgrade a few development depencencies</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="november-27-2019">
+<h2>1.3.4 (November 27, 2019)<a class="headerlink" href="#november-27-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfix:</em></dt><dd><ul class="simple">
+<li><p>Exception logging not working properly with <code class="docutils literal notranslate"><span class="pre">DEBUG</span> <span class="pre">=</span> <span class="pre">False</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/19">#19</a>. Special thanks to <a class="reference external" href="https://github.com/danpalmer">&#64;danpalmer</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="october-6-2019">
+<h2>1.3.3 (October 6, 2019)<a class="headerlink" href="#october-6-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfix:</em></dt><dd><ul class="simple">
+<li><p>Fix support of different primary key for <code class="docutils literal notranslate"><span class="pre">User</span></code> model. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/13">#13</a>. Special thanks to <a class="reference external" href="https://github.com/dhararon">&#64;dhararon</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="september-21-2019">
+<h2>1.3.2 (September 21, 2019)<a class="headerlink" href="#september-21-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Add support of projects without <code class="docutils literal notranslate"><span class="pre">AuthenticationMiddleware</span></code>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/9">#9</a>. Special thanks to <a class="reference external" href="https://github.com/dhararon">&#64;dhararon</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="september-4-2019">
+<h2>1.3.1 (September 4, 2019)<a class="headerlink" href="#september-4-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Remove extraneous <code class="docutils literal notranslate"><span class="pre">rest-framework</span></code> dependency introduced by <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/7">#7</a>. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/8">#8</a> . Special thanks to <a class="reference external" href="https://github.com/ghickman">&#64;ghickman</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="september-3-2019">
+<h2>1.3.0 (September 3, 2019)<a class="headerlink" href="#september-3-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Improve django uncaught exception formatting. See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pull/7">#7</a>. Special thanks to <a class="reference external" href="https://github.com/paulstuartparker">&#64;paulstuartparker</a></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="may-18-2019">
+<h2>1.2.3 (May 18, 2019)<a class="headerlink" href="#may-18-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">structlog</span></code> dependency not being installed</p></li>
+</ul>
+</dd>
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Use <a class="reference external" href="https://github.com/python/black">black</a> code formatter</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="may-13-2019">
+<h2>1.2.2 (May 13, 2019)<a class="headerlink" href="#may-13-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Use appropriate packaging</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="may-8-2019">
+<h2>1.2.1 (May 8, 2019)<a class="headerlink" href="#may-8-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Fix missing license file to be included in distribution</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id87">
+<h2>1.2.0 (May 8, 2019)<a class="headerlink" href="#id87" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>In the event <code class="docutils literal notranslate"><span class="pre">task_enqueued</span></code>, <code class="docutils literal notranslate"><span class="pre">task_id</span></code> and <code class="docutils literal notranslate"><span class="pre">task_name</span></code> are renamed <code class="docutils literal notranslate"><span class="pre">child_task_id</span></code> and <code class="docutils literal notranslate"><span class="pre">child_task_name</span></code> respectively to avoid override of <code class="docutils literal notranslate"><span class="pre">task_id</span></code> in nested tasks.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id88">
+<h2>1.1.6 (May 8, 2019)<a class="headerlink" href="#id88" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">task_name</span></code> when a task is enqueued</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id89">
+<h2>1.1.5 (May 8, 2019)<a class="headerlink" href="#id89" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add support of tasks calling other tasks (introducing <code class="docutils literal notranslate"><span class="pre">parent_task_id</span></code>)</p></li>
+</ul>
+</dd>
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Fix missing packages</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-22-2019">
+<h2>1.1.4 (April 22, 2019)<a class="headerlink" href="#april-22-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>Wheel distribution</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id90">
+<h2>1.1.3 (April 22, 2019)<a class="headerlink" href="#id90" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Improvements:</em></dt><dd><ul class="simple">
+<li><p>api documentation</p></li>
+<li><p>code documentation</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-19-2019">
+<h2>1.1.2 (April 19, 2019)<a class="headerlink" href="#april-19-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Changes:</em></dt><dd><ul class="simple">
+<li><p>Rewrite the log texts as events</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-18-2019">
+<h2>1.1.1 (April 18, 2019)<a class="headerlink" href="#april-18-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">celery</span></code> signal <code class="docutils literal notranslate"><span class="pre">signals.bind_extra_task_metadata</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-16-2019">
+<h2>1.1 (April 16, 2019)<a class="headerlink" href="#april-16-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">celery</span></code> tasks support</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="to-1-0-7-april-14-2019">
+<h2>1.0.4 to 1.0.7 (April 14, 2019)<a class="headerlink" href="#to-1-0-7-april-14-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New:</em></dt><dd><ul class="simple">
+<li><p>Automated releases with tags on <code class="docutils literal notranslate"><span class="pre">travis</span></code></p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-14-2019">
+<h2>1.0.3 (April 14, 2019)<a class="headerlink" href="#april-14-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">bind_extra_request_metadata</span></code> documentation</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="april-13-2019">
+<h2>1.0.2 (April 13, 2019)<a class="headerlink" href="#april-13-2019" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>Bugfixes:</em></dt><dd><ul class="simple">
+<li><p>Tweaked documentation.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id91">
+<h2>1.0.0 (April 13, 2019)<a class="headerlink" href="#id91" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><em>New</em>:</dt><dd><ul class="simple">
+<li><p>Fist public release.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="demo.html" class="btn btn-neutral float-left" title="Demo app" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="upgrade_guide.html" class="btn btn-neutral float-right" title="Upgrade Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2025, Jules Robichaud-Gagnon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

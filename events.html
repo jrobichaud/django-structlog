@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events and Metadata &mdash; django-structlog 10.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=335988e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example outputs" href="example_outputs.html" />
+    <link rel="prev" title="API documentation" href="api_documentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            django-structlog
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Events and Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#django-s-requestmiddleware">Django’s RequestMiddleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#request-events">Request Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#streaminghttpresponse-events">StreamingHttpResponse Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-bound-metadata">Request Bound Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#request-events-metadata">Request Events Metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#celery">Celery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#task-events">Task Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-bound-metadata">Task Bound Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-event-metadata">Task Event Metadata</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_guide.html">Upgrade Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">django-structlog</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Events and Metadata</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/events.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="events-and-metadata">
+<h1>Events and Metadata<a class="headerlink" href="#events-and-metadata" title="Link to this heading"></a></h1>
+<section id="django-s-requestmiddleware">
+<h2>Django’s RequestMiddleware<a class="headerlink" href="#django-s-requestmiddleware" title="Link to this heading"></a></h2>
+<section id="request-events">
+<span id="id1"></span><h3>Request Events<a class="headerlink" href="#request-events" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>request_started</p></td>
+<td><p>INFO</p></td>
+<td><p>Django received a request</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_finished</p></td>
+<td><p>INFO/WARNING/ERROR</p></td>
+<td><p>request completed with status (2XX or 3XX)/4XX/5XX</p></td>
+</tr>
+<tr class="row-even"><td><p>request_cancelled</p></td>
+<td><p>WARNING</p></td>
+<td><p>request cancelled during an async request with asgi</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_failed</p></td>
+<td><p>ERROR</p></td>
+<td><p>unhandled exception occurred</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="streaminghttpresponse-events">
+<span id="streaming-response-events"></span><h3>StreamingHttpResponse Events<a class="headerlink" href="#streaminghttpresponse-events" title="Link to this heading"></a></h3>
+<p>Specific to <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/request-response/#streaminghttpresponse-objects">StreamingHttpResponse</a></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>streaming_started</p></td>
+<td><p>INFO</p></td>
+<td><p>Streaming of response started</p></td>
+</tr>
+<tr class="row-odd"><td><p>streaming_finished</p></td>
+<td><p>INFO</p></td>
+<td><p>Streaming of response finished</p></td>
+</tr>
+<tr class="row-even"><td><p>streaming_cancelled</p></td>
+<td><p>WARNING</p></td>
+<td><p>Streaming of response was cancelled</p></td>
+</tr>
+<tr class="row-odd"><td><p>streaming_failed</p></td>
+<td><p>ERROR</p></td>
+<td><p>Streaming of response failed</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="request-bound-metadata">
+<h3>Request Bound Metadata<a class="headerlink" href="#request-bound-metadata" title="Link to this heading"></a></h3>
+<p>These metadata are repeated on each log of the current request and will be also be repeated in all children Celery tasks.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>request_id</p></td>
+<td><p>UUID for the request or value of <code class="docutils literal notranslate"><span class="pre">X-Request-ID</span></code> HTTP header when provided</p></td>
+</tr>
+<tr class="row-odd"><td><p>correlation_id</p></td>
+<td><p>value of <code class="docutils literal notranslate"><span class="pre">X-Correlation-ID</span></code> HTTP header when provided</p></td>
+</tr>
+<tr class="row-even"><td><p>user_id</p></td>
+<td><p>user’s id or None (requires <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/middleware/#module-django.contrib.auth.middleware">django.contrib.auth.middleware.AuthenticationMiddleware</a>)</p>
+<p><a class="reference external" href="https://www.django-rest-framework.org/">DRF</a>: it will only be in <code class="docutils literal notranslate"><span class="pre">request_finished</span></code> and <code class="docutils literal notranslate"><span class="pre">request_failed</span></code> events</p>
+<dl class="simple">
+<dt>If you need to override the bound <code class="docutils literal notranslate"><span class="pre">user_id</span></code>, it has to be done in all three signals:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_metadata" title="django_structlog.signals.bind_extra_request_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_metadata</span></code></a></p></li>
+<li><p><a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_finished_metadata" title="django_structlog.signals.bind_extra_request_finished_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_finished_metadata</span></code></a></p></li>
+<li><p><a class="reference internal" href="api_documentation.html#django_structlog.signals.bind_extra_request_failed_metadata" title="django_structlog.signals.bind_extra_request_failed_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_failed_metadata</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="row-odd"><td><p>ip</p></td>
+<td><p>request’s ip</p></td>
+</tr>
+</tbody>
+</table>
+<p>To bind more metadata or override existing metadata from request see <a class="reference internal" href="getting_started.html#django-signals"><span class="std std-ref">Extending Request Log Metadata</span></a></p>
+</section>
+<section id="request-events-metadata">
+<h3>Request Events Metadata<a class="headerlink" href="#request-events-metadata" title="Link to this heading"></a></h3>
+<p>These metadata appear once along with their associated event</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Key</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>request_started</p></td>
+<td><p>request</p></td>
+<td><p>request as string</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_started</p></td>
+<td><p>user_agent</p></td>
+<td><p>request’s user agent</p></td>
+</tr>
+<tr class="row-even"><td><p>request_finished</p></td>
+<td><p>code</p></td>
+<td><p>request’s status code</p></td>
+</tr>
+<tr class="row-odd"><td><p>request_failed</p></td>
+<td><p>exception</p></td>
+<td><p>exception traceback (requires <a class="reference external" href="https://www.structlog.org/en/stable/api.html#structlog.processors.format_exc_info">format_exc_info</a>)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="celery">
+<h2>Celery<a class="headerlink" href="#celery" title="Link to this heading"></a></h2>
+<section id="task-events">
+<h3>Task Events<a class="headerlink" href="#task-events" title="Link to this heading"></a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>task_enqueued</p></td>
+<td><p>INFO</p></td>
+<td><p>A task was enqueued by request or another task</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_retrying</p></td>
+<td><p>WARNING</p></td>
+<td><p>Worker retry task</p></td>
+</tr>
+<tr class="row-even"><td><p>task_started</p></td>
+<td><p>INFO</p></td>
+<td><p>task just started executing</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_succeeded</p></td>
+<td><p>INFO</p></td>
+<td><p>Task completed successfully</p></td>
+</tr>
+<tr class="row-even"><td><p>task_failed</p></td>
+<td><p>ERROR/INFO*</p></td>
+<td><p>Task failed</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_revoked</p></td>
+<td><p>WARNING</p></td>
+<td><p>Task was canceled</p></td>
+</tr>
+<tr class="row-even"><td><p>task_not_found</p></td>
+<td><p>ERROR</p></td>
+<td><p>Celery app did not discover the requested task</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_rejected</p></td>
+<td><p>ERROR</p></td>
+<td><p>Task could not be enqueued</p></td>
+</tr>
+</tbody>
+</table>
+<p>* if task threw an expected exception, it will logged as <code class="docutils literal notranslate"><span class="pre">INFO</span></code>. See <a class="reference external" href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws">Celery’s Task.throws</a></p>
+</section>
+<section id="task-bound-metadata">
+<h3>Task Bound Metadata<a class="headerlink" href="#task-bound-metadata" title="Link to this heading"></a></h3>
+<p>These metadata are repeated on each log of the current task and will be also be repeated in all children Celery tasks.
+Take note that all the caller’s logger bound metadata are also bound to the task’s logger.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>task_id</p></td>
+<td><p>UUID of the current task</p></td>
+</tr>
+<tr class="row-odd"><td><p>parent_task_id</p></td>
+<td><p>UUID of the parent’s task (if any)</p></td>
+</tr>
+</tbody>
+</table>
+<p>To bind more metadata or override existing metadata from task see <a class="reference internal" href="celery.html#celery-signals"><span class="std std-ref">Signals</span></a></p>
+</section>
+<section id="task-event-metadata">
+<h3>Task Event Metadata<a class="headerlink" href="#task-event-metadata" title="Link to this heading"></a></h3>
+<p>These metadata appear once along with their associated event</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Key</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>task_enqueued</p></td>
+<td><p>child_task_id</p></td>
+<td><p>id of the task being enqueued</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_enqueued</p></td>
+<td><p>child_task_name</p></td>
+<td><p>name of the task being enqueued</p></td>
+</tr>
+<tr class="row-even"><td><p>task_enqueued</p></td>
+<td><p>routing_key</p></td>
+<td><p>task’s routing key</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_enqueued</p></td>
+<td><p>priority</p></td>
+<td><p>priority of task (if any)</p></td>
+</tr>
+<tr class="row-even"><td><p>task_retrying</p></td>
+<td><p>reason</p></td>
+<td><p>reason for retry</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_started</p></td>
+<td><p>task</p></td>
+<td><p>name of the task</p></td>
+</tr>
+<tr class="row-even"><td><p>task_succeeded</p></td>
+<td><p>duration_ms</p></td>
+<td><p>duration of the task in milliseconds</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_failed</p></td>
+<td><p>error</p></td>
+<td><p>exception as string</p></td>
+</tr>
+<tr class="row-even"><td><p>task_failed</p></td>
+<td><p>exception*</p></td>
+<td><p>exception’s traceback</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_failed</p></td>
+<td><p>duration_ms</p></td>
+<td><p>duration of the task in milliseconds</p></td>
+</tr>
+<tr class="row-even"><td><p>task_revoked</p></td>
+<td><p>terminated</p></td>
+<td><p>Set to True if the task was terminated</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_revoked</p></td>
+<td><p>signum</p></td>
+<td><p>python termination signal’s number</p></td>
+</tr>
+<tr class="row-even"><td><p>task_revoked</p></td>
+<td><p>signame</p></td>
+<td><p>python termination signal’s name</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_revoked</p></td>
+<td><p>expired</p></td>
+<td><p>see Celery’s documentation</p></td>
+</tr>
+<tr class="row-even"><td><p>task_revoked</p></td>
+<td><p>task_id</p></td>
+<td><p>id of the task being revoked</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_revoked</p></td>
+<td><p>task</p></td>
+<td><p>name of the task being revoked</p></td>
+</tr>
+<tr class="row-even"><td><p>task_not_found</p></td>
+<td><p>task_id</p></td>
+<td><p>id of the task not found</p></td>
+</tr>
+<tr class="row-odd"><td><p>task_not_found</p></td>
+<td><p>task</p></td>
+<td><p>name of the task not found</p></td>
+</tr>
+<tr class="row-even"><td><p>task_rejected</p></td>
+<td><p>task_id</p></td>
+<td><p>id of the task being rejected</p></td>
+</tr>
+</tbody>
+</table>
+<p>* if task threw an expected exception, <code class="docutils literal notranslate"><span class="pre">exception</span></code> will be omitted. See <a class="reference external" href="https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws">Celery’s Task.throws</a></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_documentation.html" class="btn btn-neutral float-left" title="API documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="example_outputs.html" class="btn btn-neutral float-right" title="Example outputs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2025, Jules Robichaud-Gagnon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

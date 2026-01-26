@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upgrade Guide &mdash; django-structlog 10.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=335988e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authors" href="authors.html" />
+    <link rel="prev" title="Change Log" href="changelog.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            django-structlog
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events and Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Upgrade Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-10-0">Upgrading to 10.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#minimum-requirements">Minimum requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-9-0">Upgrading to 9.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Minimum requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#type-hints">Type hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#for-drf-standardized-errors-users">For <code class="docutils literal notranslate"><span class="pre">drf-standardized-errors</span></code> users</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#internal-changes-in-how-requestmiddleware-handles-exceptions">Internal changes in how <code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> handles exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-8-0">Upgrading to 8.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-7-0">Upgrading to 7.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-6-0">Upgrading to 6.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Minimum requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-to-do">Changes to do</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#add-django-structlog-to-installed-app">Add <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> to installed app</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#make-sure-you-use-django-structlog-middlewares-requestmiddleware">Make sure you use <code class="docutils literal notranslate"><span class="pre">django_structlog.middlewares.RequestMiddleware</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#if-you-use-celery-make-sure-you-use-django-structlog-celery-enabled-true">(If you use celery) Make sure you use <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_CELERY_ENABLED</span> <span class="pre">=</span> <span class="pre">True</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-5-0">Upgrading to 5.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Minimum requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-4-0">Upgrading to 4.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Minimum requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-if-you-use-celery">Changes if you use <code class="docutils literal notranslate"><span class="pre">celery</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-3-0">Upgrading to 3.0+</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Minimum requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changes-you-need-to-do">Changes you need to do</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#update-structlog-settings">1. Update structlog settings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#replace-all-logger-bind-with-structlog-contextvars-bind-contextvars">2. Replace all <code class="docutils literal notranslate"><span class="pre">logger.bind</span></code> with <code class="docutils literal notranslate"><span class="pre">structlog.contextvars.bind_contextvars</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-to-2-0">Upgrading to 2.0+</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">django-structlog</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Upgrade Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/upgrade_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="upgrade-guide">
+<h1>Upgrade Guide<a class="headerlink" href="#upgrade-guide" title="Link to this heading"></a></h1>
+<section id="upgrading-to-10-0">
+<span id="upgrade-10-0"></span><h2>Upgrading to 10.0+<a class="headerlink" href="#upgrading-to-10-0" title="Link to this heading"></a></h2>
+<section id="minimum-requirements">
+<h3>Minimum requirements<a class="headerlink" href="#minimum-requirements" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires python 3.10+</p></li>
+</ul>
+</section>
+</section>
+<section id="upgrading-to-9-0">
+<span id="upgrade-9-0"></span><h2>Upgrading to 9.0+<a class="headerlink" href="#upgrading-to-9-0" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Minimum requirements<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires python 3.9+</p></li>
+<li><p>django 4.2 and 5.0+ are supported</p></li>
+</ul>
+</section>
+<section id="type-hints">
+<h3>Type hints<a class="headerlink" href="#type-hints" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> now uses <a class="reference external" href="https://docs.python.org/3/library/typing.html">python type hints</a> and is being validated with <a class="reference external" href="https://mypy.readthedocs.io/en/stable/">mypy</a> <code class="docutils literal notranslate"><span class="pre">--strict</span></code>.</p>
+</section>
+<section id="for-drf-standardized-errors-users">
+<h3>For <code class="docutils literal notranslate"><span class="pre">drf-standardized-errors</span></code> users<a class="headerlink" href="#for-drf-standardized-errors-users" title="Link to this heading"></a></h3>
+<p>Now unhandled exceptions when using <a class="reference external" href="https://github.com/ghazi-git/drf-standardized-errors">drf-standardized-errors</a> will be intercepted and the exception logged properly.</p>
+<p>If you also use <a class="reference external" href="https://github.com/kiwicom/structlog-sentry">structlog-sentry</a>, the exception will now be propagated as expected.</p>
+<p>Other libraries alike may be affected by this change.</p>
+</section>
+<section id="internal-changes-in-how-requestmiddleware-handles-exceptions">
+<h3>Internal changes in how <code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> handles exceptions<a class="headerlink" href="#internal-changes-in-how-requestmiddleware-handles-exceptions" title="Link to this heading"></a></h3>
+<p>This only affects you if you implemented a middleware inheriting from <code class="docutils literal notranslate"><span class="pre">RequestMiddleware</span></code> and you overrode the <code class="docutils literal notranslate"><span class="pre">process_exception</span></code> method.</p>
+<p>Did you?</p>
+<p>If so:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">RequestMiddleware.process_exception</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">RequestMiddleware._process_exception</span></code>, you should to the same in the middleware.</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+<section id="upgrading-to-8-0">
+<span id="upgrade-8-0"></span><h2>Upgrading to 8.0+<a class="headerlink" href="#upgrading-to-8-0" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>A new keyword argument <code class="docutils literal notranslate"><span class="pre">log_kwargs</span></code> was added to the the optional signals:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_metadata</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_finished_metadata</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">django_structlog.signals.bind_extra_request_failed_metadata</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>It should not affect you if you have a <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> in the signature of your receivers.</p>
+<p><code class="docutils literal notranslate"><span class="pre">log_kwargs</span></code> is a dictionary containing the log metadata that will be added to their respective logs (<code class="docutils literal notranslate"><span class="pre">&quot;request_started&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;request_finished&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;request_failed&quot;</span></code>).</p>
+<p>If you use any of these signals, you may need to update your receiver to accept this new argument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.contrib.sites.shortcuts</span> <span class="kn">import</span> <span class="n">get_current_site</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django_structlog</span> <span class="kn">import</span> <span class="n">signals</span>
+<span class="kn">import</span> <span class="nn">structlog</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">bind_extra_request_metadata</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_receiver</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">log_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1"># &lt;- add `log_kwargs` if necessary</span>
+    <span class="o">...</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">bind_extra_request_finished_metadata</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_receiver_finished</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">log_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1"># &lt;- add `log_kwargs` if necessary</span>
+    <span class="o">...</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">bind_extra_request_failed_metadata</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">my_receiver_failed</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="n">log_kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1"># &lt;- add `log_kwargs` if necessary</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</section>
+<section id="upgrading-to-7-0">
+<span id="upgrade-7-0"></span><h2>Upgrading to 7.0+<a class="headerlink" href="#upgrading-to-7-0" title="Link to this heading"></a></h2>
+<p>The dependency <a class="reference external" href="https://github.com/un33k/django-ipware">django-ipware</a> was upgraded to version 6. This library is used to retrieve the request’s ip address.</p>
+<p>Version 6 may have some <a class="reference external" href="https://github.com/un33k/django-ipware/compare/v5.0.2...v6.0.2#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5R97">breaking changes</a> if you did customizations.</p>
+<p>It should not affect most of the users but if you did some customizations, you might need to update your configurations.</p>
+</section>
+<section id="upgrading-to-6-0">
+<span id="upgrade-6-0"></span><h2>Upgrading to 6.0+<a class="headerlink" href="#upgrading-to-6-0" title="Link to this heading"></a></h2>
+<section id="id2">
+<h3>Minimum requirements<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires python 3.8+</p></li>
+</ul>
+</section>
+<section id="changes-to-do">
+<h3>Changes to do<a class="headerlink" href="#changes-to-do" title="Link to this heading"></a></h3>
+<section id="add-django-structlog-to-installed-app">
+<h4>Add <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> to installed app<a class="headerlink" href="#add-django-structlog-to-installed-app" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">INSTALLED_APP</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ...</span>
+    <span class="s2">&quot;django_structlog&quot;</span><span class="p">,</span>
+    <span class="c1"># ...</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="make-sure-you-use-django-structlog-middlewares-requestmiddleware">
+<h4>Make sure you use <code class="docutils literal notranslate"><span class="pre">django_structlog.middlewares.RequestMiddleware</span></code><a class="headerlink" href="#make-sure-you-use-django-structlog-middlewares-requestmiddleware" title="Link to this heading"></a></h4>
+<p>If you used any of the experimental async or sync middlewares, you do not need to anymore.
+Make sure you use <code class="docutils literal notranslate"><span class="pre">django_structlog.middlewares.RequestMiddleware</span></code> instead of any of the other request middlewares commented below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="c1"># &quot;django_structlog.middlewares.request_middleware_router&quot;, # &lt;- remove</span>
+    <span class="c1"># &quot;django_structlog.middlewares.requests.SyncRequestMiddleware&quot;, # &lt;- remove</span>
+    <span class="c1"># &quot;django_structlog.middlewares.requests.AsyncRequestMiddleware&quot;, # &lt;- remove</span>
+    <span class="s2">&quot;django_structlog.middlewares.RequestMiddleware&quot;</span><span class="p">,</span> <span class="c1"># &lt;- make sure you use this one</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="if-you-use-celery-make-sure-you-use-django-structlog-celery-enabled-true">
+<h4>(If you use celery) Make sure you use <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_CELERY_ENABLED</span> <span class="pre">=</span> <span class="pre">True</span></code><a class="headerlink" href="#if-you-use-celery-make-sure-you-use-django-structlog-celery-enabled-true" title="Link to this heading"></a></h4>
+<p>It is only applicable if you use celery integration.</p>
+<p><code class="docutils literal notranslate"><span class="pre">django_structlog.middlewares.CeleryMiddleware</span></code> has been remove in favor of a django settings.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">+=</span> <span class="p">[</span>
+    <span class="s2">&quot;django_structlog.middlewares.RequestMiddleware&quot;</span><span class="p">,</span>
+    <span class="c1"># &quot;django_structlog.middlewares.CeleryMiddleware&quot;,  # &lt;- remove this</span>
+<span class="p">]</span>
+
+<span class="n">DJANGO_STRUCTLOG_CELERY_ENABLED</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># &lt;-- add this</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="upgrading-to-5-0">
+<span id="upgrade-5-0"></span><h2>Upgrading to 5.0+<a class="headerlink" href="#upgrading-to-5-0" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Minimum requirements<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires asgiref 3.6+</p></li>
+</ul>
+</section>
+</section>
+<section id="upgrading-to-4-0">
+<span id="upgrade-4-0"></span><h2>Upgrading to 4.0+<a class="headerlink" href="#upgrading-to-4-0" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> drops support of django below 3.2.</p>
+<section id="id4">
+<h3>Minimum requirements<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires django 3.2+</p></li>
+<li><p>requires python 3.7+</p></li>
+<li><p>requires structlog 21.4.0+</p></li>
+<li><p>(optionally) requires celery 5.1+</p></li>
+</ul>
+</section>
+<section id="changes-if-you-use-celery">
+<h3>Changes if you use <code class="docutils literal notranslate"><span class="pre">celery</span></code><a class="headerlink" href="#changes-if-you-use-celery" title="Link to this heading"></a></h3>
+<p>You can now install <code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> explicitly with <code class="docutils literal notranslate"><span class="pre">celery</span></code> extra in order to validate the compatibility with your version of <code class="docutils literal notranslate"><span class="pre">celery</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>django-structlog<span class="o">[</span>celery<span class="o">]==</span><span class="m">4</span>.0.0
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras">Installing “Extras”</a> for more information about this <code class="docutils literal notranslate"><span class="pre">pip</span></code> feature.</p>
+</section>
+</section>
+<section id="upgrading-to-3-0">
+<span id="upgrade-3-0"></span><h2>Upgrading to 3.0+<a class="headerlink" href="#upgrading-to-3-0" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> now use  <a class="reference external" href="https://www.structlog.org/en/stable/contextvars.html">structlog.contextvars.bind_contextvars</a> instead of <code class="docutils literal notranslate"><span class="pre">threadlocal</span></code>.</p>
+<section id="id5">
+<h3>Minimum requirements<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>requires python 3.7+</p></li>
+<li><p>requires structlog 21.4.0+</p></li>
+</ul>
+</section>
+<section id="changes-you-need-to-do">
+<h3>Changes you need to do<a class="headerlink" href="#changes-you-need-to-do" title="Link to this heading"></a></h3>
+<section id="update-structlog-settings">
+<h4>1. Update structlog settings<a class="headerlink" href="#update-structlog-settings" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p>add <code class="docutils literal notranslate"><span class="pre">structlog.contextvars.merge_contextvars</span></code> as first <code class="docutils literal notranslate"><span class="pre">processors</span></code></p></li>
+<li><p>remove <code class="docutils literal notranslate"><span class="pre">context_class=structlog.threadlocal.wrap_dict(dict),</span></code></p></li>
+<li><p>(if you use standard loggers) add <code class="docutils literal notranslate"><span class="pre">structlog.contextvars.merge_contextvars</span></code> in <cite>foreign_pre_chain</cite></p></li>
+<li><p>(if you use standard loggers) remove <code class="docutils literal notranslate"><span class="pre">django_structlog.processors.inject_context_dict,</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">structlog</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span>
+    <span class="n">processors</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">contextvars</span><span class="o">.</span><span class="n">merge_contextvars</span><span class="p">,</span> <span class="c1"># &lt;---- add this</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">filter_by_level</span><span class="p">,</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">TimeStamper</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;iso&quot;</span><span class="p">),</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">add_logger_name</span><span class="p">,</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">add_log_level</span><span class="p">,</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">PositionalArgumentsFormatter</span><span class="p">(),</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">StackInfoRenderer</span><span class="p">(),</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">format_exc_info</span><span class="p">,</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">UnicodeDecoder</span><span class="p">(),</span>
+        <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">ProcessorFormatter</span><span class="o">.</span><span class="n">wrap_for_formatter</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="c1"># context_class=structlog.threadlocal.wrap_dict(dict), # &lt;---- remove this</span>
+    <span class="n">logger_factory</span><span class="o">=</span><span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">LoggerFactory</span><span class="p">(),</span>
+    <span class="n">cache_logger_on_first_use</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># If you use standard logging</span>
+<span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;json_formatter&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">ProcessorFormatter</span><span class="p">,</span>
+            <span class="s2">&quot;processor&quot;</span><span class="p">:</span> <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">JSONRenderer</span><span class="p">(),</span>
+            <span class="s2">&quot;foreign_pre_chain&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">structlog</span><span class="o">.</span><span class="n">contextvars</span><span class="o">.</span><span class="n">merge_contextvars</span><span class="p">,</span> <span class="c1"># &lt;---- add this</span>
+                <span class="c1"># django_structlog.processors.inject_context_dict, # &lt;---- remove this</span>
+                <span class="n">structlog</span><span class="o">.</span><span class="n">processors</span><span class="o">.</span><span class="n">TimeStamper</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;iso&quot;</span><span class="p">),</span>
+                <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">add_logger_name</span><span class="p">,</span>
+                <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">add_log_level</span><span class="p">,</span>
+                <span class="n">structlog</span><span class="o">.</span><span class="n">stdlib</span><span class="o">.</span><span class="n">PositionalArgumentsFormatter</span><span class="p">(),</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="replace-all-logger-bind-with-structlog-contextvars-bind-contextvars">
+<h4>2. Replace all <code class="docutils literal notranslate"><span class="pre">logger.bind</span></code> with <code class="docutils literal notranslate"><span class="pre">structlog.contextvars.bind_contextvars</span></code><a class="headerlink" href="#replace-all-logger-bind-with-structlog-contextvars-bind-contextvars" title="Link to this heading"></a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@receiver</span><span class="p">(</span><span class="n">bind_extra_request_metadata</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">bind_domain</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">logger</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">current_site</span> <span class="o">=</span> <span class="n">get_current_site</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="c1"># logger.bind(domain=current_site.domain)</span>
+    <span class="n">structlog</span><span class="o">.</span><span class="n">contextvars</span><span class="o">.</span><span class="n">bind_contextvars</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="n">current_site</span><span class="o">.</span><span class="n">domain</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="upgrading-to-2-0">
+<span id="upgrade-2-0"></span><h2>Upgrading to 2.0+<a class="headerlink" href="#upgrading-to-2-0" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> was originally developed using the debug configuration <a class="reference external" href="https://www.structlog.org/en/stable/api.html#structlog.processors.ExceptionPrettyPrinter">ExceptionPrettyPrinter</a> which led to incorrect handling of exception.</p>
+<ul class="simple">
+<li><p>remove <code class="docutils literal notranslate"><span class="pre">structlog.processors.ExceptionPrettyPrinter(),</span></code> of your processors.</p></li>
+<li><p>make sure you have <code class="docutils literal notranslate"><span class="pre">structlog.processors.format_exc_info,</span></code> in your processors if you want appropriate exception logging.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="changelog.html" class="btn btn-neutral float-left" title="Change Log" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="authors.html" class="btn btn-neutral float-right" title="Authors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2025, Jules Robichaud-Gagnon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>django-structlog &mdash; django-structlog 10.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=335988e4"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            django-structlog
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events and Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_guide.html">Upgrade Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">django-structlog</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">django-structlog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="django-structlog">
+<h1>django-structlog<a class="headerlink" href="#django-structlog" title="Link to this heading"></a></h1>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://pypi.org/project/django-structlog/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/django-structlog.svg" /></a> <a class="reference external" href="https://pypi.org/project/django-structlog/"><img alt="PyPI - Wheel" src="https://img.shields.io/pypi/wheel/django-structlog.svg" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/actions"><img alt="Build Status" src="https://github.com/jrobichaud/django-structlog/actions/workflows/main.yml/badge.svg?branch=main" /></a> <a class="reference external" href="https://django-structlog.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/django-structlog/badge/?version=latest" /></a> <a class="reference external" href="https://codecov.io/gh/jrobichaud/django-structlog"><img alt="codecov" src="https://img.shields.io/codecov/c/github/jrobichaud/django-structlog.svg" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/jrobichaud/django-structlog.svg" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/pulls"><img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/jrobichaud/django-structlog.svg" /></a></div>
+<div class="line"><a class="reference external" href="https://pypi.org/project/django-structlog/"><img alt="PyPI - Django Version" src="https://img.shields.io/pypi/djversions/django-structlog.svg" /></a> <a class="reference external" href="https://pypi.org/project/django-structlog/"><img alt="Supported Python versions" src="https://img.shields.io/pypi/pyversions/django-structlog.svg" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/blob/main/LICENSE.rst"><img alt="License" src="https://img.shields.io/pypi/l/django-structlog.svg" /></a> <a class="reference external" href="https://github.com/python/black"><img alt="Black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="https://github.com/astral-sh/ruff"><img alt="Ruff" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" /></a></div>
+<div class="line"><a class="reference external" href="https://djangopackages.org/packages/p/django-structlog/"><img alt="Published on Django Packages" src="https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26" /></a></div>
+<div class="line"><a class="reference external" href="https://github.com/jrobichaud/django-structlog/"><img alt="GitHub watchers" src="https://img.shields.io/github/watchers/jrobichaud/django-structlog.svg?style=social" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jrobichaud/django-structlog.svg?style=social" /></a> <a class="reference external" href="https://github.com/jrobichaud/django-structlog/"><img alt="GitHub forks" src="https://img.shields.io/github/forks/jrobichaud/django-structlog.svg?style=social" /></a></div>
+</div>
+<p>django-structlog is a structured logging integration for <a class="reference external" href="https://www.djangoproject.com/">Django</a> project using <a class="reference external" href="https://www.structlog.org/">structlog</a></p>
+<p>Logging will then produce additional cohesive metadata on each logs that makes it easier to track events or incidents.</p>
+<section id="additional-popular-integrations">
+<h2>Additional Popular Integrations<a class="headerlink" href="#additional-popular-integrations" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3><a class="reference external" href="https://www.django-rest-framework.org/">Django REST framework</a><a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Django</span> <span class="pre">REST</span> <span class="pre">framework</span></code> is supported by default. But when using it with <code class="docutils literal notranslate"><span class="pre">rest_framework.authentication.TokenAuthentication</span></code> (or other DRF authentications)  <code class="docutils literal notranslate"><span class="pre">user_id</span></code> will be only be in <code class="docutils literal notranslate"><span class="pre">request_finished</span></code> and <code class="docutils literal notranslate"><span class="pre">request_failed</span></code> instead of each logs.</p>
+<p>See <a class="reference external" href="https://github.com/jrobichaud/django-structlog/issues/37">#37</a> for details.</p>
+</section>
+<section id="id3">
+<h3><a class="reference external" href="https://django-ninja.dev/">django-ninja</a><a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">django-ninja</span></code> is supported by default 🥷.</p>
+</section>
+<section id="id4">
+<h3><a class="reference external" href="http://www.celeryproject.org/">Celery</a><a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>Celery’s task logging requires additional configurations, see <a class="reference external" href="https://django-structlog.readthedocs.io/en/latest/celery.html">documentation</a> for details.</p>
+</section>
+</section>
+<section id="logging-comparison">
+<h2>Logging comparison<a class="headerlink" href="#logging-comparison" title="Link to this heading"></a></h2>
+<section id="standard-logging">
+<h3>Standard logging:<a class="headerlink" href="#standard-logging" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;An error occurred&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>An<span class="w"> </span>error<span class="w"> </span>occurred
+</pre></div>
+</div>
+<p>Well… ok</p>
+</section>
+<section id="with-django-structlog-and-flat-line">
+<h3>With django-structlog and flat_line:<a class="headerlink" href="#with-django-structlog-and-flat-line" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">structlog</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;an_error_occurred&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s2">&quot;Buz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">timestamp</span><span class="o">=</span><span class="s1">&#39;2019-04-13T19:39:31.089925Z&#39;</span><span class="w"> </span><span class="nv">level</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="w"> </span><span class="nv">event</span><span class="o">=</span><span class="s1">&#39;an_error_occurred&#39;</span><span class="w"> </span><span class="nv">logger</span><span class="o">=</span><span class="s1">&#39;my_awesome_project.my_awesome_module&#39;</span><span class="w"> </span><span class="nv">request_id</span><span class="o">=</span><span class="s1">&#39;3a8f801c-072b-4805-8f38-e1337f363ed4&#39;</span><span class="w"> </span><span class="nv">user_id</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">ip</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="w"> </span><span class="nv">bar</span><span class="o">=</span><span class="s1">&#39;Buz&#39;</span>
+</pre></div>
+</div>
+<p>Then you can search with commands like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>logs/flat_line.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="nv">request_id</span><span class="o">=</span><span class="s1">&#39;3a8f801c-072b-4805-8f38-e1337f363ed4&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="with-django-structlog-and-json">
+<h3>With django-structlog and json<a class="headerlink" href="#with-django-structlog-and-json" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">structlog</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span> <span class="o">=</span> <span class="n">structlog</span><span class="o">.</span><span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;an_error_occurred&quot;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s2">&quot;Buz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">&quot;request_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3a8f801c-072b-4805-8f38-e1337f363ed4&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;user_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;ip&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;event&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;an_error_occurred&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2019-04-13T19:39:31.089925Z&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;logger&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my_awesome_project.my_awesome_module&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;info&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;bar&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Buz&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Then you can search with commands like:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>cat<span class="w"> </span>logs/json.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.[] | select(.request_id=&quot;3a8f801c-072b-4805-8f38-e1337f363ed4&quot;)&#39;</span><span class="w"> </span>-s
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="contents-indices-and-tables">
+<h1>Contents, indices and tables<a class="headerlink" href="#contents-indices-and-tables" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#extending-request-log-metadata">Extending Request Log Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#standard-loggers">Standard Loggers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration.html#settings">Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="celery.html#getting-started-with-celery">Getting Started with Celery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celery.html#signals">Signals</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="commands.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commands.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="commands.html#results">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_documentation.html#module-django_structlog">django_structlog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_documentation.html#module-django_structlog.celery">django_structlog.celery</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events and Metadata</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="events.html#django-s-requestmiddleware">Django’s RequestMiddleware</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html#celery">Celery</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_outputs.html#flat-lines-file-logs-flat-lines-log">Flat lines file (<code class="docutils literal notranslate"><span class="pre">logs/flat_lines.log</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_outputs.html#json-file-logs-json-log">Json file (<code class="docutils literal notranslate"><span class="pre">logs/json.log</span></code>)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_tos.html#bind-request-id-to-response-s-header">Bind <code class="docutils literal notranslate"><span class="pre">request_id</span></code> to response’s header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_tos.html#bind-rest-framework-simplejwt-token-s-user-id">Bind <code class="docutils literal notranslate"><span class="pre">rest_framework_simplejwt</span></code> token’s user id</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_tos.html#bind-aws-s-x-amzn-trace-id">Bind AWS’s <code class="docutils literal notranslate"><span class="pre">X-Amzn-Trace-Id</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_tos.html#filter-logs-from-being-recorded">Filter logs from being recorded</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="development.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#start-demo-app">Start Demo App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#building-serving-and-testing-the-documentation-locally">Building, Serving and Testing the Documentation Locally</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-22-2025">10.0.0 (October 22, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-7-2025">9.1.1 (April 7, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-4-2025">9.1.0 (April 4, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#january-29-2025">9.0.1 (January 29, 2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-26-2024">9.0.0 (November 26, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-24-2024">8.1.0 (May 24, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#march-13-2024">8.0.0 (March 13, 2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#december-20-2023">7.1.0 (December 20, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#december-13-2023">7.0.0 (December 13, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-29-2023">6.0.1 (November 29, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-3-2023">6.0 (October 3, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-30-2023">5.3.0 (June 30, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-29-2023">5.2.0 (June 29, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-22-2023">5.1.0 (April 22, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-16-2023">5.0.2 (April 16, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#march-24-2023">5.0.1 (March 24, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#march-23-2023">5.0.0 (March 23, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#february-7-2023">4.1.1 (February 7, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#february-4-2023">4.1.0 (February 4, 2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-25-2022">4.0.1 (October 25, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-22-2022">4.0.0 (October 22, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#august-2-2022">3.0.1 (August 2, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#august-1-2022">3.0.0 (August 1, 2022)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-18-2021">2.2.0 (November 18, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#september-28-2021">2.1.3 (September 28, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#august-31-2021">2.1.2 (August 31, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-22-2021">2.1.1 (June 22, 2021)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-26-2020">2.1.0 (November 26, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-25-2020">2.0.0 (November 25, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-11-2020">1.6.3 (November 11, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-4-2020">1.6.2 (October 4, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#august-13-2020">1.6.1 (August 13, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-17-2020">1.6.0 (June 17, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-16-2020">1.5.5 (June 16, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#june-15-2020">1.5.4 (June 15, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id70">1.5.3 (June 15, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-2-2020">1.5.2 (April 2, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#march-18-2020">1.5.1 (March 18, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#march-6-2020">1.5.0 (March 6, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#february-8-2020">1.4.1 (February 8, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#february-7-2020">1.4.0 (February 7, 2020)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#december-23-2019">1.3.5 (December 23, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#november-27-2019">1.3.4 (November 27, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#october-6-2019">1.3.3 (October 6, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#september-21-2019">1.3.2 (September 21, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#september-4-2019">1.3.1 (September 4, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#september-3-2019">1.3.0 (September 3, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-18-2019">1.2.3 (May 18, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-13-2019">1.2.2 (May 13, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-8-2019">1.2.1 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id87">1.2.0 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id88">1.1.6 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id89">1.1.5 (May 8, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-22-2019">1.1.4 (April 22, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id90">1.1.3 (April 22, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-19-2019">1.1.2 (April 19, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-18-2019">1.1.1 (April 18, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-16-2019">1.1 (April 16, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#to-1-0-7-april-14-2019">1.0.4 to 1.0.7 (April 14, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-14-2019">1.0.3 (April 14, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#april-13-2019">1.0.2 (April 13, 2019)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id91">1.0.0 (April 13, 2019)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_guide.html">Upgrade Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-10-0">Upgrading to 10.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-9-0">Upgrading to 9.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-8-0">Upgrading to 8.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-7-0">Upgrading to 7.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-6-0">Upgrading to 6.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-5-0">Upgrading to 5.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-4-0">Upgrading to 4.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-3-0">Upgrading to 3.0+</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade_guide.html#upgrading-to-2-0">Upgrading to 2.0+</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2025, Jules Robichaud-Gagnon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
