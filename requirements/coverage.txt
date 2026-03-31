@@ -1,1 +1,1 @@
-coverage==7.13.1  # https://github.com/nedbat/coveragepy
+coverage==7.13.2  # https://github.com/nedbat/coveragepy
