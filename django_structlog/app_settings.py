@@ -12,6 +12,10 @@ class AppSettings:
         return getattr(settings, self.PREFIX + "CELERY_ENABLED", False)
 
     @property
+    def DJANGO_TASKS_ENABLED(self) -> bool:
+        return getattr(settings, self.PREFIX + "DJANGO_TASKS_ENABLED", False)
+
+    @property
     def IP_LOGGING_ENABLED(self) -> bool:
         return getattr(settings, self.PREFIX + "IP_LOGGING_ENABLED", True)
 
