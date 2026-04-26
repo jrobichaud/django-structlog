@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Unreleased
+----------
+
+*New:*
+    - Add settings to configure the logging levels for the request middleware and celery task events. See `#1022 <https://github.com/jrobichaud/django-structlog/issues/1022>`_.
+
 10.0.0 (October 22, 2025)
 -------------------------
 
