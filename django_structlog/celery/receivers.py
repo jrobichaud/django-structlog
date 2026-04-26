@@ -15,6 +15,7 @@ from celery.signals import (
     task_unknown,
 )
 
+from ..app_settings import app_settings
 from ..tasks.receivers import BaseTaskReceiver
 from . import signals
 
@@ -66,7 +67,8 @@ class CeleryReceiver(BaseTaskReceiver):
             properties["priority"] = self._priority
             self._priority = None
 
-        logger.info(
+        logger.log(
+            app_settings.CELERY_TASK_START_LOG_LEVEL,
             "task_enqueued",
             child_task_id=(
                 headers.get("id")
@@ -94,7 +96,9 @@ class CeleryReceiver(BaseTaskReceiver):
         )
         # Record the start time so we can log the task duration later.
         task.request._django_structlog_started_at = time.monotonic_ns()
-        logger.info("task_started", task=task.name)
+        logger.log(
+            app_settings.CELERY_TASK_START_LOG_LEVEL, "task_started", task=task.name
+        )
 
     def receiver_task_retry(
         self,
@@ -103,7 +107,9 @@ class CeleryReceiver(BaseTaskReceiver):
         einfo: Optional[Any] = None,
         **kwargs: Any,
     ) -> None:
-        logger.warning("task_retrying", reason=reason)
+        logger.log(
+            app_settings.CELERY_TASK_NOTICE_LOG_LEVEL, "task_retrying", reason=reason
+        )
 
     def receiver_task_success(
         self, result: Optional[str] = None, sender: Optional[Any] = None, **kwargs: Any
@@ -114,7 +120,9 @@ class CeleryReceiver(BaseTaskReceiver):
 
         log_vars: dict[str, Any] = {}
         self.add_duration_ms(sender, log_vars)
-        logger.info("task_succeeded", **log_vars)
+        logger.log(
+            app_settings.CELERY_TASK_SUCCESS_LOG_LEVEL, "task_succeeded", **log_vars
+        )
 
     def receiver_task_failure(
         self,
@@ -130,7 +138,8 @@ class CeleryReceiver(BaseTaskReceiver):
         self.add_duration_ms(sender, log_vars)
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
-            logger.info(
+            logger.log(
+                app_settings.CELERY_TASK_FAILURE_LOG_LEVEL,
                 "task_failed",
                 error=str(exception),
                 **log_vars,
@@ -165,7 +174,8 @@ class CeleryReceiver(BaseTaskReceiver):
         metadata["task_id"] = request.id
         metadata["task"] = request.task
 
-        logger.warning(
+        logger.log(
+            app_settings.CELERY_TASK_NOTICE_LOG_LEVEL,
             "task_revoked",
             terminated=terminated,
             signum=signum.value if signum is not None else None,
@@ -182,7 +192,8 @@ class CeleryReceiver(BaseTaskReceiver):
         id: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        logger.error(
+        logger.log(
+            app_settings.CELERY_TASK_ERROR_LOG_LEVEL,
             "task_not_found",
             task=name,
             task_id=id,
