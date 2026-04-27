@@ -5,4 +5,4 @@ django>=4.2,<7
 structlog
 sphinx-autobuild==2025.8.25
 Jinja2==3.1.6
-importlib-metadata>=8.0.0,<10
+importlib-metadata>=9.0.0,<10
