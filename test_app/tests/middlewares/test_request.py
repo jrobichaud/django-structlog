@@ -1369,3 +1369,35 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertEqual("streaming_cancelled", record.msg["event"])
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
+
+
+class TestLogLevelMappings(TestCase):
+    def test_log_level_for_status_code(self):
+        middleware = RequestMiddleware(lambda r: HttpResponse())
+        from django_structlog.app_settings import app_settings
+
+        # 2xx
+        self.assertEqual(
+            middleware._log_level_for_status_code(200),
+            app_settings.STATUS_2XX_LOG_LEVEL,
+        )
+        # 4xx
+        self.assertEqual(
+            middleware._log_level_for_status_code(404),
+            app_settings.STATUS_4XX_LOG_LEVEL,
+        )
+        # 5xx
+        self.assertEqual(
+            middleware._log_level_for_status_code(500),
+            app_settings.STATUS_5XX_LOG_LEVEL,
+        )
+        # 3xx (default branch)
+        self.assertEqual(
+            middleware._log_level_for_status_code(301),
+            app_settings.STATUS_DEFAULT_LOG_LEVEL,
+        )
+        # 1xx (default branch)
+        self.assertEqual(
+            middleware._log_level_for_status_code(100),
+            app_settings.STATUS_DEFAULT_LOG_LEVEL,
+        )
