@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import sys
 import uuid
 from typing import (
@@ -57,7 +56,7 @@ def sync_streaming_content_wrapper(
     streaming_content: Iterator[bytes], context: Any
 ) -> Generator[bytes, None, None]:
     with structlog.contextvars.bound_contextvars(**context):
-        logger.info("streaming_started")
+        logger.log(app_settings.STATUS_START_LOG_LEVEL, "streaming_started")
         try:
             for chunk in streaming_content:
                 yield chunk
@@ -65,25 +64,25 @@ def sync_streaming_content_wrapper(
             logger.exception("streaming_failed")
             raise
         else:
-            logger.info("streaming_finished")
+            logger.log(app_settings.STATUS_2XX_LOG_LEVEL, "streaming_finished")
 
 
 async def async_streaming_content_wrapper(
     streaming_content: AsyncIterator[bytes], context: Any
 ) -> AsyncGenerator[bytes, Any]:
     with structlog.contextvars.bound_contextvars(**context):
-        logger.info("streaming_started")
+        logger.log(app_settings.STATUS_START_LOG_LEVEL, "streaming_started")
         try:
             async for chunk in streaming_content:
                 yield chunk
         except asyncio.CancelledError:
-            logger.warning("streaming_cancelled")
+            logger.log(app_settings.REQUEST_CANCELLED_LOG_LEVEL, "streaming_cancelled")
             raise
         except Exception:
             logger.exception("streaming_failed")
             raise
         else:
-            logger.info("streaming_finished")
+            logger.log(app_settings.STATUS_2XX_LOG_LEVEL, "streaming_finished")
 
 
 class RequestMiddleware:
@@ -105,6 +104,7 @@ class RequestMiddleware:
             ["HttpRequest"], Union["HttpResponse", Awaitable["HttpResponse"]]
         ],
     ) -> None:
+
         self.get_response = get_response
         if iscoroutinefunction(self.get_response):
             markcoroutinefunction(self)
@@ -130,6 +130,18 @@ class RequestMiddleware:
         await sync.sync_to_async(self.handle_response)(request, response)
         return response
 
+    def _log_level_for_status_code(self, status_code: int) -> int:
+        match status_code // 100:
+            case 2:
+                level = app_settings.STATUS_2XX_LOG_LEVEL
+            case 4:
+                level = app_settings.STATUS_4XX_LOG_LEVEL
+            case 5:
+                level = app_settings.STATUS_5XX_LOG_LEVEL
+            case _:
+                level = app_settings.STATUS_DEFAULT_LOG_LEVEL
+        return level
+
     def handle_response(self, request: "HttpRequest", response: "HttpResponse") -> None:
         if not hasattr(request, "_raised_exception"):
             self.bind_user_id(request)
@@ -146,12 +158,7 @@ class RequestMiddleware:
                 response=response,
                 log_kwargs=log_kwargs,
             )
-            if response.status_code >= 500:
-                level = app_settings.STATUS_5XX_LOG_LEVEL
-            elif response.status_code >= 400:
-                level = app_settings.STATUS_4XX_LOG_LEVEL
-            else:
-                level = logging.INFO
+            level = self._log_level_for_status_code(response.status_code)
             logger.log(
                 level,
                 "request_finished",
@@ -200,7 +207,8 @@ class RequestMiddleware:
         signals.bind_extra_request_metadata.send(
             sender=self.__class__, request=request, logger=logger, log_kwargs=log_kwargs
         )
-        logger.info("request_started", **log_kwargs)
+        level = app_settings.STATUS_START_LOG_LEVEL
+        logger.log(level, "request_started", **log_kwargs)
 
     @classmethod
     def bind_ip(cls, request: "HttpRequest") -> None:
