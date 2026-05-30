@@ -263,8 +263,27 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "django_structlog_demo_project.users.adapters.AccountAdapter"
 
-
-# Your stuff...
+# Django's Tasks Framework
 # ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/topics/tasks/
+TASKS = {
+    "default": {
+        # This task backend runs synchronously on the same thread.
+        # This makes it appear that "django_structlog" works with Django task framework,
+        # but it's only because they are in the same thread-local context.
+        "BACKEND": "django.tasks.backends.immediate.ImmediateBackend",
+    },
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    "django_structlog": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env("DJANGO_STRUCTLOG_CACHE"),
+    },
+}
+
 
 INSTALLED_APPS += ["django_structlog"]

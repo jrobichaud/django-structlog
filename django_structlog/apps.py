@@ -18,3 +18,9 @@ class DjangoStructLogConfig(AppConfig):
 
             self._django_command_receiver = DjangoCommandReceiver()
             self._django_command_receiver.connect_signals()
+
+        if app_settings.DJANGO_TASKS_ENABLED:
+            from .tasks.receivers import DjangoTaskReceiver
+
+            self._django_task_receiver = DjangoTaskReceiver()
+            self._django_task_receiver.connect_signals()
