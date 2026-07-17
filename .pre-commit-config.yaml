@@ -20,7 +20,7 @@ repos:
         args: [--no-incremental]
         additional_dependencies: [
             celery-types==0.23.0,
-            "django-stubs[compatible-mypy]==5.2.5",
+            "django-stubs[compatible-mypy]==5.2.8",
             structlog==25.2.0,
             django-extensions==4.1,
             django-ipware==7.0.1,
