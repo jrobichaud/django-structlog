@@ -323,22 +323,25 @@ class TestReceivers(TestCase):
         self.assertNotIn("duration_ms", record.msg)
 
     def test_receiver_task_failure(self) -> None:
+        task_id = "11111111-1111-1111-1111-111111111111"
         expected_exception = "foo"
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
             logging.getLogger("django_structlog.celery.receivers"), logging.ERROR
         ) as log_results:
-            receiver.receiver_task_failure(exception=Exception("foo"))
+            receiver.receiver_task_failure(task_id=task_id, exception=Exception("foo"))
 
         self.assertEqual(1, len(log_results.records))
         record: Any = log_results.records[0]
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("ERROR", record.levelname)
+        self.assertEqual(task_id, record.msg["task_id"])
         self.assertIn("error", record.msg)
         self.assertIn("exception", record.msg)
         self.assertEqual(expected_exception, record.msg["error"])
 
     def test_receiver_task_failure_with_throws(self) -> None:
+        task_id = "11111111-1111-1111-1111-111111111111"
         expected_exception = "foo"
 
         mock_sender = Mock()
@@ -349,13 +352,14 @@ class TestReceivers(TestCase):
             logging.getLogger("django_structlog.celery.receivers"), logging.INFO
         ) as log_results:
             receiver.receiver_task_failure(
-                exception=Exception("foo"), sender=mock_sender
+                task_id=task_id, exception=Exception("foo"), sender=mock_sender
             )
 
         self.assertEqual(1, len(log_results.records))
         record: Any = log_results.records[0]
         self.assertEqual("task_failed", record.msg["event"])
         self.assertEqual("INFO", record.levelname)
+        self.assertEqual(task_id, record.msg["task_id"])
         self.assertIn("error", record.msg)
         self.assertIn("duration_ms", record.msg)
         self.assertNotIn("exception", record.msg)
