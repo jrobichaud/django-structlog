@@ -22,9 +22,8 @@ build-backend = "setuptools.build_meta"
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
     "Framework :: Django :: 4.2",
-    "Framework :: Django :: 5.0",
-    "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
@@ -94,6 +93,10 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
   DJANGO_SETTINGS_MODULE = "config.settings.test_demo_app"
+  env = [
+      "D:CELERY_BROKER_URL=redis://0.0.0.0:6379",
+      "D:DJANGO_STRUCTLOG_CACHE=redis://0.0.0.0:6379"
+  ]
 
 [tool.tox]
   legacy_tox_ini = """
@@ -103,11 +106,9 @@ build-backend = "setuptools.build_meta"
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
         py{310,311}-django42-celery5{2,3}-redis4-kombu5,
-        py31{0,1}-django5{0,1,2}-celery5{3,4}-redis4-kombu5,
-        py312-django{42,50,51,52}-celery5{3,4}-redis4-kombu5,
-        py313-django51-celery5{3,4}-redis5-kombu5,
-        py31{3,4}-django52-celery5{3,4}-redis5-kombu5,
-
+        py31{0,1}-django52-celery5{3,4}-redis4-kombu5,
+        py312-django{42,52,60}-celery5{3,4}-redis4-kombu5,
+        py31{3,4}-django{52,60}-celery5{3,4}-redis5-kombu5,
     [gh-actions]
     python =
         3.10: py310
@@ -120,6 +121,7 @@ build-backend = "setuptools.build_meta"
     setenv =
         PYTHONPATH={toxinidir}
         CELERY_BROKER_URL=redis://0.0.0.0:6379
+        DJANGO_STRUCTLOG_CACHE: redis://0.0.0.0:6379
         CELERY_RESULT_BACKEND=redis://0.0.0.0:6379
         DJANGO_SETTINGS_MODULE=config.settings.test
     pip_pre = True
@@ -132,9 +134,8 @@ build-backend = "setuptools.build_meta"
         celery53: Celery >=5.3, <5.4
         celery54: Celery >=5.4, <5.5
         django42: Django >=4.2, <5.0
-        django50: Django >=5.0, <5.1
-        django51: Django >=5.1, <5.2
         django52: Django >=5.2, <6.0
+        django60: Django >=6.0, <6.1
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
