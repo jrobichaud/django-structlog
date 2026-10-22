@@ -894,7 +894,8 @@ class TestRequestMiddleware(TestCase):
         self.assertEqual("CRITICAL", record.levelname)
         self.assertEqual(expected_uuid, record.msg["request_id"])
 
-    def test_should_log_request_id_from_request_x_request_id_header(self) -> None:
+    @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_REQUEST_ID=True)
+    def test_should_log_request_id_from_request_x_request_id_header_if_trusted(self) -> None:
         mock_response = Mock()
         mock_response.status_code = 200
         x_request_id = "my-fake-request-id"
@@ -919,7 +920,34 @@ class TestRequestMiddleware(TestCase):
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_request_id, record.msg["request_id"])
 
-    def test_should_log_correlation_id_from_request_x_correlation_id_header(
+    @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_REQUEST_ID=False)
+    def test_should_not_log_request_id_from_request_x_request_id_header_if_not_trusted(self) -> None:
+        mock_response = Mock()
+        mock_response.status_code = 200
+        x_request_id = "my-fake-request-id"
+
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = RequestFactory(HTTP_X_REQUEST_ID=x_request_id).get("/foo")
+
+        middleware = RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record: Any
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("request_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertNotIn(x_request_id, record.msg["request_id"])
+
+    @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID=True)
+    def test_should_log_correlation_id_from_request_x_correlation_id_header_if_trusted(
         self,
     ) -> None:
         mock_response = Mock()
@@ -932,7 +960,8 @@ class TestRequestMiddleware(TestCase):
             self.log_results = log_results
             return mock_response
 
-        request = RequestFactory(HTTP_X_CORRELATION_ID=x_correlation_id).get("/foo")
+        request = RequestFactory(
+            HTTP_X_CORRELATION_ID=x_correlation_id).get("/foo")
 
         middleware = RequestMiddleware(get_response)
         middleware(request)
@@ -942,9 +971,38 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("request_id", record.msg)
+        self.assertIn("correlation_id", record.msg)
         self.assertNotIn("user_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
+
+    @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID=False)
+    def test_should_not_log_correlation_id_from_request_x_correlation_id_header_if_not_trusted(
+        self,
+    ) -> None:
+        mock_response = Mock()
+        mock_response.status_code = 200
+        x_correlation_id = "my-fake-correlation-id"
+
+        def get_response(_request: HttpRequest) -> HttpResponse:
+            with self.assertLogs(__name__, logging.INFO) as log_results:
+                self.logger.info("hello")
+            self.log_results = log_results
+            return mock_response
+
+        request = RequestFactory(
+            HTTP_X_CORRELATION_ID=x_correlation_id).get("/foo")
+
+        middleware = RequestMiddleware(get_response)
+        middleware(request)
+
+        self.assertEqual(1, len(self.log_results.records))
+        record: Any
+        record = self.log_results.records[0]
+
+        self.assertEqual("INFO", record.levelname)
+        self.assertIn("correlation_id", record.msg)
+        self.assertNotIn("user_id", record.msg)
+        self.assertNotIn(x_correlation_id, record.msg["correlation_id"])
 
     def test_sync_streaming_response(self) -> None:
         def streaming_content() -> Generator[Any, None, None]:  # pragma: no cover
