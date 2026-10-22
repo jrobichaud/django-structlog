@@ -1000,7 +1000,7 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("correlation_id", record.msg)
+        self.assertNotIn("correlation_id", record.msg)
         self.assertNotIn("user_id", record.msg)
         self.assertNotIn(x_correlation_id, record.msg["correlation_id"])
 
