@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Unreleased
+----------
+
+*New:*
+    - Add settings to configure trust in externally-provided `x-request-id` and `x-correlation-id` passed by upstream. See `#1048 <https://github.com/jrobichaud/django-structlog/issues/1048>`_.
+
 10.1.0 (May 30, 2025)
 ---------------------
 
