@@ -3,21 +3,20 @@ python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 
 # Django
 # ------------------------------------------------------------------------------
-django==6.0  # https://www.djangoproject.com/
+django==6.1.2  # https://www.djangoproject.com/
 django-environ==0.12.0  # https://github.com/joke2k/django-environ
-django-model-utils==5.0.0  # https://github.com/jazzband/django-model-utils
-django-allauth==65.13.1  # https://github.com/pennersr/django-allauth
-django-crispy-forms==2.5  # https://github.com/django-crispy-forms/django-crispy-forms
-crispy-bootstrap5==2025.6 # https://github.com/django-crispy-forms/crispy-bootstrap5
-django-redis==6.0.0  # https://github.com/niwinz/django-redis
+django-allauth==65.20.1  # https://github.com/pennersr/django-allauth
+django-crispy-forms==2.7  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5==2026.9 # https://github.com/django-crispy-forms/crispy-bootstrap5
+django-redis==7.0.0  # https://github.com/niwinz/django-redis
 asgiref==3.11.0 # https://github.com/django/asgiref
 
 # Django REST Framework
-djangorestframework==3.16.1  # https://github.com/encode/django-rest-framework
+djangorestframework==3.18.3  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
 # django-ninja
-django-ninja==1.5.3  # https://github.com/vitalik/django-ninja
+django-ninja==1.7.1  # https://github.com/vitalik/django-ninja
 
 structlog==25.5.0
 colorama==0.4.6
@@ -25,7 +24,7 @@ django-ipware==7.0.1
 
 Werkzeug==3.1.5  # https://github.com/pallets/werkzeug
 ipdb==0.13.13  # https://github.com/gotcha/ipdb
-psycopg[binary]==3.3.2 # https://github.com/psycopg/psycopg
+psycopg[binary]==3.3.6 # https://github.com/psycopg/psycopg
 
 # Testing
 # ------------------------------------------------------------------------------

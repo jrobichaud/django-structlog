@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Type
+from typing import TYPE_CHECKING, Any
 
 import django
 import structlog
@@ -33,7 +33,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
 
     def receiver_task_enqueued(
         self,
-        sender: Type[Any],
+        sender: type[Any],
         task_result: "TaskResult",
         **kwargs: dict[str, str],
     ) -> None:
@@ -51,7 +51,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
 
     def receiver_task_started(
         self,
-        sender: Type[Any],
+        sender: type[Any],
         task_result: "TaskResult",
         **kwargs: dict[str, str],
     ) -> None:
@@ -69,7 +69,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
 
     def receiver_task_finished(
         self,
-        sender: Type[Any],
+        sender: type[Any],
         task_result: "TaskResult",
         **kwargs: dict[str, str],
     ) -> None:

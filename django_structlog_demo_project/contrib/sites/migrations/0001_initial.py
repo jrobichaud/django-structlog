@@ -4,9 +4,9 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-    dependencies = []
+    dependencies = ()
 
-    operations = [
+    operations = (
         migrations.CreateModel(
             name="Site",
             fields=[
@@ -37,5 +37,5 @@ class Migration(migrations.Migration):
             },
             bases=(models.Model,),
             managers=[("objects", django.contrib.sites.models.SiteManager())],
-        )
-    ]
+        ),
+    )

@@ -10,7 +10,7 @@ from django_structlog_demo_project.home import api_views, ninja_views, views
 
 
 def uncaught_exception_view(request):
-    raise Exception("Uncaught Exception")
+    raise Exception("Uncaught Exception")  # noqa: TRY002
 
 
 urlpatterns = [

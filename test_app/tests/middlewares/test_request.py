@@ -2,7 +2,8 @@ import asyncio
 import logging
 import traceback
 import uuid
-from typing import Any, AsyncGenerator, Awaitable, Generator, Type, cast
+from collections.abc import AsyncGenerator, Awaitable, Generator
+from typing import Any, cast
 from unittest import mock
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -96,7 +97,7 @@ class TestRequestMiddleware(TestCase):
             return mock_response
 
         request = self.factory.get("/foo")
-        setattr(request, "user", None)
+        request.user = None  # type: ignore[assignment]
 
         middleware = RequestMiddleware(get_response)
         with patch("uuid.UUID.__str__", return_value=expected_uuid):
@@ -383,7 +384,7 @@ class TestRequestMiddleware(TestCase):
             request.user = mock_user
             try:
                 raise exception
-            except Exception:
+            except Exception:  # noqa: BLE001
                 got_request_exception.send(object, request=request)
                 self.exception_traceback = traceback.format_exc()
             return mock_response
@@ -425,7 +426,7 @@ class TestRequestMiddleware(TestCase):
     def test_signal_bind_extra_request_metadata(self) -> None:
         @receiver(bind_extra_request_metadata)
         def receiver_bind_extra_request_metadata(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             request: Any = None,
             logger: Any = None,
@@ -481,7 +482,7 @@ class TestRequestMiddleware(TestCase):
 
         @receiver(bind_extra_request_finished_metadata)
         def receiver_bind_extra_request_finished_metadata(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             request: Any = None,
             logger: Any = None,
@@ -537,7 +538,7 @@ class TestRequestMiddleware(TestCase):
 
         @receiver(bind_extra_request_failed_metadata)
         def receiver_bind_extra_request_failed_metadata(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             request: Any = None,
             response: Any = None,
@@ -559,7 +560,7 @@ class TestRequestMiddleware(TestCase):
         def get_response(_request: HttpRequest) -> HttpResponse:
             try:
                 raise expected_exception
-            except Exception:
+            except Exception:  # noqa: BLE001
                 got_request_exception.send(object, request=request)
             return mock_response
 
@@ -607,7 +608,7 @@ class TestRequestMiddleware(TestCase):
             """Simulate an exception"""
             try:
                 raise exception
-            except Exception:
+            except Exception:  # noqa: BLE001
                 got_request_exception.send(object, request=request)
                 self.exception_traceback = traceback.format_exc()
 
@@ -662,7 +663,7 @@ class TestRequestMiddleware(TestCase):
         def get_response(_request: HttpRequest) -> HttpResponse:
             try:
                 raise exception
-            except Exception:
+            except PermissionDenied:
                 got_request_exception.send(object, request=request)
             return HttpResponseForbidden()
 
@@ -716,7 +717,7 @@ class TestRequestMiddleware(TestCase):
         def get_response(_request: HttpRequest) -> HttpResponse:
             try:
                 raise exception
-            except Exception:
+            except Http404:
                 got_request_exception.send(object, request=request)
             return HttpResponseNotFound()
 
@@ -771,7 +772,7 @@ class TestRequestMiddleware(TestCase):
         def get_response(_request: HttpRequest) -> HttpResponse:
             try:
                 raise exception
-            except Exception:
+            except Http404:
                 got_request_exception.send(object, request=request)
             return HttpResponseNotFound()
 
@@ -1015,9 +1016,9 @@ class TestRequestMiddleware(TestCase):
             self.assertLogs(
                 "django_structlog.middlewares.request", logging.WARNING
             ) as log_results,
+            self.assertRaises(asyncio.CancelledError),
         ):
-            with self.assertRaises(asyncio.CancelledError):
-                await cast(Awaitable[HttpResponse], middleware(mock_request))
+            await cast(Awaitable[HttpResponse], middleware(mock_request))
         mock_prepare.assert_called_once_with(mock_request)
         mock_handle_response.assert_not_called()
         self.assertEqual(1, len(log_results.records))
@@ -1042,9 +1043,9 @@ class TestRequestMiddleware(TestCase):
             self.assertLogs(
                 "django_structlog.middlewares.request", logging.DEBUG
             ) as log_results,
+            self.assertRaises(asyncio.CancelledError),
         ):
-            with self.assertRaises(asyncio.CancelledError):
-                await cast(Awaitable[HttpResponse], middleware(mock_request))
+            await cast(Awaitable[HttpResponse], middleware(mock_request))
         mock_prepare.assert_called_once_with(mock_request)
         mock_handle_response.assert_not_called()
         self.assertEqual(1, len(log_results.records))
@@ -1265,11 +1266,13 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
-        with self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
-            with self.assertRaises(StopAsyncIteration):
-                await wrapped_streaming_content.__anext__()
+        with (
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+            self.assertRaises(StopAsyncIteration),
+        ):
+            await wrapped_streaming_content.__anext__()
 
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = streaming_content_log_results.records[0]
@@ -1316,11 +1319,13 @@ class TestASyncStreamingContentWrapper(TestCase):
         self.assertIn("foo", record.msg)
         self.assertEqual("bar", record.msg["foo"])
 
-        with self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
-            with self.assertRaises(CustomException):
-                await wrapped_streaming_content.__anext__()
+        with (
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+            self.assertRaises(CustomException),
+        ):
+            await wrapped_streaming_content.__anext__()
 
         self.assertEqual(1, len(streaming_content_log_results.records))
         record = streaming_content_log_results.records[0]
@@ -1350,11 +1355,13 @@ class TestASyncStreamingContentWrapper(TestCase):
         )
         with self.assertLogs(__name__, logging.INFO) as streaming_content_log_results:
             self.assertEqual(result, await wrapped_streaming_content.__anext__())
-        with self.assertLogs(
-            "django_structlog.middlewares.request", logging.INFO
-        ) as log_results:
-            with self.assertRaises(asyncio.CancelledError):
-                await wrapped_streaming_content.__anext__()
+        with (
+            self.assertLogs(
+                "django_structlog.middlewares.request", logging.INFO
+            ) as log_results,
+            self.assertRaises(asyncio.CancelledError),
+        ):
+            await wrapped_streaming_content.__anext__()
 
         self.assertEqual(1, len(streaming_content_log_results.records))
         record: Any

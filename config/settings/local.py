@@ -1,6 +1,6 @@
 import structlog
 
-from .base import *  # noqa: F403
+from .base import *
 from .base import MIDDLEWARE, env
 
 # GENERAL
@@ -21,7 +21,7 @@ IS_WORKER = env.bool("IS_WORKER", default=False)
 # TEMPLATES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
-TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG  # noqa F405
+TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ if env("USE_DOCKER") == "yes":
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
+INSTALLED_APPS += ["django_extensions"]
 # Celery
 # ------------------------------------------------------------------------------
 

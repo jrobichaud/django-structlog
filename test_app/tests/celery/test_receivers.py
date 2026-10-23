@@ -1,7 +1,7 @@
 import logging
 import time
 from signal import SIGTERM
-from typing import Any, Optional, Type
+from typing import Any
 from unittest.mock import MagicMock, Mock, call, patch
 
 import structlog
@@ -100,7 +100,7 @@ class TestReceivers(TestCase):
         user_id = "1234"
         expected_parent_task_uuid = "11111111-1111-1111-1111-111111111111"
         routing_key = "foo"
-        properties: dict[str, Optional[str]] = {
+        properties: dict[str, str | None] = {
             "correlation_id": "22222222-2222-2222-2222-222222222222"
         }
 
@@ -109,7 +109,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.modify_context_before_task_publish)
         def receiver_modify_context_before_task_publish(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             context: Any,
             task_properties: Any,
@@ -238,7 +238,7 @@ class TestReceivers(TestCase):
     def test_signal_bind_extra_task_metadata(self) -> None:
         @django_receiver(signals.bind_extra_task_metadata)
         def receiver_bind_extra_request_metadata(
-            sender: Type[Any], signal: Any, task: Any = None, logger: Any = None
+            sender: type[Any], signal: Any, task: Any = None, logger: Any = None
         ) -> None:
             structlog.contextvars.bind_contextvars(
                 correlation_id=task.request.correlation_id
@@ -281,7 +281,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.pre_task_succeeded)
         def receiver_pre_task_succeeded(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             task: Any = None,
             logger: Any = None,
@@ -467,7 +467,7 @@ class TestReceivers(TestCase):
     def test_receiver_task_rejected(self) -> None:
         task_id = "11111111-1111-1111-1111-111111111111"
         message = Mock(name="message")
-        message.properties = dict(correlation_id=task_id)
+        message.properties = {"correlation_id": task_id}
 
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(

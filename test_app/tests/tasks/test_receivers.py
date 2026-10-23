@@ -1,6 +1,6 @@
 import logging
 import unittest
-from typing import Any, Type
+from typing import Any
 from unittest.mock import Mock, call, patch
 
 import django
@@ -69,7 +69,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.modify_context_before_task_publish)
         def receiver_modify_context_before_task_publish(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             context: Any,
             **kwargs: Any,
@@ -157,7 +157,7 @@ class TestReceivers(TestCase):
     def test_signal_bind_extra_task_metadata(self) -> None:
         @django_receiver(signals.bind_extra_task_metadata)
         def receiver_bind_extra_task_metadata(
-            sender: Type[Any], signal: Any, task_result: Any = None, logger: Any = None
+            sender: type[Any], signal: Any, task_result: Any = None, logger: Any = None
         ) -> None:
             structlog.contextvars.bind_contextvars(
                 custom_field=task_result.custom_field
@@ -216,7 +216,7 @@ class TestReceivers(TestCase):
 
         @django_receiver(signals.pre_task_succeeded)
         def receiver_pre_task_succeeded(
-            sender: Type[Any],
+            sender: type[Any],
             signal: Any,
             task_result: Any = None,
             logger: Any = None,
@@ -328,13 +328,15 @@ class TestReceivers(TestCase):
         receiver = receivers.DjangoTaskReceiver()
 
         # No logs should be produced for RUNNING status
-        with self.assertRaises(AssertionError):
-            with self.assertLogs(
+        with (
+            self.assertRaises(AssertionError),
+            self.assertLogs(
                 logging.getLogger("django_structlog.tasks.receivers"), logging.INFO
-            ):
-                receiver.receiver_task_finished(
-                    sender=mock_sender, task_result=mock_task_result
-                )
+            ),
+        ):
+            receiver.receiver_task_finished(
+                sender=mock_sender, task_result=mock_task_result
+            )
 
     def test_receiver_task_finished_failed_empty_errors(self) -> None:
         """Test task failure with empty errors list."""

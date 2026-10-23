@@ -7,9 +7,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
     initial = True
 
-    dependencies = [("auth", "0008_alter_user_username_max_length")]
+    dependencies = (("auth", "0008_alter_user_username_max_length"),)
 
-    operations = [
+    operations = (
         migrations.CreateModel(
             name="User",
             fields=[
@@ -127,5 +127,5 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             managers=[("objects", django.contrib.auth.models.UserManager())],
-        )
-    ]
+        ),
+    )
