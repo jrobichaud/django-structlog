@@ -44,7 +44,7 @@ Specific to `StreamingHttpResponse <https://docs.djangoproject.com/en/dev/ref/re
 Request Bound Metadata
 ^^^^^^^^^^^^^^^^^^^^^^
 
-These metadata are repeated on each log of the current request and will be also be repeated in all children Celery tasks.
+These metadata are repeated on each log of the current request and will be also be repeated in all children Celery tasks and Django tasks.
 
 +------------------+---------------------------------------------------------------------------------------------------------------------------------+
 | Key              | Value                                                                                                                           |
@@ -182,3 +182,67 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 
 \* if task threw an expected exception, ``exception`` will be omitted. See `Celery's Task.throws <https://docs.celeryproject.org/en/latest/userguide/tasks.html#Task.throws>`_
+
+.. _django_tasks_events:
+
+Django Tasks
+------------
+
+See :ref:`django_tasks_integration`.
+
+Django Task Events
+^^^^^^^^^^^^^^^^^^
+
++--------------------+-------------+------------------------------------------------+
+| Event              | Type        | Description                                    |
++====================+=============+================================================+
+| task_enqueued      | INFO        | A task was enqueued by request or another task |
++--------------------+-------------+------------------------------------------------+
+| task_started       | INFO        | task just started executing                    |
++--------------------+-------------+------------------------------------------------+
+| task_succeeded     | INFO        | Task completed successfully                    |
++--------------------+-------------+------------------------------------------------+
+| task_failed        | ERROR       | Task failed                                    |
++--------------------+-------------+------------------------------------------------+
+
+.. note::
+    The ``DJANGO_STRUCTLOG_CELERY_*_LOG_LEVEL`` settings do not apply to Django tasks events.
+
+Django Task Bound Metadata
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These metadata are repeated on each log of the current task and will be also be repeated in all children Django tasks.
+Take note that all the caller's logger bound metadata are also bound to the task's logger.
+
++------------------+------------------------------------------------------------------+
+| Key              | Value                                                            |
++==================+==================================================================+
+| task_id          | id of the current task                                           |
++------------------+------------------------------------------------------------------+
+| parent_task_id   | id of the parent's task (if enqueued from within another task)   |
++------------------+------------------------------------------------------------------+
+
+To bind more metadata or override existing metadata from task see :ref:`django_tasks_signals`
+
+
+Django Task Event Metadata
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+These metadata appear once along with their associated event
+
++------------------+------------------+-----------------------------------------------------+
+| Event            | Key              | Value                                               |
++==================+==================+=====================================================+
+| task_enqueued    | task_id          | id of the task being enqueued                       |
++------------------+------------------+-----------------------------------------------------+
+| task_enqueued    | task_name        | module path of the task being enqueued              |
++------------------+------------------+-----------------------------------------------------+
+| task_started     | task             | module path of the task                             |
++------------------+------------------+-----------------------------------------------------+
+| task_failed      | exception_class  | exception's class path (of the last error)          |
++------------------+------------------+-----------------------------------------------------+
+| task_failed      | traceback        | exception's traceback (of the last error)           |
++------------------+------------------+-----------------------------------------------------+
+
+.. note::
+    In ``task_enqueued``, ``task_id`` is the id of the task being enqueued. When enqueued from within another task, it overrides the bound ``task_id`` of the current task for this event only.

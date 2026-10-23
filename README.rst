@@ -100,6 +100,11 @@ See `#37  <https://github.com/jrobichaud/django-structlog/issues/37>`_ for detai
 Celery's task logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/celery.html>`_ for details.
 
 
+`Django Tasks <https://docs.djangoproject.com/en/dev/topics/tasks/>`_
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Django 6.0+'s ``django.tasks`` logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/django_tasks.html>`_ for details.
+
+
 Logging comparison
 ^^^^^^^^^^^^^^^^^^
 
