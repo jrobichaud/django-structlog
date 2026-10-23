@@ -86,7 +86,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
   line-length = 88
-  target-version = "py315"
+  target-version = "py311"
   lint.ignore = [
     'E501',
   ]
