@@ -916,8 +916,9 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+
+        self.assertIn("request_id", record.msg)
         self.assertEqual(x_request_id, record.msg["request_id"])
 
     @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_REQUEST_ID=False)
@@ -942,8 +943,9 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("request_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+
+        self.assertIn("request_id", record.msg)
         self.assertNotIn(x_request_id, record.msg["request_id"])
 
     @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID=True)
@@ -971,8 +973,9 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertIn("correlation_id", record.msg)
         self.assertNotIn("user_id", record.msg)
+
+        self.assertIn("correlation_id", record.msg)
         self.assertEqual(x_correlation_id, record.msg["correlation_id"])
 
     @override_settings(DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID=False)
@@ -1000,9 +1003,9 @@ class TestRequestMiddleware(TestCase):
         record = self.log_results.records[0]
 
         self.assertEqual("INFO", record.levelname)
-        self.assertNotIn("correlation_id", record.msg)
         self.assertNotIn("user_id", record.msg)
-        self.assertNotIn(x_correlation_id, record.msg["correlation_id"])
+
+        self.assertNotIn("correlation_id", record.msg)
 
     def test_sync_streaming_response(self) -> None:
         def streaming_content() -> Generator[Any, None, None]:  # pragma: no cover
