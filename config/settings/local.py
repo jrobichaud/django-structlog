@@ -41,11 +41,14 @@ if env("USE_DOCKER") == "yes":
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 
-# django-extensions
-# ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
 INSTALLED_APPS += [
+    # django-extensions
+    # ------------------------------------------------------------------------------
+    # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
     "django_extensions",
+    # django-tasks-tb
+    # ------------------------------------------------------------------------------
+    # https://github.com/RealOrangeOne/django-tasks-db
     "django_tasks_db",
 ]
 # Celery
