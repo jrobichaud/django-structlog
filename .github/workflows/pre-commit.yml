@@ -11,7 +11,7 @@ jobs:
   auto-update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -19,7 +19,7 @@ jobs:
 
       - uses: browniebroke/pre-commit-autoupdate-action@v1.0.1
 
-      - uses: peter-evans/create-pull-request@v8.1.0
+      - uses: peter-evans/create-pull-request@v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: update/pre-commit-hooks
