@@ -102,7 +102,7 @@ Celery's task logging requires additional configurations, see `documentation <ht
 
 `Django Tasks <https://docs.djangoproject.com/en/dev/topics/tasks/>`_
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Django 6.0+'s ``django.tasks`` logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/django_tasks.html>`_ for details.
+(Experimental) Django 6.0+'s ``django.tasks`` logging requires additional configurations, see `documentation <https://django-structlog.readthedocs.io/en/latest/django_tasks.html>`_ for details.
 
 
 Logging comparison

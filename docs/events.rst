@@ -188,7 +188,7 @@ These metadata appear once along with their associated event
 Django Tasks
 ------------
 
-See :ref:`django_tasks_integration`.
+See :ref:`django_tasks_integration`. This integration is experimental.
 
 Django Task Events
 ^^^^^^^^^^^^^^^^^^

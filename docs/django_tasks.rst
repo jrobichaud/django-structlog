@@ -3,6 +3,9 @@
 Django Tasks Integration
 ========================
 
+.. warning::
+    This integration is **experimental**. Its behaviour, events, metadata and signals may change in future releases.
+
 We are referring to `Django's django.tasks <https://docs.djangoproject.com/en/dev/topics/tasks/>`_ and not `django-tasks backport <https://pypi.org/project/django-tasks/>`_.
 
 This integration requires **Django 6.0+** and a `task backend <https://docs.djangoproject.com/en/dev/ref/tasks/#task-backends>`_ compatible with Django's task framework.

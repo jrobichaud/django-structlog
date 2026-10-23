@@ -6,7 +6,7 @@ Unreleased (TBD)
 
 *New:*
     - Add Django 6.0 support.
-    - Add ``django.tasks`` (Django 6.0+) integration with context propagation through a ``django_structlog`` cache. See :ref:`django_tasks_integration`.
+    - Add experimental ``django.tasks`` (Django 6.0+) integration with context propagation through a ``django_structlog`` cache. See :ref:`django_tasks_integration`.
 
 *Changes:*
     - Drop python 3.10 support.
