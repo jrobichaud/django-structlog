@@ -11,6 +11,9 @@ crispy-bootstrap5==2026.9 # https://github.com/django-crispy-forms/crispy-bootst
 django-redis==7.0.0  # https://github.com/niwinz/django-redis
 asgiref==3.11.0 # https://github.com/django/asgiref
 
+## Django.tasks backend
+django-tasks-db==0.13.0  # https://github.com/RealOrangeOne/django-tasks-db
+
 # Django REST Framework
 djangorestframework==3.18.3  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client

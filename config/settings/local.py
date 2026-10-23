@@ -44,7 +44,10 @@ if env("USE_DOCKER") == "yes":
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]
+INSTALLED_APPS += [
+    "django_extensions",
+    "django_tasks_db",
+]
 # Celery
 # ------------------------------------------------------------------------------
 
@@ -159,3 +162,7 @@ MIDDLEWARE += [
 DJANGO_STRUCTLOG_CELERY_ENABLED = True
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
 DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED = True
+
+TASKS = {
+    "default": {"BACKEND": "django_tasks_db.DatabaseBackend", "QUEUES": ["default"]}
+}
