@@ -1,8 +1,8 @@
 Change Log
 ==========
 
-Unreleased (TBD)
-----------------
+11.0.0 (TBD)
+------------
 
 *New:*
     - Add Django 6.0 support.
@@ -14,7 +14,7 @@ Unreleased (TBD)
     - Drop celery <5.4 support.
 
 
-10.1.0 (May 30, 2025)
+10.1.0 (May 30, 2026)
 ---------------------
 
 *New:*

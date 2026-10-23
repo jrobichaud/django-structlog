@@ -380,6 +380,15 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_11.0:
+
+Upgrading to 11.0+
+^^^^^^^^^^^^^^^^^^
+
+- requires python 3.10+
+- requires django 5.2+
+- (when using celery) requires celery 5.5+
+
 .. _upgrade_10.0:
 
 Upgrading to 10.0+
