@@ -1,13 +1,13 @@
 import django.dispatch
 
 bind_extra_task_metadata = django.dispatch.Signal()
-""" Signal to add extra ``structlog`` bindings from ``celery``'s task.
+""" Signal to add extra ``structlog`` bindings from ``django.tasks``'s task.
 
-:param task: the celery task being run
+:param task: the django task being run
 :param logger: the logger to bind more metadata or override existing bound metadata
 
 >>> from django.dispatch import receiver
->>> from django_structlog.celery import signals
+>>> from django_structlog.tasks import signals
 >>> import structlog
 >>>
 >>> @receiver(signals.bind_extra_task_metadata)
@@ -18,14 +18,14 @@ bind_extra_task_metadata = django.dispatch.Signal()
 
 
 modify_context_before_task_publish = django.dispatch.Signal()
-""" Signal to modify context passed over to ``celery`` task's context. You must modify the ``context`` dict.
+""" Signal to modify context passed over to ``django.tasks`` task's context. You must modify the ``context`` dict.
 
 :param context: the context dict that will be passed over to the task runner's logger
 :param task_routing_key: routing key of the task
 :param task_properties: task's message properties
 
 >>> from django.dispatch import receiver
->>> from django_structlog.celery import signals
+>>> from django_structlog.tasks import signals
 >>>
 >>> @receiver(signals.modify_context_before_task_publish)
 ... def receiver_modify_context_before_task_publish(sender, signal, context, task_routing_key=None, task_properties=None, **kwargs):
@@ -41,17 +41,17 @@ modify_context_before_task_publish = django.dispatch.Signal()
 """
 
 pre_task_succeeded = django.dispatch.Signal()
-""" Signal to add ``structlog`` bindings from ``celery``'s successful task.
+""" Signal to add ``structlog`` bindings from ``django.tasks``'s successful task.
 
 :param logger: the logger to bind more metadata or override existing bound metadata
-:param result: result of the succeeding task
+:param task_result: the task's result object
 
 >>> from django.dispatch import receiver
->>> from django_structlog.celery import signals
+>>> from django_structlog.tasks import signals
 >>> import structlog
 >>>
 >>> @receiver(signals.pre_task_succeeded)
-... def receiver_pre_task_succeeded(sender, signal, logger=None, result=None, **kwargs):
-...     structlog.contextvars.bind_contextvars(result=str(result))
+... def receiver_pre_task_succeeded(sender, logger=None, task_result=None, **kwargs):
+...     ...
 
 """

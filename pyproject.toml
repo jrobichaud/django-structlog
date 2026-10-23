@@ -51,6 +51,9 @@ build-backend = "setuptools.build_meta"
   commands = [
     "django-extensions>=1.4.9"
   ]
+  django-tasks = [
+    "django>=6.0"
+  ]
 
 [tool.setuptools.dynamic]
   version = { attr = "django_structlog.__version__" }
