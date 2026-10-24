@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING, Any
 
 import django
 import structlog
-from django.core.cache import caches
+from django.core.cache import InvalidCacheBackendError, caches
+from django.core.exceptions import ImproperlyConfigured
 
 from django_structlog.tasks import signals
 
@@ -29,7 +30,13 @@ class BaseTaskReceiver:
 class DjangoTaskReceiver(BaseTaskReceiver):
 
     def __init__(self) -> None:
-        self.cache = caches["django_structlog"]
+        try:
+            self.cache = caches["django_structlog"]
+        except InvalidCacheBackendError:
+            raise ImproperlyConfigured(
+                '`DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED = True` requires a special "CACHES" configuration.\n'
+                "See https://django-structlog.readthedocs.io/en/latest/django_tasks.html#configure-the-django-structlog-cache"
+            ) from None
 
     def receiver_task_enqueued(
         self,

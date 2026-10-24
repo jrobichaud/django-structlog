@@ -6,8 +6,9 @@ from unittest.mock import Mock, call, patch
 import django
 import structlog
 from django.core.cache import caches
+from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import receiver as django_receiver
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from django_structlog.tasks import receivers, signals
 
@@ -59,6 +60,23 @@ class TestReceivers(TestCase):
         cached_context = self.cache.get(expected_task_id)
         self.assertIsNotNone(cached_context)
         self.assertEqual(expected_uuid, cached_context["request_id"])
+
+    def test_init_without_django_structlog_cache(self) -> None:
+        with (
+            override_settings(
+                CACHES={
+                    "default": {
+                        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+                    }
+                }
+            ),
+            self.assertRaises(ImproperlyConfigured) as context,
+        ):
+            receivers.DjangoTaskReceiver()
+
+        self.assertIn("DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED", str(context.exception))
+        self.assertIsNone(context.exception.__cause__)
+        self.assertTrue(context.exception.__suppress_context__)
 
     def test_signal_modify_context_before_task_publish(self) -> None:
         expected_uuid = "00000000-0000-0000-0000-000000000000"
