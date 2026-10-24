@@ -135,6 +135,7 @@ class CeleryReceiver(BaseTaskReceiver):
         **kwargs: Any,
     ) -> None:
         log_vars: dict[str, Any] = {}
+        log_vars["task_id"] = task_id
         self.add_duration_ms(sender, log_vars)
         throws = getattr(sender, "throws", ())
         if isinstance(exception, throws):
