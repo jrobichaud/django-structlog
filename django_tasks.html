@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Django Tasks Integration &mdash; django-structlog 10.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=428cc2bd"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Celery Integration" href="celery.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            django-structlog
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Django Tasks Integration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-django-tasks">Getting Started with Django Tasks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replace-your-requirements">Replace your requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enable-django-tasks-integration-in-your-web-app">Enable Django Tasks integration in your web app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-the-django-structlog-cache">Configure the <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-your-workers">Configure your workers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#signals">Signals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modify-context-before-task-publish">modify_context_before_task_publish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bind-extra-task-metadata">bind_extra_task_metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-task-succeeded">pre_task_succeeded</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#events-and-metadata">Events and Metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="celery.html">Celery Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">Commands</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_documentation.html">API documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events and Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_outputs.html">Example outputs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_tos.html">How Tos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_tests.html">Running the tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo.html">Demo app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upgrade_guide.html">Upgrade Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="acknowledgements.html">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="licence.html">Licence</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">django-structlog</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Django Tasks Integration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/django_tasks.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="django-tasks-integration">
+<span id="id1"></span><h1>Django Tasks Integration<a class="headerlink" href="#django-tasks-integration" title="Link to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This integration is <strong>experimental</strong>. Its behaviour, events, metadata and signals may change in future releases.</p>
+</div>
+<p>We are referring to <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/tasks/">Django’s django.tasks</a> and not <a class="reference external" href="https://pypi.org/project/django-tasks/">django-tasks backport</a>.</p>
+<p>This integration requires <strong>Django 6.0+</strong> and a <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/tasks/#task-backends">task backend</a> compatible with Django’s task framework.</p>
+<section id="getting-started-with-django-tasks">
+<h2>Getting Started with Django Tasks<a class="headerlink" href="#getting-started-with-django-tasks" title="Link to this heading"></a></h2>
+<p>In order to be able to support <code class="docutils literal notranslate"><span class="pre">django.tasks</span></code> you need to configure both your webapp and your workers.</p>
+<section id="how-it-works">
+<h3>How it works<a class="headerlink" href="#how-it-works" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">django.tasks</span></code> does not provide a way to attach custom metadata to a task. <code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> stores the logging context in a dedicated Django cache instead:</p>
+<ol class="arabic simple">
+<li><p>When a task is enqueued (<code class="docutils literal notranslate"><span class="pre">task_enqueued</span></code> signal), the current <code class="docutils literal notranslate"><span class="pre">structlog</span></code> context is saved in the <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> cache using the task’s id as key.</p></li>
+<li><p>When the task starts (<code class="docutils literal notranslate"><span class="pre">task_started</span></code> signal), the context is cleared, <code class="docutils literal notranslate"><span class="pre">task_id</span></code> is bound and the saved context is retrieved from the cache and bound again.</p></li>
+<li><p>When the task finishes (<code class="docutils literal notranslate"><span class="pre">task_finished</span></code> signal), <code class="docutils literal notranslate"><span class="pre">task_succeeded</span></code> or <code class="docutils literal notranslate"><span class="pre">task_failed</span></code> is logged.</p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The context is stored in the <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> cache. It should only contain data that can be serialized by your cache backend (<code class="docutils literal notranslate"><span class="pre">pickle</span></code> for Django’s built-in backends). You can use <a class="reference internal" href="#django-tasks-modify-context-before-task-publish"><span class="std std-ref">modify_context_before_task_publish</span></a> to make sure this is the case.</p>
+</div>
+</section>
+<section id="replace-your-requirements">
+<h3>Replace your requirements<a class="headerlink" href="#replace-your-requirements" title="Link to this heading"></a></h3>
+<p>First of all, make sure your <code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> installation knows you use <code class="docutils literal notranslate"><span class="pre">django.tasks</span></code> in order to validate compatibility with your installed version. See <a class="reference external" href="https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-extras">Installing “Extras”</a> for more information.</p>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">django-structlog</span></code> with <code class="docutils literal notranslate"><span class="pre">django-structlog[django-tasks]</span></code> in your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">django</span><span class="o">-</span><span class="n">structlog</span><span class="p">[</span><span class="n">django</span><span class="o">-</span><span class="n">tasks</span><span class="p">]</span><span class="o">==</span><span class="n">X</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">Z</span>
+</pre></div>
+</div>
+</section>
+<section id="enable-django-tasks-integration-in-your-web-app">
+<h3>Enable Django Tasks integration in your web app<a class="headerlink" href="#enable-django-tasks-integration-in-your-web-app" title="Link to this heading"></a></h3>
+<p>In your settings.py</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># ...</span>
+    <span class="s1">&#39;django_structlog.middlewares.RequestMiddleware&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="configure-the-django-structlog-cache">
+<h3>Configure the <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> cache<a class="headerlink" href="#configure-the-django-structlog-cache" title="Link to this heading"></a></h3>
+<p>The integration requires a cache named <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code>. Django will fail to start if it is missing while the integration is enabled.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CACHES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1"># ...</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;django_structlog&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;BACKEND&quot;</span><span class="p">:</span> <span class="s2">&quot;django.core.cache.backends.redis.RedisCache&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;LOCATION&quot;</span><span class="p">:</span> <span class="s2">&quot;redis://127.0.0.1:6379&quot;</span><span class="p">,</span>
+        <span class="c1"># Must be longer than the delay between a task&#39;s enqueue and its start</span>
+        <span class="s2">&quot;TIMEOUT&quot;</span><span class="p">:</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The cache must be <strong>shared</strong> between the processes enqueueing the tasks (ex: your web app) and the workers running them (ex: <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/cache/#redis">Redis</a>, <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/cache/#memcached">Memcached</a> or <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/cache/#database-caching">database caching</a>).</p>
+<p><code class="docutils literal notranslate"><span class="pre">LocMemCache</span></code> is only suitable for tests or when the task runs in the same process (ex: <code class="docutils literal notranslate"><span class="pre">django.tasks.backends.immediate.ImmediateBackend</span></code>).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Context entries are stored without an explicit timeout, therefore the cache’s <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> applies (Django’s default is 300 seconds). If a task starts after its entry expired, the task’s logs will not contain the caller’s context. Set a <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> greater than the longest delay you expect between a task being enqueued and being started (including tasks scheduled with <code class="docutils literal notranslate"><span class="pre">run_after</span></code>).</p>
+<p>Entries are not deleted once the task has started, they are evicted when they expire.</p>
+</div>
+</section>
+<section id="configure-your-workers">
+<h3>Configure your workers<a class="headerlink" href="#configure-your-workers" title="Link to this heading"></a></h3>
+<p>Your workers must use the same settings as your web app: <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> in <code class="docutils literal notranslate"><span class="pre">INSTALLED_APPS</span></code>, <code class="docutils literal notranslate"><span class="pre">DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED</span> <span class="pre">=</span> <span class="pre">True</span></code> and the same <code class="docutils literal notranslate"><span class="pre">django_structlog</span></code> cache. This way the receivers are connected when the worker initializes Django.</p>
+<p>Make sure your worker also configures <code class="docutils literal notranslate"><span class="pre">logging</span></code> and <code class="docutils literal notranslate"><span class="pre">structlog</span></code> (see <a class="reference internal" href="getting_started.html"><span class="doc">Getting Started</span></a>), otherwise the task events will not be rendered as expected.</p>
+</section>
+</section>
+<section id="signals">
+<span id="django-tasks-signals"></span><h2>Signals<a class="headerlink" href="#signals" title="Link to this heading"></a></h2>
+<section id="modify-context-before-task-publish">
+<span id="django-tasks-modify-context-before-task-publish"></span><h3>modify_context_before_task_publish<a class="headerlink" href="#modify-context-before-task-publish" title="Link to this heading"></a></h3>
+<p>You can connect to <code class="docutils literal notranslate"><span class="pre">modify_context_before_task_publish</span></code> signal in order to modify the metadata before it is stored in the cache.</p>
+<p>By example you can strip down the <code class="docutils literal notranslate"><span class="pre">context</span></code> to keep only some of the keys:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django_structlog.tasks</span> <span class="kn">import</span> <span class="n">signals</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">modify_context_before_task_publish</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">receiver_modify_context_before_task_publish</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">keys_to_keep</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;request_id&quot;</span><span class="p">,</span> <span class="s2">&quot;parent_task_id&quot;</span><span class="p">}</span>
+    <span class="n">new_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key_to_keep</span><span class="p">:</span> <span class="n">context</span><span class="p">[</span><span class="n">key_to_keep</span><span class="p">]</span> <span class="k">for</span> <span class="n">key_to_keep</span> <span class="ow">in</span> <span class="n">keys_to_keep</span> <span class="k">if</span> <span class="n">key_to_keep</span> <span class="ow">in</span> <span class="n">context</span><span class="p">}</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="api_documentation.html#django_structlog.tasks.signals.modify_context_before_task_publish" title="django_structlog.tasks.signals.modify_context_before_task_publish"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.tasks.signals.modify_context_before_task_publish</span></code></a>.</p>
+</section>
+<section id="bind-extra-task-metadata">
+<h3>bind_extra_task_metadata<a class="headerlink" href="#bind-extra-task-metadata" title="Link to this heading"></a></h3>
+<p>You can optionally connect to <code class="docutils literal notranslate"><span class="pre">bind_extra_task_metadata</span></code> signal in order to bind more metadata to the logger or override existing bound metadata. This is called
+when the task starts, after the context was restored and before <code class="docutils literal notranslate"><span class="pre">task_started</span></code> is logged.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django_structlog.tasks</span> <span class="kn">import</span> <span class="n">signals</span>
+<span class="kn">import</span> <span class="nn">structlog</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">bind_extra_task_metadata</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">receiver_bind_extra_task_metadata</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">task_result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">structlog</span><span class="o">.</span><span class="n">contextvars</span><span class="o">.</span><span class="n">bind_contextvars</span><span class="p">(</span><span class="n">task_backend</span><span class="o">=</span><span class="n">task_result</span><span class="o">.</span><span class="n">backend</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="api_documentation.html#django_structlog.tasks.signals.bind_extra_task_metadata" title="django_structlog.tasks.signals.bind_extra_task_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.tasks.signals.bind_extra_task_metadata</span></code></a>.</p>
+</section>
+<section id="pre-task-succeeded">
+<h3>pre_task_succeeded<a class="headerlink" href="#pre-task-succeeded" title="Link to this heading"></a></h3>
+<p>You can optionally connect to <code class="docutils literal notranslate"><span class="pre">pre_task_succeeded</span></code> signal in order to bind more metadata before <code class="docutils literal notranslate"><span class="pre">task_succeeded</span></code> is logged.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django_structlog.tasks</span> <span class="kn">import</span> <span class="n">signals</span>
+<span class="kn">import</span> <span class="nn">structlog</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">pre_task_succeeded</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">receiver_pre_task_succeeded</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">task_result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">structlog</span><span class="o">.</span><span class="n">contextvars</span><span class="o">.</span><span class="n">bind_contextvars</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">task_result</span><span class="o">.</span><span class="n">return_value</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="api_documentation.html#django_structlog.tasks.signals.pre_task_succeeded" title="django_structlog.tasks.signals.pre_task_succeeded"><code class="xref py py-attr docutils literal notranslate"><span class="pre">django_structlog.tasks.signals.pre_task_succeeded</span></code></a>.</p>
+</section>
+</section>
+<section id="events-and-metadata">
+<h2>Events and Metadata<a class="headerlink" href="#events-and-metadata" title="Link to this heading"></a></h2>
+<p>See <a class="reference internal" href="events.html#django-tasks-events"><span class="std std-ref">Django Tasks</span></a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="celery.html" class="btn btn-neutral float-right" title="Celery Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019-2026, Jules Robichaud-Gagnon.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
