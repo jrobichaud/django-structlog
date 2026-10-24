@@ -4,6 +4,8 @@ Change Log
 11.0.0 (TBD)
 ------------
 
+See: :ref:`upgrade_11.0`
+
 *New:*
     - Add Django 6.0 support.
     - Add experimental ``django.tasks`` (Django 6.0+) integration with context propagation through a ``django_structlog`` cache. See :ref:`django_tasks_integration`.
@@ -25,6 +27,8 @@ Change Log
 
 10.0.0 (October 22, 2025)
 -------------------------
+
+See: :ref:`upgrade_10.0`
 
 *New:*
     - Add 5xx and cancelled request log level config. See `#935 <https://github.com/jrobichaud/django-structlog/pull/935>`_. Special thanks to `@fcortes <https://github.com/fcortes>`_.
@@ -348,6 +352,8 @@ See: :ref:`upgrade_3.0`
 
 2.0.0 (November 25, 2020)
 -------------------------
+
+See: :ref:`upgrade_2.0`
 
 *Upgrade:*
     - There are necessary configuration changes needed. See :ref:`upgrade_2.0` for the details.
