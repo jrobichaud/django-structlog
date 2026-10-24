@@ -13,7 +13,7 @@ from django.test import TestCase, override_settings
 from django_structlog.tasks import receivers, signals
 
 if django.VERSION >= (6, 0):
-    from django.tasks.base import (  # type: ignore[import-untyped]
+    from django.tasks.base import (
         TaskResult,
         TaskResultStatus,
     )
@@ -389,7 +389,7 @@ class TestReceivers(TestCase):
 @unittest.skipIf(django.VERSION < (6, 0), "Django 6.0+ required for native tasks")
 class TestConnectDjangoTaskSignals(TestCase):
     def test_call(self) -> None:
-        from django.tasks.signals import (  # type: ignore[import-untyped]
+        from django.tasks.signals import (
             task_enqueued,
             task_finished,
             task_started,

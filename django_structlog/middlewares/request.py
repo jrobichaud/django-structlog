@@ -212,7 +212,7 @@ class RequestMiddleware:
 
     @classmethod
     def bind_ip(cls, request: "HttpRequest") -> None:
-        from ipware import get_client_ip  # type: ignore[import-untyped]
+        from ipware import get_client_ip
 
         ip, _ = get_client_ip(request)
         structlog.contextvars.bind_contextvars(ip=ip)
