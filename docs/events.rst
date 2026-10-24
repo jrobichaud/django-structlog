@@ -156,6 +156,8 @@ These metadata appear once along with their associated event
 +------------------+------------------+----------------------------------------+
 | task_succeeded   | duration_ms      | duration of the task in milliseconds   |
 +------------------+------------------+----------------------------------------+
+| task_failed      | task_id          | id of the task                         |
++------------------+------------------+----------------------------------------+
 | task_failed      | error            | exception as string                    |
 +------------------+------------------+----------------------------------------+
 | task_failed      | exception*       | exception's traceback                  |

@@ -7,6 +7,7 @@ Change Log
 *New:*
     - Add Django 6.0 support.
     - Add experimental ``django.tasks`` (Django 6.0+) integration with context propagation through a ``django_structlog`` cache. See :ref:`django_tasks_integration`.
+    - Add ``task_id`` to the celery ``task_failed`` log (useful when a worker is lost). See `#1043 <https://github.com/jrobichaud/django-structlog/pull/1043>`_. Special thanks to `@ento <https://github.com/ento>`_.
 
 *Changes:*
     - Drop python 3.10 support.
