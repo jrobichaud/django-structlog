@@ -105,5 +105,13 @@ class AppSettings:
     def USER_ID_FIELD(self) -> str:
         return getattr(settings, self.PREFIX + "USER_ID_FIELD", "pk")
 
+    @property
+    def TRUST_UPSTREAM_REQUEST_ID(self) -> bool:
+        return getattr(settings, self.PREFIX + "TRUST_UPSTREAM_REQUEST_ID", False)
+
+    @property
+    def TRUST_UPSTREAM_CORRELATION_ID(self) -> bool:
+        return getattr(settings, self.PREFIX + "TRUST_UPSTREAM_CORRELATION_ID", False)
+
 
 app_settings = AppSettings()

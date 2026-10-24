@@ -188,16 +188,25 @@ class RequestMiddleware:
         structlog.contextvars.clear_contextvars()
 
     def prepare(self, request: "HttpRequest") -> None:
-        request_id = get_request_header(
-            request, "x-request-id", "HTTP_X_REQUEST_ID"
-        ) or str(uuid.uuid4())
-        correlation_id = get_request_header(
-            request, "x-correlation-id", "HTTP_X_CORRELATION_ID"
-        )
+        if app_settings.TRUST_UPSTREAM_REQUEST_ID:
+            request_id = get_request_header(
+                request, "x-request-id", "HTTP_X_REQUEST_ID"
+            ) or str(uuid.uuid4())
+        else:
+            request_id = str(uuid.uuid4())
+
         structlog.contextvars.bind_contextvars(request_id=request_id)
+
+        if app_settings.TRUST_UPSTREAM_CORRELATION_ID:
+            correlation_id = get_request_header(
+                request, "x-correlation-id", "HTTP_X_CORRELATION_ID"
+            )
+
+            if correlation_id:
+                structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
+
         self.bind_user_id(request)
-        if correlation_id:
-            structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
+
         if app_settings.IP_LOGGING_ENABLED:
             self.bind_ip(request)
         log_kwargs = {

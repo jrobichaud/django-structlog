@@ -4,15 +4,19 @@ Change Log
 11.0.0 (TBD)
 ------------
 
+See: :ref:`upgrade_11.0`
+
 *New:*
     - Add Django 6.0 support.
     - Add experimental ``django.tasks`` (Django 6.0+) integration with context propagation through a ``django_structlog`` cache. See :ref:`django_tasks_integration`.
     - Add ``task_id`` to the celery ``task_failed`` log (useful when a worker is lost). See `#1043 <https://github.com/jrobichaud/django-structlog/pull/1043>`_. Special thanks to `@ento <https://github.com/ento>`_.
+    - Add settings to configure trust in externally-provided `x-request-id` and `x-correlation-id` passed by upstream. See `#1048 <https://github.com/jrobichaud/django-structlog/issues/1048>`_, `#1054 <https://github.com/jrobichaud/django-structlog/issues/1054>`_ and `#1049 <https://github.com/jrobichaud/django-structlog/issues/1049>`_. Special thanks to `@zweizeichen <https://github.com/zweizeichen>`_.
 
 *Changes:*
+    - ``x-request-id`` and ``x-correlation-id`` are not trusted by default anymore. If you want to preserve the previous behavior or start to use them, use ``DJANGO_STRUCTLOG_TRUST_UPSTREAM_REQUEST_ID = True`` and/or ``DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID = True``. See `#1048 <https://github.com/jrobichaud/django-structlog/issues/1048>`_, `#1054 <https://github.com/jrobichaud/django-structlog/issues/1054>`_ and `#1049 <https://github.com/jrobichaud/django-structlog/issues/1049>`_.
     - Drop python 3.10 support.
     - Drop django 4.2 support.
-    - Drop celery <5.4 support.
+    - Drop celery 5.4 support and below.
 
 
 10.1.0 (May 30, 2026)
@@ -21,9 +25,10 @@ Change Log
 *New:*
     - Add settings to configure the logging levels for the request middleware and celery task events. See `#1022 <https://github.com/jrobichaud/django-structlog/issues/1022>`_.
 
-
 10.0.0 (October 22, 2025)
 -------------------------
+
+See: :ref:`upgrade_10.0`
 
 *New:*
     - Add 5xx and cancelled request log level config. See `#935 <https://github.com/jrobichaud/django-structlog/pull/935>`_. Special thanks to `@fcortes <https://github.com/fcortes>`_.
@@ -347,6 +352,8 @@ See: :ref:`upgrade_3.0`
 
 2.0.0 (November 25, 2020)
 -------------------------
+
+See: :ref:`upgrade_2.0`
 
 *Upgrade:*
     - There are necessary configuration changes needed. See :ref:`upgrade_2.0` for the details.
