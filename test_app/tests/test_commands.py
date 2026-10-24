@@ -13,7 +13,7 @@ class TestCommands(TestCase):
     def test_command(self) -> None:
         class Command(BaseCommand):
 
-            @signalcommand  # type: ignore[misc]
+            @signalcommand  # type: ignore[untyped-decorator]
             def handle(self, *args: Any, **options: Any) -> Any:
                 structlog.getLogger("command").info("command_event")
 
@@ -41,7 +41,7 @@ class TestCommands(TestCase):
 
     def test_nested_command(self) -> None:
         class Command(BaseCommand):
-            @signalcommand  # type: ignore[misc]
+            @signalcommand  # type: ignore[untyped-decorator]
             def handle(self, *args: Any, **options: Any) -> None:
                 logger = structlog.getLogger("command")
                 logger.info("command_event_1")
@@ -49,7 +49,7 @@ class TestCommands(TestCase):
                 logger.info("command_event_2")
 
         class NestedCommand(BaseCommand):
-            @signalcommand  # type: ignore[misc]
+            @signalcommand  # type: ignore[untyped-decorator]
             def handle(self, *args: Any, **options: Any) -> None:
                 structlog.getLogger("nested_command").info("nested_command_event")
 

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Any
 
-import django
 import structlog
 from django.core.cache import InvalidCacheBackendError, caches
 from django.core.exceptions import ImproperlyConfigured
@@ -10,10 +9,7 @@ from django_structlog.tasks import signals
 logger = structlog.getLogger(__name__)
 
 if TYPE_CHECKING:  # pragma: no cover
-    if django.VERSION >= (6, 0):
-        from django.tasks.base import TaskResult  # type: ignore[import-untyped]
-    else:
-        TaskResult = Any
+    from django.tasks.base import TaskResult
 
 
 class BaseTaskReceiver:
@@ -41,7 +37,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
     def receiver_task_enqueued(
         self,
         sender: type[Any],
-        task_result: "TaskResult",
+        task_result: "TaskResult[Any, Any]",
         **kwargs: dict[str, str],
     ) -> None:
         context = self.get_task_context()
@@ -59,7 +55,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
     def receiver_task_started(
         self,
         sender: type[Any],
-        task_result: "TaskResult",
+        task_result: "TaskResult[Any, Any]",
         **kwargs: dict[str, str],
     ) -> None:
         structlog.contextvars.clear_contextvars()
@@ -77,7 +73,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
     def receiver_task_finished(
         self,
         sender: type[Any],
-        task_result: "TaskResult",
+        task_result: "TaskResult[Any, Any]",
         **kwargs: dict[str, str],
     ) -> None:
         from django.tasks.base import TaskResultStatus
@@ -98,7 +94,7 @@ class DjangoTaskReceiver(BaseTaskReceiver):
             logger.error("task_failed", **log_vars)
 
     def connect_signals(self) -> None:
-        from django.tasks.signals import (  # type: ignore[import-untyped]
+        from django.tasks.signals import (
             task_enqueued,
             task_finished,
             task_started,
