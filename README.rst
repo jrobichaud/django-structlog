@@ -387,9 +387,16 @@ Upgrade Guide
 Upgrading to 11.0+
 ^^^^^^^^^^^^^^^^^^
 
-- requires python 3.10+
+Minimum requirements
+~~~~~~~~~~~~~~~~~~~~
+- requires python 3.11+
 - requires django 5.2+
 - (when using celery) requires celery 5.5+
+
+Upstream ``x-request-id`` and ``x-correlation-id`` headers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``x-request-id`` and ``x-correlation-id`` are not trusted by default anymore. If you want to preserve the previous behavior or start to use them, use ``DJANGO_STRUCTLOG_TRUST_UPSTREAM_REQUEST_ID = True`` and/or ``DJANGO_STRUCTLOG_TRUST_UPSTREAM_CORRELATION_ID = True``.
 
 .. _upgrade_10.0:
 
