@@ -1,16 +1,17 @@
 import asyncio
 import sys
 import uuid
-from typing import (
-    TYPE_CHECKING,
-    Any,
+from collections.abc import (
     AsyncGenerator,
     AsyncIterator,
     Awaitable,
     Callable,
     Generator,
     Iterator,
-    Type,
+)
+from typing import (
+    TYPE_CHECKING,
+    Any,
     Union,
     cast,
 )
@@ -58,8 +59,7 @@ def sync_streaming_content_wrapper(
     with structlog.contextvars.bound_contextvars(**context):
         logger.log(app_settings.STATUS_START_LOG_LEVEL, "streaming_started")
         try:
-            for chunk in streaming_content:
-                yield chunk
+            yield from streaming_content
         except Exception:
             logger.exception("streaming_failed")
             raise
@@ -147,10 +147,10 @@ class RequestMiddleware:
             self.bind_user_id(request)
             context = structlog.contextvars.get_merged_contextvars(logger)
 
-            log_kwargs = dict(
-                code=response.status_code,
-                request=self.format_request(request),
-            )
+            log_kwargs = {
+                "code": response.status_code,
+                "request": self.format_request(request),
+            }
             signals.bind_extra_request_finished_metadata.send(
                 sender=self.__class__,
                 request=request,
@@ -176,7 +176,7 @@ class RequestMiddleware:
                     )
 
         else:
-            exception = getattr(request, "_raised_exception")
+            exception = request._raised_exception
             delattr(request, "_raised_exception")
             signals.update_failure_response.send(
                 sender=self.__class__,
@@ -203,8 +203,7 @@ class RequestMiddleware:
             )
 
             if correlation_id:
-                structlog.contextvars.bind_contextvars(
-                    correlation_id=correlation_id)
+                structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
 
         self.bind_user_id(request)
 
@@ -222,7 +221,7 @@ class RequestMiddleware:
 
     @classmethod
     def bind_ip(cls, request: "HttpRequest") -> None:
-        from ipware import get_client_ip  # type: ignore[import-untyped]
+        from ipware import get_client_ip
 
         ip, _ = get_client_ip(request)
         structlog.contextvars.bind_contextvars(ip=ip)
@@ -261,11 +260,11 @@ class RequestMiddleware:
             request.session.accessed = False
 
     def process_got_request_exception(
-        self, sender: Type[Any], request: "HttpRequest", **kwargs: Any
+        self, sender: type[Any], request: "HttpRequest", **kwargs: Any
     ) -> None:
         if not hasattr(request, "_raised_exception"):
             ex = cast(
-                tuple[Type[Exception], Exception, "TracebackType"],
+                tuple[type[Exception], Exception, "TracebackType"],
                 sys.exc_info(),
             )
             self._process_exception(request, ex[1])
@@ -277,12 +276,9 @@ class RequestMiddleware:
             # to be emitted.
             return
 
-        setattr(request, "_raised_exception", exception)
+        request._raised_exception = exception  # type: ignore[attr-defined]
         self.bind_user_id(request)
-        log_kwargs = dict(
-            code=500,
-            request=self.format_request(request),
-        )
+        log_kwargs = {"code": 500, "request": self.format_request(request)}
         signals.bind_extra_request_failed_metadata.send(
             sender=self.__class__,
             request=request,

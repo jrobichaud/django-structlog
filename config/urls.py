@@ -10,7 +10,7 @@ from django_structlog_demo_project.home import api_views, ninja_views, views
 
 
 def uncaught_exception_view(request):
-    raise Exception("Uncaught Exception")
+    raise Exception("Uncaught Exception")  # noqa: TRY002
 
 
 urlpatterns = [
@@ -20,6 +20,12 @@ urlpatterns = [
     ),
     re_path(r"^failing_task$", views.enqueue_failing_task, name="enqueue_failing_task"),
     re_path(r"^nesting_task$", views.enqueue_nesting_task, name="enqueue_nesting_task"),
+    re_path(r"^django_task$", views.enqueue_django_task, name="enqueue_django_task"),
+    re_path(
+        r"^django_failing_task$",
+        views.enqueue_django_failing_task,
+        name="enqueue_django_failing_task",
+    ),
     re_path(r"^unknown_task$", views.enqueue_unknown_task, name="enqueue_unknown_task"),
     re_path(
         r"^rejected_task$", views.enqueue_rejected_task, name="enqueue_rejected_task"

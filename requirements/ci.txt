@@ -1,24 +1,25 @@
 # Django
 # ------------------------------------------------------------------------------
-django-environ==0.12.0  # https://github.com/joke2k/django-environ
-django-redis==6.0.0  # https://github.com/niwinz/django-redis
+django-environ==0.14.0  # https://github.com/joke2k/django-environ
+django-redis==7.0.0  # https://github.com/niwinz/django-redis
 django-extensions==4.1
 
 structlog>=21.4.0
 colorama>=0.4.3
 
-psycopg[binary]==3.3.2 # https://github.com/psycopg/psycopg
+psycopg[binary]==3.3.6 # https://github.com/psycopg/psycopg
 
 # Testing
 # ------------------------------------------------------------------------------
-pytest==9.0.2   # https://github.com/pytest-dev/pytest
+pytest==9.1.1   # https://github.com/pytest-dev/pytest
 pytest-sugar==1.1.1  # https://github.com/Frozenball/pytest-sugar
-pytest-cov==7.0.0
+pytest-cov==7.1.0
+pytest-env==1.8.1 # https://github.com/pytest-dev/pytest-env
 
 # Code quality
 # ------------------------------------------------------------------------------
 -r coverage.txt
-pylint-django==2.7.0  # https://github.com/PyCQA/pylint-django
+pylint-django==2.8.0  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 
 # Django
@@ -26,7 +27,7 @@ pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 factory-boy==3.3.3  # https://github.com/FactoryBoy/factory_boy
 
 django-coverage-plugin==3.2.2  # https://github.com/nedbat/django_coverage_plugin
-pytest-django==4.11.1  # https://github.com/pytest-dev/pytest-django
+pytest-django==4.14.0  # https://github.com/pytest-dev/pytest-django
 
 # Setup tools
 # ------------------------------------------------------------------------------

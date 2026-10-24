@@ -10,10 +10,10 @@ build-backend = "setuptools.build_meta"
   ]
   readme = "README.rst"
   dynamic = ["version"]
-  requires-python = ">=3.10"
+  requires-python = ">=3.11"
   license = { text = "MIT" }
   dependencies = [
-    "django>=4.2",
+    "django>=5.2",
     "structlog>=21.4.0",
     "asgiref>=3.6.0",
     "django-ipware>=6.0.2",
@@ -21,17 +21,16 @@ build-backend = "setuptools.build_meta"
   classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 4.2",
-    "Framework :: Django :: 5.0",
-    "Framework :: Django :: 5.1",
     "Framework :: Django :: 5.2",
+    "Framework :: Django :: 6.0",
+    "Framework :: Django :: 6.1",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: System :: Logging",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -47,10 +46,13 @@ build-backend = "setuptools.build_meta"
 
 [project.optional-dependencies]
   celery = [
-    "celery>=5.1"
+    "celery>=5.5"
   ]
   commands = [
     "django-extensions>=1.4.9"
+  ]
+  django-tasks = [
+    "django>=6.0"
   ]
 
 [tool.setuptools.dynamic]
@@ -65,11 +67,11 @@ build-backend = "setuptools.build_meta"
 [tool.black]
   line-length = 88
   target-version = [
-    'py310',
     'py311',
     'py312',
     'py313',
     'py314',
+    'py315',
   ]
   include = '\.pyi?$'
   exclude = '''
@@ -87,13 +89,17 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
   line-length = 88
-  target-version = "py314"
+  target-version = "py311"
   lint.ignore = [
     'E501',
   ]
 
 [tool.pytest.ini_options]
   DJANGO_SETTINGS_MODULE = "config.settings.test_demo_app"
+  env = [
+      "D:CELERY_BROKER_URL=redis://0.0.0.0:6379",
+      "D:DJANGO_STRUCTLOG_CACHE=redis://0.0.0.0:6379"
+  ]
 
 [tool.tox]
   legacy_tox_ini = """
@@ -102,39 +108,32 @@ build-backend = "setuptools.build_meta"
     #
     # Also, make sure that all python versions used here are included in ./github/worksflows/main.yml
     envlist =
-        py{310,311}-django42-celery5{2,3}-redis4-kombu5,
-        py31{0,1}-django5{0,1,2}-celery5{3,4}-redis4-kombu5,
-        py312-django{42,50,51,52}-celery5{3,4}-redis4-kombu5,
-        py313-django51-celery5{3,4}-redis5-kombu5,
-        py31{3,4}-django52-celery5{3,4}-redis5-kombu5,
-
+        py31{1,2,3,4}-django52-celery5{5,6}-redis8-kombu5,
+        py31{2,3,4}-django60-celery5{5,6}-redis8-kombu5,
+        py31{2,3,4,5}-django61-celery5{5,6}-redis8-kombu5,
     [gh-actions]
     python =
-        3.10: py310
         3.11: py311
         3.12: py312
         3.13: py313
         3.14: py314
-
+        3.15: py315
     [testenv]
     setenv =
         PYTHONPATH={toxinidir}
         CELERY_BROKER_URL=redis://0.0.0.0:6379
+        DJANGO_STRUCTLOG_CACHE: redis://0.0.0.0:6379
         CELERY_RESULT_BACKEND=redis://0.0.0.0:6379
         DJANGO_SETTINGS_MODULE=config.settings.test
     pip_pre = True
     deps =
-        redis4: redis>=4, <5
-        redis5: redis>=5, <6
+        redis8: redis>=8, <9
         kombu5: kombu<6
-        celery51: Celery >=5.1, <5.2
-        celery52: Celery >=5.2, <5.3
-        celery53: Celery >=5.3, <5.4
-        celery54: Celery >=5.4, <5.5
-        django42: Django >=4.2, <5.0
-        django50: Django >=5.0, <5.1
-        django51: Django >=5.1, <5.2
+        celery55: Celery >=5.5, <5.6
+        celery56: Celery >=5.6, <5.7
         django52: Django >=5.2, <6.0
+        django60: Django >=6.0, <6.1
+        django61: Django >=6.1, <6.2
         -r{toxinidir}/requirements/ci.txt
 
     commands = pytest --cov=./test_app --cov=./django_structlog --cov-append test_app
@@ -158,7 +157,7 @@ include = [
 ]
 
 [tool.mypy]
-python_version="3.10"
+python_version="3.11"
 strict=true
 packages=[
   "django_structlog",

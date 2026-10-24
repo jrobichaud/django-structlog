@@ -15,11 +15,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -32,6 +32,7 @@ jobs:
       - name: Test demo app
         env:
           CELERY_BROKER_URL: redis://0.0.0.0:6379
+          DJANGO_STRUCTLOG_CACHE: redis://0.0.0.0:6379
           DJANGO_SETTINGS_MODULE: config.settings.test_demo_app
         run: pytest --cov=./django_structlog_demo_project --cov-append django_structlog_demo_project
       - uses: codecov/codecov-action@v7
@@ -43,15 +44,15 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
           - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -77,9 +78,15 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: docs/requirements.txt
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -99,7 +106,7 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Install dependencies
@@ -117,7 +124,7 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Install dependencies
@@ -135,7 +142,7 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Install dependencies
@@ -161,11 +168,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -187,11 +194,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
@@ -218,11 +225,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.14'
+          - '3.15'
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip

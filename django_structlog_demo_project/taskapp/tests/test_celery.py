@@ -52,10 +52,10 @@ class TestRejectedTask:
 class TestCorruptRejectedTask:
     def test(self, caplog):
         task_id = "11111111-1111-1111-1111-111111111111"
-        headers = dict(
-            id=task_id,
-            task="django_structlog_demo_project.taskapp.celery.rejected_task",
-        )
+        headers = {
+            "id": task_id,
+            "task": "django_structlog_demo_project.taskapp.celery.rejected_task",
+        }
         celery.corrupt_rejected_task(sender=None, headers=headers)
         assert len(caplog.records) == 1
         record = caplog.records[0]
@@ -65,10 +65,10 @@ class TestCorruptRejectedTask:
 
     def test_other_tasks_not_corrupted(self, caplog):
         task_id = "11111111-1111-1111-1111-111111111111"
-        headers = dict(
-            id=task_id,
-            task="django_structlog_demo_project.taskapp.celery.successful_task",
-        )
+        headers = {
+            "id": task_id,
+            "task": "django_structlog_demo_project.taskapp.celery.successful_task",
+        }
         celery.corrupt_rejected_task(sender=None, headers=headers)
         assert len(caplog.records) == 0
         assert (

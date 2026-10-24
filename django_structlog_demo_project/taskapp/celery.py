@@ -67,7 +67,7 @@ def successful_task(foo=None):
 
 @shared_task
 def failing_task(foo=None, **kwargs):
-    raise Exception("This is a failed task")
+    raise Exception("This is a failed task")  # noqa: TRY002
 
 
 @shared_task
@@ -108,7 +108,7 @@ def corrupt_rejected_task(sender=None, headers=None, body=None, **kwargs):
     """Simulate celery's task rejection mechanism by breaking up the message"""
     logger = structlog.getLogger(__name__)
     if headers.get("task") == f"{rejected_task.__module__}.{rejected_task.__name__}":
-        logger.warn(
+        logger.warning(
             f"corrupting {rejected_task.__name__}",
             task_id=headers.get("id"),
         )
