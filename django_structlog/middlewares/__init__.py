@@ -1,4 +1,4 @@
-from .request import RequestMiddleware  # noqa F401
+from .request import RequestMiddleware
 
 __all__ = [
     "RequestMiddleware",

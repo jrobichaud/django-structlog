@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.17.2
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -9,7 +9,7 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/ambv/black
-    rev: 25.11.0
+    rev: 26.10.1
     hooks:
       - id: black
         language_version: python3
@@ -20,7 +20,7 @@ repos:
         args: [--no-incremental]
         additional_dependencies: [
             celery-types==0.23.0,
-            "django-stubs[compatible-mypy]==5.2.5",
+            "django-stubs[compatible-mypy]==5.2.8",
             structlog==25.2.0,
             django-extensions==4.1,
             django-ipware==7.0.1,

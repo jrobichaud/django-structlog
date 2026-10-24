@@ -33,3 +33,10 @@ django_structlog.celery
 
 .. automodule:: django_structlog.celery.signals
     :members: bind_extra_task_metadata, modify_context_before_task_publish, pre_task_succeeded
+
+
+django_structlog.tasks
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: django_structlog.tasks.signals
+    :members: bind_extra_task_metadata, modify_context_before_task_publish, pre_task_succeeded

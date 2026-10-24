@@ -1,6 +1,6 @@
 import structlog
 
-from .base import *  # noqa: F403
+from .base import *
 from .base import MIDDLEWARE, env
 
 # GENERAL
@@ -18,20 +18,10 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 IS_WORKER = env.bool("IS_WORKER", default=False)
 
-# CACHES
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#caches
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
-    }
-}
-
 # TEMPLATES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
-TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG  # noqa F405
+TEMPLATES[0]["OPTIONS"]["debug"] = DEBUG
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -51,10 +41,16 @@ if env("USE_DOCKER") == "yes":
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 
-# django-extensions
-# ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa F405
+INSTALLED_APPS += [
+    # django-extensions
+    # ------------------------------------------------------------------------------
+    # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
+    "django_extensions",
+    # django-tasks-tb
+    # ------------------------------------------------------------------------------
+    # https://github.com/RealOrangeOne/django-tasks-db
+    "django_tasks_db",
+]
 # Celery
 # ------------------------------------------------------------------------------
 
@@ -168,3 +164,8 @@ MIDDLEWARE += [
 
 DJANGO_STRUCTLOG_CELERY_ENABLED = True
 DJANGO_STRUCTLOG_COMMAND_LOGGING_ENABLED = True
+DJANGO_STRUCTLOG_DJANGO_TASKS_ENABLED = True
+
+TASKS = {
+    "default": {"BACKEND": "django_tasks_db.DatabaseBackend", "QUEUES": ["default"]}
+}

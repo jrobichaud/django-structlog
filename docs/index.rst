@@ -11,6 +11,7 @@ Contents, indices and tables
 
   getting_started
   configuration
+  django_tasks
   celery
   commands
   api_documentation
