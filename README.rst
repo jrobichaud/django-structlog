@@ -288,8 +288,6 @@ Start logging with ``structlog`` instead of ``logging``.
 Extending Request Log Metadata
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. Attention:: By default ``request_id`` and ``correlation_id`` are bound to the values passed by the upstream in the ``x-request-id`` and ``x-correlation-id`` headers. This behaviour is deprecated and will be opt-in starting next major release.
-
 By default only a ``request_id`` and the ``user_id`` are bound from the request but pertinent log metadata may vary from a project to another.
 
 If you need to add more metadata from the request you can implement a convenient signal receiver to bind them. You can also override existing bound metadata the same way.
