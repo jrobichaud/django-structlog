@@ -5,7 +5,7 @@ repos:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
   - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 10.0.0b1
     hooks:
       - id: isort
   - repo: https://github.com/ambv/black
