@@ -31,4 +31,4 @@ pytest-django==4.14.0  # https://github.com/pytest-dev/pytest-django
 
 # Setup tools
 # ------------------------------------------------------------------------------
-setuptools>=41.0.1
+setuptools>=84.2.1
