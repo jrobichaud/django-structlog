@@ -1,1 +1,1 @@
-importlib-metadata>=8.0.0,<9
+importlib-metadata>=9.1.0,<10
