@@ -39,8 +39,11 @@ class AppSettings:
     def CELERY_TASK_NOTICE_LOG_LEVEL(self) -> int:
         return getattr(
             settings,
-            self.PREFIX + "CELERY_TASK_RETRY_LOG_LEVEL",
-            logging.WARNING,
+            self.PREFIX + "CELERY_TASK_NOTICE_LOG_LEVEL",
+            # read under this name before, so keep honouring it
+            getattr(
+                settings, self.PREFIX + "CELERY_TASK_RETRY_LOG_LEVEL", logging.WARNING
+            ),
         )
 
     @property
