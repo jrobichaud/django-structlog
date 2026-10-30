@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Unreleased (TBD)
+----------------
+
+*Fixes:*
+    - ``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` had no effect on ``task_retrying`` and ``task_revoked``: the undocumented ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` was read instead. Only ``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` is now read; rename the setting if you used the undocumented name. See `#1058 <https://github.com/jrobichaud/django-structlog/pull/1058>`_. Special thanks to `@youdie006 <https://github.com/youdie006>`_.
+
+
 11.0.0 (October 24, 2026)
 -------------------------
 

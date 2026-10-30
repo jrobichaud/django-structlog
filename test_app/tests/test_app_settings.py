@@ -58,18 +58,6 @@ class TestAppSettings(TestCase):
         with self.settings(DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL=logging.ERROR):
             self.assertEqual(settings.CELERY_TASK_NOTICE_LOG_LEVEL, logging.ERROR)
 
-    def test_celery_task_notice_log_level_previous_setting_name(self) -> None:
-        settings = app_settings.AppSettings()
-
-        with self.settings(DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL=logging.ERROR):
-            self.assertEqual(settings.CELERY_TASK_NOTICE_LOG_LEVEL, logging.ERROR)
-
-        with self.settings(
-            DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL=logging.ERROR,
-            DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL=logging.INFO,
-        ):
-            self.assertEqual(settings.CELERY_TASK_NOTICE_LOG_LEVEL, logging.INFO)
-
     def test_command_logging_enabled(self) -> None:
         settings = app_settings.AppSettings()
 

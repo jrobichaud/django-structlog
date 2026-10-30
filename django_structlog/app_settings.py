@@ -40,10 +40,7 @@ class AppSettings:
         return getattr(
             settings,
             self.PREFIX + "CELERY_TASK_NOTICE_LOG_LEVEL",
-            # read under this name before, so keep honouring it
-            getattr(
-                settings, self.PREFIX + "CELERY_TASK_RETRY_LOG_LEVEL", logging.WARNING
-            ),
+            logging.WARNING,
         )
 
     @property
