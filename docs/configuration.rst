@@ -25,9 +25,9 @@ Settings
 +--------------------------------------------------+---------+-----------------+-----------------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_IP_LOGGING_ENABLED              | boolean | True            | automatically bind user ip using `django-ipware`                                        |
 +--------------------------------------------------+---------+-----------------+-----------------------------------------------------------------------------------------+
-| DJANGO_STRUCTLOG_DEFAULT_LOG_LEVEL               | int     | logging.INFO    | The default log level for non-error statuses                                            |
+| DJANGO_STRUCTLOG_STATUS_DEFAULT_LOG_LEVEL        | int     | logging.INFO    | The default log level for non-error statuses                                            |
 +--------------------------------------------------+---------+-----------------+-----------------------------------------------------------------------------------------+
-| DJANGO_STRUCTLOG_START_LOG_LEVEL                 | int     | logging.INFO    | The level at which request starts are logged                                            |
+| DJANGO_STRUCTLOG_STATUS_START_LOG_LEVEL          | int     | logging.INFO    | The level at which request starts are logged                                            |
 +--------------------------------------------------+---------+-----------------+-----------------------------------------------------------------------------------------+
 | DJANGO_STRUCTLOG_STATUS_2XX_LOG_LEVEL            | int     | logging.INFO    | The level of 2XX status codes                                                           |
 +--------------------------------------------------+---------+-----------------+-----------------------------------------------------------------------------------------+

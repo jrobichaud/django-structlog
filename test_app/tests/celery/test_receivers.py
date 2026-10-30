@@ -8,7 +8,7 @@ import structlog
 from celery import shared_task
 from django.contrib.auth.models import AnonymousUser
 from django.dispatch import receiver as django_receiver
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, override_settings
 
 from django_structlog.celery import receivers, signals
 
@@ -275,6 +275,19 @@ class TestReceivers(TestCase):
         self.assertEqual("WARNING", record.levelname)
         self.assertIn("reason", record.msg)
         self.assertEqual(expected_reason, record.msg["reason"])
+
+    @override_settings(DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL=logging.ERROR)
+    def test_receiver_task_retry_custom_log_level(self) -> None:
+        receiver = receivers.CeleryReceiver()
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.WARNING
+        ) as log_results:
+            receiver.receiver_task_retry(reason="foo")
+
+        self.assertEqual(1, len(log_results.records))
+        record: Any = log_results.records[0]
+        self.assertEqual("task_retrying", record.msg["event"])
+        self.assertEqual("ERROR", record.levelname)
 
     def test_receiver_task_success(self) -> None:
         expected_result = "foo"
