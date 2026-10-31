@@ -36,7 +36,7 @@ pytest-sugar==1.1.1  # https://github.com/Frozenball/pytest-sugar
 pytest-cov==7.1.0
 pytest-asyncio==1.4.0 # https://github.com/pytest-dev/pytest-asyncio
 pytest-mock==3.17.0 # https://github.com/pytest-dev/pytest-mock
-pytest-env==1.8.1 # https://github.com/pytest-dev/pytest-env
+pytest-env==1.8.3 # https://github.com/pytest-dev/pytest-env
 
 # Code quality
 # ------------------------------------------------------------------------------
