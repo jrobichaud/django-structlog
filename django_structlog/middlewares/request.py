@@ -57,7 +57,7 @@ def sync_streaming_content_wrapper(
     streaming_content: Iterator[bytes], context: Any
 ) -> Generator[bytes, None, None]:
     with structlog.contextvars.bound_contextvars(**context):
-        logger.log(app_settings.STATUS_START_LOG_LEVEL, "streaming_started")
+        logger.log(app_settings.REQUEST_STARTED_LOG_LEVEL, "streaming_started")
         try:
             yield from streaming_content
         except Exception:
@@ -71,7 +71,7 @@ async def async_streaming_content_wrapper(
     streaming_content: AsyncIterator[bytes], context: Any
 ) -> AsyncGenerator[bytes, Any]:
     with structlog.contextvars.bound_contextvars(**context):
-        logger.log(app_settings.STATUS_START_LOG_LEVEL, "streaming_started")
+        logger.log(app_settings.REQUEST_STARTED_LOG_LEVEL, "streaming_started")
         try:
             async for chunk in streaming_content:
                 yield chunk
@@ -216,7 +216,7 @@ class RequestMiddleware:
         signals.bind_extra_request_metadata.send(
             sender=self.__class__, request=request, logger=logger, log_kwargs=log_kwargs
         )
-        level = app_settings.STATUS_START_LOG_LEVEL
+        level = app_settings.REQUEST_STARTED_LOG_LEVEL
         logger.log(level, "request_started", **log_kwargs)
 
     @classmethod

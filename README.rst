@@ -380,6 +380,29 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_12.0:
+
+Upgrading to 12.0+
+^^^^^^^^^^^^^^^^^^
+
+Request started log level setting renamed
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``DJANGO_STRUCTLOG_START_LOG_LEVEL`` (documented) and ``DJANGO_STRUCTLOG_STATUS_START_LOG_LEVEL`` (actually read) are replaced by ``DJANGO_STRUCTLOG_REQUEST_STARTED_LOG_LEVEL``. It sets the level of ``request_started`` and ``streaming_started``. Rename the setting if you used either name.
+
+Celery retry and revoked log level settings split
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The level of ``task_retrying`` and ``task_revoked`` is now set by two settings:
+
+- ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` for ``task_retrying``
+- ``DJANGO_STRUCTLOG_CELERY_TASK_REVOKED_LOG_LEVEL`` for ``task_revoked``
+
+Both default to ``logging.WARNING``.
+
+- If you used ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` (the name actually read before), also set ``DJANGO_STRUCTLOG_CELERY_TASK_REVOKED_LOG_LEVEL`` to the same value to keep the same behavior.
+- If you used ``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` (documented but never read), it is removed: use the two settings above instead.
+
 .. _upgrade_11.0:
 
 Upgrading to 11.0+

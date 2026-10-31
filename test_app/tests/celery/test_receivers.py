@@ -276,7 +276,7 @@ class TestReceivers(TestCase):
         self.assertIn("reason", record.msg)
         self.assertEqual(expected_reason, record.msg["reason"])
 
-    @override_settings(DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL=logging.ERROR)
+    @override_settings(DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL=logging.ERROR)
     def test_receiver_task_retry_custom_log_level(self) -> None:
         receiver = receivers.CeleryReceiver()
         with self.assertLogs(
@@ -419,6 +419,26 @@ class TestReceivers(TestCase):
         self.assertEqual(expected_request_uuid, record.msg["request_id"])
         self.assertIn("user_id", record.msg)
         self.assertEqual(expected_user_id, record.msg["user_id"])
+
+    @override_settings(DJANGO_STRUCTLOG_CELERY_TASK_REVOKED_LOG_LEVEL=logging.ERROR)
+    def test_receiver_task_revoked_custom_log_level(self) -> None:
+        request = Mock()
+        request.__django_structlog__ = {}
+        request.task = "task_name"
+        request.id = "11111111-1111-1111-1111-111111111111"
+
+        receiver = receivers.CeleryReceiver()
+        with self.assertLogs(
+            logging.getLogger("django_structlog.celery.receivers"), logging.WARNING
+        ) as log_results:
+            receiver.receiver_task_revoked(
+                request=request, terminated=False, signum=None, expired=False
+            )
+
+        self.assertEqual(1, len(log_results.records))
+        record: Any = log_results.records[0]
+        self.assertEqual("task_revoked", record.msg["event"])
+        self.assertEqual("ERROR", record.levelname)
 
     def test_receiver_task_revoked_terminated(self) -> None:
         expected_request_uuid = "00000000-0000-0000-0000-000000000000"

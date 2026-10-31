@@ -36,10 +36,18 @@ class AppSettings:
         )
 
     @property
-    def CELERY_TASK_NOTICE_LOG_LEVEL(self) -> int:
+    def CELERY_TASK_RETRY_LOG_LEVEL(self) -> int:
         return getattr(
             settings,
-            self.PREFIX + "CELERY_TASK_NOTICE_LOG_LEVEL",
+            self.PREFIX + "CELERY_TASK_RETRY_LOG_LEVEL",
+            logging.WARNING,
+        )
+
+    @property
+    def CELERY_TASK_REVOKED_LOG_LEVEL(self) -> int:
+        return getattr(
+            settings,
+            self.PREFIX + "CELERY_TASK_REVOKED_LOG_LEVEL",
             logging.WARNING,
         )
 
@@ -74,10 +82,10 @@ class AppSettings:
         return getattr(settings, self.PREFIX + "STATUS_DEFAULT_LOG_LEVEL", logging.INFO)
 
     @property
-    def STATUS_START_LOG_LEVEL(self) -> int:
+    def REQUEST_STARTED_LOG_LEVEL(self) -> int:
         return getattr(
             settings,
-            self.PREFIX + "STATUS_START_LOG_LEVEL",
+            self.PREFIX + "REQUEST_STARTED_LOG_LEVEL",
             self.STATUS_DEFAULT_LOG_LEVEL,
         )
 
