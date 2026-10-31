@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Unreleased (TBD)
+----------------
+
+See: :ref:`upgrade_12.0`
+
+*Fixes:*
+    - The documented ``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` had no effect on ``task_retrying`` and ``task_revoked``: the undocumented ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` was read instead. See `#1058 <https://github.com/jrobichaud/django-structlog/pull/1058>`_. Special thanks to `@youdie006 <https://github.com/youdie006>`_.
+
+*Changes:*
+    - ``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` is removed. ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` now only sets the level of ``task_retrying``, and the new ``DJANGO_STRUCTLOG_CELERY_TASK_REVOKED_LOG_LEVEL`` sets the level of ``task_revoked``. Both default to ``logging.WARNING``.
+    - ``DJANGO_STRUCTLOG_START_LOG_LEVEL`` (documented) and ``DJANGO_STRUCTLOG_STATUS_START_LOG_LEVEL`` (actually read) are replaced by ``DJANGO_STRUCTLOG_REQUEST_STARTED_LOG_LEVEL``, which sets the level of ``request_started`` and ``streaming_started``. Rename the setting if you used either name.
+
+
 11.0.0 (October 24, 2026)
 -------------------------
 

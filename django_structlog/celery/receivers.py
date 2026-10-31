@@ -108,7 +108,7 @@ class CeleryReceiver(BaseTaskReceiver):
         **kwargs: Any,
     ) -> None:
         logger.log(
-            app_settings.CELERY_TASK_NOTICE_LOG_LEVEL, "task_retrying", reason=reason
+            app_settings.CELERY_TASK_RETRY_LOG_LEVEL, "task_retrying", reason=reason
         )
 
     def receiver_task_success(
@@ -174,7 +174,7 @@ class CeleryReceiver(BaseTaskReceiver):
         metadata["task"] = request.task
 
         logger.log(
-            app_settings.CELERY_TASK_NOTICE_LOG_LEVEL,
+            app_settings.CELERY_TASK_REVOKED_LOG_LEVEL,
             "task_revoked",
             terminated=terminated,
             signum=signum.value if signum is not None else None,

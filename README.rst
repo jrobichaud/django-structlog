@@ -380,6 +380,24 @@ Json file (\ ``logs/json.log``\ )
 Upgrade Guide
 =============
 
+.. _upgrade_12.0:
+
+Upgrading to 12.0+
+^^^^^^^^^^^^^^^^^^
+
+Configuration Changes
+~~~~~~~~~~~~~~~~~~~~~
+
+``DJANGO_STRUCTLOG_REQUEST_STARTED_LOG_LEVEL`` replaces:
+ - ``DJANGO_STRUCTLOG_START_LOG_LEVEL``
+ - ``DJANGO_STRUCTLOG_STATUS_START_LOG_LEVEL``
+
+
+``DJANGO_STRUCTLOG_CELERY_TASK_NOTICE_LOG_LEVEL`` is now two different settings:
+ - ``DJANGO_STRUCTLOG_CELERY_TASK_REVOKED_LOG_LEVEL`` for celery event ``task_revoked``
+ - ``DJANGO_STRUCTLOG_CELERY_TASK_RETRY_LOG_LEVEL`` for celery event ``task_retry``
+
+
 .. _upgrade_11.0:
 
 Upgrading to 11.0+
