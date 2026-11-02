@@ -19,7 +19,7 @@ djangorestframework==3.18.3  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
 # django-ninja
-django-ninja==1.7.1  # https://github.com/vitalik/django-ninja
+django-ninja==1.7.3  # https://github.com/vitalik/django-ninja
 
 structlog==26.1.0
 colorama==0.4.6
