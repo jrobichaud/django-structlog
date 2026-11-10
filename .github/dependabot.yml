@@ -5,6 +5,12 @@ updates:
     directory: "/requirements"
     schedule:
       interval: weekly
+    open-pull-requests-limit: 20
+    groups:
+      celery:
+        patterns:
+          - "kombu"
+          - "celery"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
