@@ -6,4 +6,4 @@ kombu==5.6.2
 flower==2.2.0  # https://github.com/mher/flower
 uvicorn==0.54.0 # https://github.com/encode/uvicorn
 gunicorn==26.2.0 # https://github.com/benoitc/gunicorn
-amqp==5.4.1 # https://github.com/celery/py-amqp
+amqp==5.4.2 # https://github.com/celery/py-amqp
